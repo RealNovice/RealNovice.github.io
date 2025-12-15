@@ -3,23 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Personal · Glass</title>
+  <title>Johannes Lima Spielhofen</title>
 
   <style>
     :root {
-      --glass: rgba(255,255,255,0.08);
-      --border: rgba(255,255,255,0.18);
-      --text-main: #f5f5f7;
-      --text-sub: rgba(245,245,247,0.7);
+      --glass: rgba(255,255,255,0.25);
+      --glass-border: rgba(255,255,255,0.35);
+      --text-main: #1d1d1f;
+      --text-sub: rgba(29,29,31,0.65);
+      --bg-start: #d5d5e0;
+      --bg-end: #f0f0f5;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui;
-      background: black;
+      background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
       color: var(--text-main);
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     section {
@@ -27,58 +30,142 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 8rem 1.5rem;
+      padding: 8rem 2rem;
       position: relative;
     }
 
     .pane {
       background: var(--glass);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
-      border: 1px solid var(--border);
-      border-radius: 34px;
-      padding: 3rem;
-      max-width: 900px;
+      backdrop-filter: blur(80px) saturate(250%);
+      -webkit-backdrop-filter: blur(80px) saturate(250%);
+      border: 1px solid var(--glass-border);
+      border-radius: 36px;
+      padding: 4.5rem 4rem;
+      max-width: 880px;
       width: 100%;
       box-shadow:
-        0 60px 120px rgba(0,0,0,0.65),
-        inset 0 1px 0 rgba(255,255,255,0.05);
-      transform-style: preserve-3d;
-      will-change: transform;
+        0 25px 70px rgba(0,0,0,0.1),
+        0 10px 30px rgba(0,0,0,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.7),
+        inset 0 -1px 0 rgba(255,255,255,0.3);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform, opacity;
+    }
+
+    /* Landing section */
+    .landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .profile-card {
+      background: var(--glass);
+      backdrop-filter: blur(80px) saturate(250%);
+      -webkit-backdrop-filter: blur(80px) saturate(250%);
+      border: 1px solid var(--glass-border);
+      border-radius: 40px;
+      padding: 2.5rem 3rem;
+      max-width: 420px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.12),
+        0 10px 30px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.7),
+        inset 0 -1px 0 rgba(255,255,255,0.3);
+    }
+
+    .profile-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.4);
+      box-shadow: 
+        0 15px 40px rgba(0,0,0,0.15),
+        inset 0 0 0 1px rgba(255,255,255,0.3);
+    }
+
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-name {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
     }
 
     h1 {
-      font-size: clamp(3rem, 6vw, 4.8rem);
-      letter-spacing: -0.04em;
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      font-weight: 700;
+      letter-spacing: -0.055em;
       text-align: center;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--text-main), rgba(29,29,31,0.6));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     h2 {
-      font-size: 2.3rem;
-      margin-bottom: 1rem;
-      letter-spacing: -0.03em;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.04em;
     }
 
     p {
-      font-size: 1.1rem;
-      line-height: 1.7;
+      font-size: 1.2rem;
+      font-weight: 400;
+      line-height: 1.55;
       color: var(--text-sub);
-      max-width: 650px;
-      margin-top: 1rem;
+      max-width: 640px;
     }
 
     .hero p {
       margin-left: auto;
       margin-right: auto;
       text-align: center;
+      font-size: 1.35rem;
     }
 
     .image {
-      margin-top: 2.5rem;
-      border-radius: 28px;
+      margin-top: 2.8rem;
+      border-radius: 24px;
       overflow: hidden;
-      border: 1px solid var(--border);
-      will-change: transform;
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow: 
+        0 20px 50px rgba(0,0,0,0.12),
+        0 8px 20px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+      transition: transform 0.4s ease;
     }
 
     .image img {
@@ -86,35 +173,80 @@
       display: block;
     }
 
-    /* ambient glass light */
+    /* Enhanced glass orbs */
     .orb {
       position: absolute;
-      width: 420px;
-      height: 420px;
+      border-radius: 50%;
       background: radial-gradient(circle,
-        rgba(255,255,255,0.2),
-        transparent 70%);
-      filter: blur(80px);
+        rgba(255,255,255,0.5),
+        rgba(255,255,255,0.2) 35%,
+        rgba(200,200,255,0.1) 60%,
+        transparent 75%);
+      filter: blur(70px);
       z-index: -1;
+      pointer-events: none;
     }
 
-    .orb.left { left: -160px; top: 20%; }
-    .orb.right { right: -160px; bottom: 20%; }
+    .orb.large {
+      width: 900px;
+      height: 900px;
+    }
+
+    .orb.medium {
+      width: 600px;
+      height: 600px;
+    }
+
+    .orb.small {
+      width: 400px;
+      height: 400px;
+    }
 
     footer {
-      padding: 5rem 1rem;
+      padding: 5rem 2rem;
       text-align: center;
-      font-size: 0.9rem;
-      color: rgba(255,255,255,0.4);
+      font-size: 0.95rem;
+      color: rgba(29,29,31,0.5);
+      letter-spacing: 0.01em;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 5rem 1.5rem; }
+      .pane { padding: 3rem 2.5rem; }
+      .profile-card { 
+        padding: 2rem; 
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+      }
+      .profile-image { width: 100px; height: 100px; }
+      .profile-name { font-size: 1.4rem; }
+      h1 { font-size: 3rem; }
+      h2 { font-size: 2rem; }
+      p { font-size: 1.1rem; }
     }
   </style>
 </head>
 
 <body>
 
+  <div class="orb large" style="left: -250px; top: 5%;"></div>
+  <div class="orb medium" style="right: -200px; top: 30%;"></div>
+  <div class="orb small" style="left: 15%; top: 70%;"></div>
+  <div class="orb medium" style="right: 10%; bottom: 10%;"></div>
+
+  <div class="landing">
+    <div class="profile-card">
+      <div class="profile-image">
+        <img src="https://picsum.photos/400/400" alt="Johannes Lima Spielhofen">
+      </div>
+      <h2 class="profile-name">Johannes Lima Spielhofen</h2>
+    </div>
+  </div>
+
   <section>
-    <div class="orb left"></div>
-    <div class="pane hero" data-x="60" data-rotate="4">
+    <div class="pane hero" data-start="200" data-end="1000">
       <h1>Hello.</h1>
       <p>
         I build things slowly enough to notice how they move.
@@ -124,42 +256,40 @@
   </section>
 
   <section>
-    <div class="orb right"></div>
-    <div class="pane" data-x="-80" data-rotate="-5">
+    <div class="pane" data-start="800" data-end="1800">
       <h2>Early curiosity</h2>
       <p>
         I was less interested in rules than in edge cases.
         The sideways behavior always felt more honest.
       </p>
-      <div class="image" data-img-x="50">
+      <div class="image">
         <img src="https://placekitten.com/900/600" alt="Kitten">
       </div>
     </div>
   </section>
 
   <section>
-    <div class="pane" data-x="100" data-rotate="6">
+    <div class="pane" data-start="1600" data-end="2600">
       <h2>The middle stretch</h2>
       <p>
         Speed stopped being impressive.
         Precision became the only metric that mattered.
       </p>
-      <div class="image" data-img-x="-70">
+      <div class="image">
         <img src="https://placebear.com/900/600" alt="Bear">
       </div>
     </div>
   </section>
 
   <section>
-    <div class="orb left"></div>
-    <div class="pane" data-x="-60" data-rotate="-4">
+    <div class="pane" data-start="2400" data-end="3400">
       <h2>Now</h2>
       <p>
         Calm interfaces.
         Motion with intent.
-        Glass that feels like it’s floating, not performing.
+        Glass that feels like it's floating, not performing.
       </p>
-      <div class="image" data-img-x="40">
+      <div class="image">
         <img src="https://place.dog/900/600" alt="Dog">
       </div>
     </div>
@@ -171,35 +301,47 @@
 
   <script>
     const panes = document.querySelectorAll('.pane');
-    const images = document.querySelectorAll('.image');
+    const orbs = document.querySelectorAll('.orb');
 
     function onScroll() {
-      const viewportHeight = window.innerHeight;
+      const scrollY = window.scrollY;
 
       panes.forEach(pane => {
-        const rect = pane.getBoundingClientRect();
-        const progress = 1 - (rect.top + rect.height / 2) / viewportHeight;
-
-        const x = parseFloat(pane.dataset.x || 0);
-        const r = parseFloat(pane.dataset.rotate || 0);
+        const start = parseFloat(pane.dataset.start);
+        const end = parseFloat(pane.dataset.end);
+        const range = end - start;
+        
+        const progress = Math.max(0, Math.min(1, (scrollY - start) / range));
+        
+        // Smooth entrance and exit
+        const easeProgress = progress < 0.5 
+          ? 2 * progress * progress 
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        
+        // Transform based on scroll position
+        const translateY = (1 - easeProgress) * 100;
+        const scale = 0.85 + (easeProgress * 0.15);
+        const opacity = easeProgress;
+        const rotateX = (1 - easeProgress) * -8;
 
         pane.style.transform = `
-          translateX(${progress * x}px)
-          rotateY(${progress * r}deg)
-          translateZ(${progress * 40}px)
+          translateY(${translateY}px) 
+          scale(${scale})
+          perspective(1000px)
+          rotateX(${rotateX}deg)
         `;
+        pane.style.opacity = opacity;
       });
 
-      images.forEach(img => {
-        const rect = img.getBoundingClientRect();
-        const progress = 1 - (rect.top + rect.height / 2) / viewportHeight;
-        const x = parseFloat(img.dataset.imgX || 0);
-
-        img.style.transform = `translateX(${progress * x}px)`;
+      // Parallax orbs
+      orbs.forEach((orb, i) => {
+        const speed = 0.2 + (i * 0.1);
+        orb.style.transform = `translateY(${scrollY * speed}px)`;
       });
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
     onScroll();
   </script>
 
