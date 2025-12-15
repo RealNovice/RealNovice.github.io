@@ -13,6 +13,11 @@
       --text-sub: rgba(29,29,31,0.65);
       --bg-start: #d5d5e0;
       --bg-end: #f0f0f5;
+
+      /* profile photo sizing */
+      --photo-size: 220px;
+      --photo-size-lg: 400px;
+      --photo-lift-max: 80px; /* max lift in px when scrolled */
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -69,43 +74,59 @@
       -webkit-backdrop-filter: blur(80px) saturate(250%);
       border: 1px solid var(--glass-border);
       border-radius: 40px;
-      padding: 4 4.5;
+      padding: 4rem 4.5rem 3.5rem; /* extra top space to accommodate floating photo */
       max-width: 1400px;
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2.5;
+      gap: 1.5rem;
       box-shadow:
         0 30px 80px rgba(0,0,0,0.12),
         0 10px 30px rgba(0,0,0,0.08),
         inset 0 1px 0 rgba(255,255,255,0.7),
         inset 0 -1px 0 rgba(255,255,255,0.3);
+      position: relative; /* for absolutely-positioned floating photo */
+      overflow: visible;
     }
 
+    /* floating circular profile image positioned above the card */
     .profile-image {
-      width: 400px;
-      height: 400px;
+      width: var(--photo-size);
+      height: var(--photo-size);
       border-radius: 50%;
-      flex-shrink: 0;
       overflow: hidden;
-      border: 4px solid rgba(255,255,255,0.4);
-      box-shadow: 
-        0 20px 40px rgba(0,0,0,0.15),
-        inset 0 0 0 1px rgba(255,255,255,0.3);
+      border: 4px solid rgba(255,255,255,0.45);
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.18),
+        inset 0 0 0 1px rgba(255,255,255,0.22);
+      position: absolute;
+      left: 50%;
+      top: calc(-1 * (var(--photo-size) / 2));
+      transform: translateX(-50%) translateY(0);
+      z-index: 3;
+      will-change: transform;
+      transition: box-shadow 200ms ease, transform 120ms linear;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.02));
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .profile-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
 
     .profile-name {
-      font-size: 6rem;
-      font-weight: 600;
+      font-size: 2.2rem;
+      font-weight: 700;
       letter-spacing: -0.02em;
-      line-height: 1.3;
+      line-height: 1.2;
+      padding-top: calc(var(--photo-size) / 2 + 0.5rem); /* ensure adequate spacing on small screens */
+      text-align: center;
     }
 
     .scroll-indicator {
@@ -162,7 +183,7 @@
       border-radius: 24px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.35);
-      box-shadow: 
+      box-shadow:
         0 20px 50px rgba(0,0,0,0.12),
         0 8px 20px rgba(0,0,0,0.08),
         inset 0 1px 0 rgba(255,255,255,0.4);
@@ -212,17 +233,24 @@
       font-weight: 500;
     }
 
+    @media (min-width: 769px) {
+      :root {
+        --photo-size: var(--photo-size-lg);
+      }
+      .profile-name { font-size: 2.6rem; padding-top: calc(var(--photo-size) / 2 + 1rem); }
+    }
+
     @media (max-width: 768px) {
       section { padding: 5rem 1.5rem; }
       .pane { padding: 3rem 2.5rem; }
-      .profile-card { 
-        padding: 2rem; 
+      .profile-card {
+        padding: 3rem 2rem 2.5rem;
         flex-direction: column;
         text-align: center;
-        gap: 1.5rem;
+        gap: 1.25rem;
       }
-      .profile-image { width: 100px; height: 100px; }
-      .profile-name { font-size: 1.4rem; }
+      .profile-image { width: var(--photo-size); height: var(--photo-size); top: calc(-1 * (var(--photo-size) / 2)); }
+      .profile-name { font-size: 1.4rem; padding-top: calc(var(--photo-size) / 2 + 0.4rem); }
       h1 { font-size: 3rem; }
       h2 { font-size: 2rem; }
       p { font-size: 1.1rem; }
@@ -238,12 +266,17 @@
   <div class="orb medium" style="right: 10%; bottom: 10%;"></div>
 
   <div class="landing">
-    <div class="profile-card">
-  <h2 class="profile-name">Johannes Lima Spielhofen</h2>
-  <div class="profile-image">
-    <img src="profile.jpg" alt="Johannes Lima Spielhofen">
-  </div>
-</div>
+    <div class="profile-card" id="profileCard">
+      <div class="profile-image floating-photo" id="floatingPhoto" aria-hidden="true">
+        <img src="profile.jpg" alt="Johannes Lima Spielhofen">
+      </div>
+
+      <h2 class="profile-name">Johannes Lima Spielhofen</h2>
+
+      <p style="max-width:800px; text-align:center; color: var(--text-sub);">
+        A small note under the name can go here if you'd like some intro text in the banner.
+      </p>
+    </div>
   </div>
 
   <section>
@@ -303,6 +336,8 @@
   <script>
     const panes = document.querySelectorAll('.pane');
     const orbs = document.querySelectorAll('.orb');
+    const floatingPhoto = document.getElementById('floatingPhoto');
+    const landing = document.querySelector('.landing');
 
     function onScroll() {
       const scrollY = window.scrollY;
@@ -339,6 +374,33 @@
         const speed = 0.2 + (i * 0.1);
         orb.style.transform = `translateY(${scrollY * speed}px)`;
       });
+
+      // Floating photo lift/fall behavior:
+      if (floatingPhoto && landing) {
+        const landingRect = landing.getBoundingClientRect();
+        // We start affecting the photo once the landing section hits the top of the viewport.
+        // The effect progresses while landing scrolls up across roughly 60% of the viewport height.
+        const triggerRange = window.innerHeight * 0.6;
+        // landingRect.top is 0 when the top of landing is at the top of the viewport; negative when scrolled past.
+        const rawProgress = Math.max(0, Math.min(1, -landingRect.top / triggerRange));
+        // Map progress to a lift in px (negative -> upward)
+        const maxLift = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--photo-lift-max')) || 80;
+        const lift = rawProgress * -maxLift;
+
+        // Add a small natural bob while at rest; reduce bob as user scrolls (so it stabilizes when lifted)
+        const time = Date.now();
+        const idleBob = Math.sin(time / 700) * (3 * (1 - rawProgress)); // +-3px when not scrolled
+        const translateY = lift + idleBob;
+
+        // Slight scale change when lifted (subtle)
+        const scale = 1 - (rawProgress * 0.03);
+
+        floatingPhoto.style.transform = `translateX(-50%) translateY(${translateY}px) translateZ(0) scale(${scale})`;
+
+        // Slightly increase shadow while lifted
+        const shadowOpacity = 0.18 + (rawProgress * 0.06);
+        floatingPhoto.style.boxShadow = `0 30px 60px rgba(0,0,0,${shadowOpacity}) , inset 0 0 0 1px rgba(255,255,255,0.22)`;
+      }
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
