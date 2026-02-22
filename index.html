@@ -1,828 +1,411 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gut Sonnenhang – Ferienwohnungen im Allgäu</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Johannes Lima Spielhofen</title>
 
-  :root {
-    --cream: #f5f0e8;
-    --warm: #e8dcc8;
-    --sage: #7a8c72;
-    --earth: #8b6f47;
-    --dark: #2a2218;
-    --accent: #c8a96e;
-    --rust: #a0522d;
-  }
+  <style>
+    :root {
+      --glass: rgba(255,255,255,0.25);
+      --glass-border: rgba(255,255,255,0.35);
+      --text-main: #1d1d1f;
+      --text-sub: rgba(29,29,31,0.65);
+      --bg-start: #d5d5e0;
+      --bg-end: #f0f0f5;
 
-  html { scroll-behavior: smooth; }
+      /* profile photo sizing */
+      --photo-size: 220px;
+      --photo-size-lg: 400px;
+      --photo-lift-max: 80px; /* max lift in px when scrolled */
+    }
 
-  body {
-    font-family: 'Jost', sans-serif;
-    background: var(--cream);
-    color: var(--dark);
-    font-weight: 300;
-  }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ─── NAV ─── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.2rem 3rem;
-    background: rgba(245,240,232,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(138,111,71,0.2);
-  }
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem; font-weight: 400; letter-spacing: 0.05em;
-    color: var(--dark); text-decoration: none;
-  }
-  .nav-logo span { color: var(--earth); font-style: italic; }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a {
-    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--dark); text-decoration: none; opacity: 0.7;
-    transition: opacity 0.2s;
-  }
-  .nav-links a:hover { opacity: 1; }
-  .nav-links a.active { opacity: 1; color: var(--earth); }
-  .nav-book {
-    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
-    background: var(--earth); color: white; border: none;
-    padding: 0.65rem 1.5rem; cursor: pointer; transition: background 0.2s;
-  }
-  .nav-book:hover { background: var(--dark); }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui;
+      background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      color: var(--text-main);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
 
-  /* ─── HERO ─── */
-  #hero {
-    height: 100vh; position: relative; overflow: hidden;
-    display: flex; align-items: flex-end; padding: 5rem 3rem;
-  }
-  .hero-bg {
-    position: absolute; inset: 0;
-    background:
-      linear-gradient(to bottom, rgba(42,34,24,0.1) 0%, rgba(42,34,24,0.55) 100%),
-      url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=80') center/cover no-repeat;
-    transform-origin: center;
-    animation: slowZoom 18s ease-in-out infinite alternate;
-  }
-  @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.06); } }
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 2rem;
+      position: relative;
+    }
 
-  .hero-content { position: relative; z-index: 2; max-width: 640px; }
-  .hero-tag {
-    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 1.2rem;
-    animation: fadeUp 1s 0.2s both;
-  }
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 300; line-height: 1.1;
-    color: white; margin-bottom: 1.5rem;
-    animation: fadeUp 1s 0.4s both;
-  }
-  .hero-title em { font-style: italic; color: var(--accent); }
-  .hero-sub {
-    font-size: 0.9rem; line-height: 1.8; color: rgba(255,255,255,0.8);
-    max-width: 420px; animation: fadeUp 1s 0.6s both;
-  }
-  .hero-cta {
-    display: inline-block; margin-top: 2.5rem;
-    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
-    color: white; text-decoration: none;
-    border-bottom: 1px solid var(--accent); padding-bottom: 0.3rem;
-    animation: fadeUp 1s 0.8s both;
-    transition: color 0.2s, border-color 0.2s;
-  }
-  .hero-cta:hover { color: var(--accent); }
+    .pane {
+      background: var(--glass);
+      backdrop-filter: blur(80px) saturate(250%);
+      -webkit-backdrop-filter: blur(80px) saturate(250%);
+      border: 1px solid var(--glass-border);
+      border-radius: 36px;
+      padding: 4.5rem 4rem;
+      max-width: 880px;
+      width: 100%;
+      box-shadow:
+        0 25px 70px rgba(0,0,0,0.1),
+        0 10px 30px rgba(0,0,0,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.7),
+        inset 0 -1px 0 rgba(255,255,255,0.3);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform, opacity;
+    }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    /* Landing section */
+    .landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2;
+      position: relative;
+    }
 
-  /* Scroll indicator */
-  .scroll-hint {
-    position: absolute; bottom: 2rem; right: 3rem; z-index: 2;
-    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
-    color: rgba(255,255,255,0.5); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
-    animation: fadeUp 1s 1.2s both;
-  }
-  .scroll-line {
-    width: 1px; height: 50px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.4));
-    animation: scrollPulse 2s ease-in-out infinite;
-  }
-  @keyframes scrollPulse { 0%,100%{transform:scaleY(1);opacity:.5} 50%{transform:scaleY(1.3);opacity:1} }
+    .profile-card {
+      background: var(--glass);
+      backdrop-filter: blur(80px) saturate(250%);
+      -webkit-backdrop-filter: blur(80px) saturate(250%);
+      border: 1px solid var(--glass-border);
+      border-radius: 40px;
+      padding: 4rem 4.5rem 3.5rem; /* extra top space to accommodate floating photo */
+      max-width: 1400px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.12),
+        0 10px 30px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.7),
+        inset 0 -1px 0 rgba(255,255,255,0.3);
+      position: relative; /* for absolutely-positioned floating photo */
+      overflow: visible;
+    }
 
-  /* ─── SECTION HEADER ─── */
-  section { padding: 6rem 3rem; }
-  .section-tag {
-    font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--earth); margin-bottom: 0.8rem;
-  }
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.15;
-    color: var(--dark); margin-bottom: 1.5rem;
-  }
-  .section-title em { font-style: italic; color: var(--earth); }
-  .section-body { font-size: 0.9rem; line-height: 1.9; color: rgba(42,34,24,0.7); max-width: 560px; }
-  .divider { width: 50px; height: 1px; background: var(--accent); margin: 1.5rem 0; }
+    /* floating circular profile image positioned above the card */
+    .profile-image {
+      width: var(--photo-size);
+      height: var(--photo-size);
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid rgba(255,255,255,0.45);
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.18),
+        inset 0 0 0 1px rgba(255,255,255,0.22);
+      position: absolute;
+      left: 50%;
+      top: calc(-1 * (var(--photo-size) / 2));
+      transform: translateX(-50%) translateY(0);
+      z-index: 3;
+      will-change: transform;
+      transition: box-shadow 200ms ease, transform 120ms linear;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.02));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-  /* ─── ÜBER UNS ─── */
-  #ueber { background: white; }
-  .ueber-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
-    max-width: 1100px; margin: 0 auto;
-  }
-  .ueber-img-wrap { position: relative; }
-  .ueber-img {
-    width: 100%; aspect-ratio: 4/5; object-fit: cover;
-    display: block;
-  }
-  .ueber-badge {
-    position: absolute; bottom: -1.5rem; right: -1.5rem;
-    width: 130px; height: 130px; border-radius: 50%;
-    background: var(--earth); color: white;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-family: 'Cormorant Garamond', serif;
-  }
-  .ueber-badge-num { font-size: 2.2rem; line-height: 1; }
-  .ueber-badge-text { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; text-align: center; }
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
-  .geschichte-grid {
-    max-width: 1100px; margin: 5rem auto 0;
-    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem;
-  }
-  .geschichte-card {
-    padding: 2rem; border-left: 2px solid var(--warm);
-    position: relative;
-  }
-  .geschichte-year {
-    font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300;
-    color: var(--warm); position: absolute; top: 1.5rem; right: 1.5rem;
-    line-height: 1;
-  }
-  .geschichte-card h4 {
-    font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--earth); margin-bottom: 0.8rem;
-  }
-  .geschichte-card p { font-size: 0.85rem; line-height: 1.8; color: rgba(42,34,24,0.65); }
+    .profile-name {
+      font-size: 5.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: calc(var(--photo-size) / 2 + 0.5rem); /* ensure adequate spacing on small screens */
+      text-align: center;
+    }
 
-  /* ─── WOHNUNGEN ─── */
-  #wohnungen { background: var(--cream); }
-  .wohnungen-header { max-width: 1100px; margin: 0 auto 3.5rem; }
-  .wohnungen-grid {
-    max-width: 1100px; margin: 0 auto;
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
-  }
-  .appt-card {
-    background: white; overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-  }
-  .appt-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(42,34,24,0.1); }
-  .appt-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; transition: transform 0.5s; }
-  .appt-card:hover .appt-img { transform: scale(1.04); }
-  .appt-img-wrap { overflow: hidden; position: relative; }
-  .appt-badge {
-    position: absolute; top: 1rem; left: 1rem;
-    background: var(--earth); color: white;
-    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
-    padding: 0.35rem 0.8rem;
-  }
-  .appt-body { padding: 1.8rem; }
-  .appt-name {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400;
-    color: var(--dark); margin-bottom: 0.4rem;
-  }
-  .appt-size { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage); margin-bottom: 1rem; }
-  .appt-desc { font-size: 0.85rem; line-height: 1.8; color: rgba(42,34,24,0.65); margin-bottom: 1.5rem; }
-  .appt-features { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .appt-feat {
-    font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--earth); border: 1px solid var(--warm); padding: 0.3rem 0.7rem;
-  }
-  .appt-price-row { display: flex; align-items: baseline; justify-content: space-between; border-top: 1px solid var(--warm); padding-top: 1.2rem; }
-  .appt-price { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; color: var(--dark); }
-  .appt-price-unit { font-size: 0.7rem; letter-spacing: 0.1em; color: rgba(42,34,24,0.5); }
-  .appt-btn {
-    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
-    background: none; border: 1px solid var(--earth); color: var(--earth);
-    padding: 0.5rem 1.1rem; cursor: pointer; transition: all 0.2s;
-  }
-  .appt-btn:hover { background: var(--earth); color: white; }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      animation: bounce 2s infinite;
+    }
 
-  /* ─── PREISE ─── */
-  #preise { background: var(--dark); color: white; }
-  .preise-header { max-width: 1100px; margin: 0 auto 3rem; }
-  .preise-header .section-title { color: white; }
-  .preise-header .section-title em { color: var(--accent); }
-  .preise-header .section-body { color: rgba(255,255,255,0.55); }
-  .preise-header .divider { background: var(--accent); }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
 
-  .tab-nav { max-width: 1100px; margin: 0 auto 2.5rem; display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
-  .tab-btn {
-    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
-    background: none; border: none; color: rgba(255,255,255,0.4);
-    padding: 0.8rem 1.8rem; cursor: pointer;
-    border-bottom: 2px solid transparent; margin-bottom: -1px;
-    transition: all 0.2s;
-  }
-  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .tab-btn:hover:not(.active) { color: rgba(255,255,255,0.7); }
+    h1 {
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      font-weight: 700;
+      letter-spacing: -0.055em;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--text-main), rgba(29,29,31,0.6));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-  .tab-content { display: none; max-width: 1100px; margin: 0 auto; }
-  .tab-content.active { display: block; }
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.04em;
+    }
 
-  .preise-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; margin-bottom: 2rem; }
-  .saison-card {
-    border: 1px solid rgba(255,255,255,0.1); padding: 2rem;
-    position: relative; overflow: hidden;
-    transition: border-color 0.3s;
-  }
-  .saison-card:hover { border-color: rgba(200,169,110,0.5); }
-  .saison-card::before {
-    content: ''; position: absolute; top: 0; left: 0;
-    width: 3px; height: 100%; background: var(--accent);
-  }
-  .saison-card.highlight::before { background: var(--rust); }
-  .saison-name {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400;
-    color: white; margin-bottom: 0.3rem;
-  }
-  .saison-dates { font-size: 0.72rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-bottom: 1.5rem; }
-  .saison-prices { display: flex; flex-direction: column; gap: 0.8rem; }
-  .saison-row { display: flex; justify-content: space-between; align-items: center; }
-  .saison-apt { font-size: 0.8rem; color: rgba(255,255,255,0.6); }
-  .saison-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--accent); }
-  .saison-unit { font-size: 0.65rem; color: rgba(255,255,255,0.35); }
+    p {
+      font-size: 1.2rem;
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--text-sub);
+      max-width: 640px;
+    }
 
-  .preise-table { width: 100%; border-collapse: collapse; }
-  .preise-table th {
-    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
-    color: rgba(255,255,255,0.4); padding: 0.8rem 1rem; text-align: left;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-  .preise-table td {
-    padding: 1rem; font-size: 0.85rem; color: rgba(255,255,255,0.75);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .preise-table td:last-child { color: var(--accent); font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; }
-  .preise-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .hero p {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      font-size: 1.35rem;
+    }
 
-  .zusatz-grid { max-width: 1100px; margin: 3rem auto 0; display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; }
-  .zusatz-card { border: 1px solid rgba(255,255,255,0.08); padding: 1.5rem; }
-  .zusatz-icon { font-size: 1.5rem; margin-bottom: 0.8rem; }
-  .zusatz-name { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: white; margin-bottom: 0.4rem; }
-  .zusatz-price { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--accent); }
-  .zusatz-note { font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-top: 0.2rem; }
+    .image {
+      margin-top: 2.8rem;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow:
+        0 20px 50px rgba(0,0,0,0.12),
+        0 8px 20px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+      transition: transform 0.4s ease;
+    }
 
-  .preise-note { max-width: 1100px; margin: 2.5rem auto 0; font-size: 0.78rem; line-height: 1.8; color: rgba(255,255,255,0.35); border-top: 1px solid rgba(255,255,255,0.08); padding-top: 2rem; }
+    .image img {
+      width: 100%;
+      display: block;
+    }
 
-  /* ─── UMGEBUNG ─── */
-  #umgebung { background: white; }
-  .umgebung-inner { max-width: 1100px; margin: 0 auto; }
-  .umgebung-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; margin-top: 3rem; }
-  .umg-card { text-align: center; padding: 2rem 1rem; }
-  .umg-icon { font-size: 2rem; margin-bottom: 1rem; }
-  .umg-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--dark); }
-  .umg-text { font-size: 0.8rem; line-height: 1.7; color: rgba(42,34,24,0.6); }
-  .umgebung-gallery { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: auto auto; gap: 0.8rem; margin-top: 3rem; }
-  .umg-img { width: 100%; object-fit: cover; display: block; }
-  .umg-img:first-child { grid-row: span 2; height: 100%; }
-  .umg-img { height: 220px; }
-  .umg-img:first-child { height: 100%; }
+    /* Enhanced glass orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(255,255,255,0.5),
+        rgba(255,255,255,0.2) 35%,
+        rgba(200,200,255,0.1) 60%,
+        transparent 75%);
+      filter: blur(70px);
+      z-index: -1;
+      pointer-events: none;
+    }
 
-  /* ─── KONTAKT ─── */
-  #kontakt { background: var(--cream); }
-  .kontakt-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
-  .kontakt-form { display: flex; flex-direction: column; gap: 1.2rem; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-group label { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(42,34,24,0.55); }
-  .form-group input, .form-group select, .form-group textarea {
-    background: white; border: 1px solid var(--warm);
-    padding: 0.85rem 1rem; font-family: 'Jost', sans-serif; font-size: 0.88rem;
-    color: var(--dark); outline: none; transition: border-color 0.2s;
-    -webkit-appearance: none; appearance: none;
-  }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--earth); }
-  .form-group textarea { min-height: 120px; resize: vertical; }
-  .submit-btn {
-    background: var(--earth); color: white; border: none;
-    font-family: 'Jost', sans-serif; font-size: 0.72rem;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    padding: 1rem 2rem; cursor: pointer; transition: background 0.2s;
-    align-self: flex-start;
-  }
-  .submit-btn:hover { background: var(--dark); }
+    .orb.large {
+      width: 900px;
+      height: 900px;
+    }
 
-  .kontakt-info { padding-top: 0.5rem; }
-  .kontakt-info h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; margin-bottom: 1.5rem; }
-  .info-row { display: flex; gap: 1rem; margin-bottom: 1.2rem; align-items: flex-start; }
-  .info-icon { font-size: 1rem; margin-top: 0.1rem; }
-  .info-text { font-size: 0.85rem; line-height: 1.7; color: rgba(42,34,24,0.7); }
-  .info-text strong { display: block; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--earth); font-weight: 500; margin-bottom: 0.2rem; }
+    .orb.medium {
+      width: 600px;
+      height: 600px;
+    }
 
-  /* ─── FOOTER ─── */
-  footer {
-    background: var(--dark); color: rgba(255,255,255,0.45);
-    padding: 3rem; display: flex; align-items: center; justify-content: space-between;
-    font-size: 0.75rem;
-  }
-  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 300; color: white; }
-  .footer-logo span { color: var(--accent); font-style: italic; }
-  .footer-links { display: flex; gap: 2rem; }
-  .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--accent); }
+    .orb.small {
+      width: 400px;
+      height: 400px;
+    }
 
-  /* ─── RESPONSIVE ─── */
-  @media(max-width:900px){
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { display: none; }
-    section { padding: 4rem 1.5rem; }
-    .ueber-grid, .kontakt-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-    .ueber-badge { right: 0; }
-    .wohnungen-grid, .umgebung-cards { grid-template-columns: 1fr 1fr; }
-    .preise-grid { grid-template-columns: 1fr; }
-    .geschichte-grid, .zusatz-grid { grid-template-columns: 1fr 1fr; }
-    .umgebung-gallery { grid-template-columns: 1fr 1fr; }
-    .umg-img:first-child { grid-row: span 1; }
-  }
-</style>
+    footer {
+      padding: 5rem 2rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: rgba(29,29,31,0.5);
+      letter-spacing: 0.01em;
+      font-weight: 500;
+    }
+
+    @media (min-width: 769px) {
+      :root {
+        --photo-size: var(--photo-size-lg);
+      }
+      .profile-name { font-size: 2.6rem; padding-top: calc(var(--photo-size) / 2 + 1rem); }
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 5rem 1.5rem; }
+      .pane { padding: 3rem 2.5rem; }
+      .profile-card {
+        padding: 3rem 2rem 2.5rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 1.25rem;
+      }
+      .profile-image { width: var(--photo-size); height: var(--photo-size); top: calc(-1 * (var(--photo-size) / 2)); }
+      .profile-name { font-size: 1.4rem; padding-top: calc(var(--photo-size) / 2 + 0.4rem); }
+      h1 { font-size: 3rem; }
+      h2 { font-size: 2rem; }
+      p { font-size: 1.1rem; }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="#hero" class="nav-logo">Gut <span>Sonnenhang</span></a>
-  <ul class="nav-links">
-    <li><a href="#ueber">Das Gut</a></li>
-    <li><a href="#wohnungen">Wohnungen</a></li>
-    <li><a href="#preise">Preise</a></li>
-    <li><a href="#umgebung">Umgebung</a></li>
-    <li><a href="#kontakt">Kontakt</a></li>
-  </ul>
-  <button class="nav-book" onclick="document.querySelector('#kontakt').scrollIntoView({behavior:'smooth'})">Anfragen</button>
-</nav>
+  <div class="orb large" style="left: -250px; top: 5%;"></div>
+  <div class="orb medium" style="right: -200px; top: 30%;"></div>
+  <div class="orb small" style="left: 15%; top: 70%;"></div>
+  <div class="orb medium" style="right: 10%; bottom: 10%;"></div>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-content">
-    <div class="hero-tag">Ferienwohnungen · Allgäu · Seit 1987</div>
-    <h1 class="hero-title">Wo die Berge<br><em>atmen</em></h1>
-    <p class="hero-sub">Drei einzigartige Ferienwohnungen auf einem historischen Bauernhof — umgeben von Wiesen, Stille und dem Panorama der Allgäuer Alpen.</p>
-    <a href="#wohnungen" class="hero-cta">Wohnungen entdecken →</a>
-  </div>
-  <div class="scroll-hint">
-    <div class="scroll-line"></div>
-    Scrollen
-  </div>
-</section>
-
-<!-- ÜBER UNS -->
-<section id="ueber">
-  <div class="ueber-grid">
-    <div class="ueber-img-wrap">
-      <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=700&q=80" alt="Gut Sonnenhang" class="ueber-img">
-      <div class="ueber-badge">
-        <div class="ueber-badge-num">37</div>
-        <div class="ueber-badge-text">Jahre<br>Gastfreundschaft</div>
+  <div class="landing">
+    <div class="profile-card" id="profileCard">
+      <div class="profile-image floating-photo" id="floatingPhoto" aria-hidden="true">
+        <img src="profile.jpg" alt="Johannes Lima Spielhofen">
       </div>
-    </div>
-    <div class="ueber-text">
-      <div class="section-tag">Das Gut</div>
-      <h2 class="section-title">Ein Ort, der <em>bleibt</em></h2>
-      <div class="divider"></div>
-      <p class="section-body">Gut Sonnenhang liegt auf 890 Metern Höhe, eingebettet zwischen saftigen Almwiesen und dem Panorama des Grünten. Familie Berger bewirtschaftet das Anwesen seit drei Generationen — erst als aktiver Milchwirtschaftsbetrieb, heute als liebevoll umgebauter Ferienhof mit drei individuell gestalteten Wohnungen.</p>
-      <br>
-      <p class="section-body">Jede Wohnung erzählt ihre eigene Geschichte: alte Holzbalken, handgemachte Möbel, textile Wärme — und überall das Licht, das die Allgäuer Berge so unverwechselbar macht.</p>
+
+      <h1 class="profile-name">Johannes Lima Spielhofen</h2>
+
+      <p style="max-width:800px; text-align:center; color: var(--text-sub);">
+        Per Aspera Ad Astra
+      </p>
     </div>
   </div>
 
-  <div class="geschichte-grid">
-    <div class="geschichte-card">
-      <div class="geschichte-year">1901</div>
-      <h4>Der Ursprung</h4>
-      <p>Hans Berger sen. baut den ersten Stall und legt damit den Grundstein für Gut Sonnenhang als Milchwirtschaftsbetrieb im oberen Illertal.</p>
+  <section>
+    <div class="pane hero" data-start="200" data-end="1000">
+      <h1>Hi, I'm Johannes.</h1>
+      <p>
+        I'm currently building SheetCheater, an App designed to help you learn 
+        reading sheet music quicker and more easily.
+              </p>
     </div>
-    <div class="geschichte-card">
-      <div class="geschichte-year">1987</div>
-      <h4>Die Wende</h4>
-      <p>Mit dem Rückgang der Milchwirtschaft wagt Familie Berger den Schritt in den Tourismus. Die erste Ferienwohnung öffnet ihre Türen — mit sofortiger Begeisterung.</p>
-    </div>
-    <div class="geschichte-card">
-      <div class="geschichte-year">2019</div>
-      <h4>Die Renovierung</h4>
-      <p>Umfassende Sanierung mit Liebe zum historischen Detail: neue Bäder, moderne Küchen und zeitgemäßer Komfort — ohne die Seele des alten Bauernhofs zu verlieren.</p>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- WOHNUNGEN -->
-<section id="wohnungen">
-  <div class="wohnungen-header">
-    <div class="section-tag">Unsere Unterkünfte</div>
-    <h2 class="section-title">Drei Wohnungen, <em>ein Charakter</em></h2>
-    <div class="divider"></div>
-    <p class="section-body">Jede Einheit ist anders — verbunden durch das gleiche Versprechen: Ruhe, Wärme und das echte Allgäu vor der Tür.</p>
-  </div>
-
-  <div class="wohnungen-grid">
-    <!-- Wohnung 1 -->
-    <div class="appt-card">
-      <div class="appt-img-wrap">
-        <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=600&q=80" alt="Die Almstube" class="appt-img">
-        <div class="appt-badge">EG</div>
-      </div>
-      <div class="appt-body">
-        <h3 class="appt-name">Die Almstube</h3>
-        <div class="appt-size">65 m² · bis 4 Personen</div>
-        <p class="appt-desc">Bodennahe Gemütlichkeit mit Original-Kassettentäfer aus dem Jahr 1923. Die Almstube hat einen direkten Zugang zur Terrasse mit Blick auf die Wiesenlandschaft.</p>
-        <div class="appt-features">
-          <span class="appt-feat">Kamin</span>
-          <span class="appt-feat">Terrasse</span>
-          <span class="appt-feat">2 Schlafzimmer</span>
-          <span class="appt-feat">Hundefreundlich</span>
-        </div>
-        <div class="appt-price-row">
-          <div>
-            <span class="appt-price">95 €</span>
-            <span class="appt-price-unit"> / Nacht</span>
-          </div>
-          <button class="appt-btn">Details</button>
-        </div>
+  <section>
+    <div class="pane" data-start="800" data-end="1800">
+      <h2>What's this even about</h2>
+      <p>
+        Honestly, I just wanted a website because it's cool.
+        If you've found me; welcome, though
+      </p>
+      <div class="image">
+        <img src="https://placekitten.com/900/600" alt="Kitten">
       </div>
     </div>
+  </section>
 
-    <!-- Wohnung 2 -->
-    <div class="appt-card">
-      <div class="appt-img-wrap">
-        <img src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&q=80" alt="Das Heustüble" class="appt-img">
-        <div class="appt-badge">OG</div>
-      </div>
-      <div class="appt-body">
-        <h3 class="appt-name">Das Heustüble</h3>
-        <div class="appt-size">48 m² · bis 2 Personen</div>
-        <p class="appt-desc">Eingebaut im ehemaligen Heugiebel — mit offenen Dachbalken, einem Schlafbereich unter dem Dach und einem romantischen Blick auf die Bergsilhouette.</p>
-        <div class="appt-features">
-          <span class="appt-feat">Dachterrasse</span>
-          <span class="appt-feat">Sauna</span>
-          <span class="appt-feat">1 Schlafzimmer</span>
-          <span class="appt-feat">Adults only</span>
-        </div>
-        <div class="appt-price-row">
-          <div>
-            <span class="appt-price">79 €</span>
-            <span class="appt-price-unit"> / Nacht</span>
-          </div>
-          <button class="appt-btn">Details</button>
-        </div>
+  <section>
+    <div class="pane" data-start="1600" data-end="2600">
+      <h2>At some point I'll include a Vita here, that day is not today.</h2>
+      <p>
+        :-)
+      </p>
+      <div class="image">
+        <img src="https://placebear.com/900/600" alt="Bear">
       </div>
     </div>
+  </section>
 
-    <!-- Wohnung 3 -->
-    <div class="appt-card">
-      <div class="appt-img-wrap">
-        <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600&q=80" alt="Die Bergerblick Suite" class="appt-img">
-        <div class="appt-badge">DG</div>
-      </div>
-      <div class="appt-body">
-        <h3 class="appt-name">Bergerblick Suite</h3>
-        <div class="appt-size">90 m² · bis 6 Personen</div>
-        <p class="appt-desc">Die große Familienwohnung mit Panoramafenster im Wohnzimmer, drei Schlafzimmern und einer vollausgestatteten Küche — perfekt für eine Woche Berge.</p>
-        <div class="appt-features">
-          <span class="appt-feat">Panoramabalkon</span>
-          <span class="appt-feat">Familienküche</span>
-          <span class="appt-feat">3 Schlafzimmer</span>
-          <span class="appt-feat">Kinderbett inkl.</span>
-        </div>
-        <div class="appt-price-row">
-          <div>
-            <span class="appt-price">138 €</span>
-            <span class="appt-price-unit"> / Nacht</span>
-          </div>
-          <button class="appt-btn">Details</button>
-        </div>
+  <section>
+    <div class="pane" data-start="2400" data-end="3400">
+      <h2>You're still here? Fine, some things about me, then.</h2>
+      <p>
+      I am half Brazilian, half German. Consequently, I love cultures and languages, of which I currently speak five (four?)
+      German, Englisch, French, Japanese, Portuguese (and Spanish isn't too hard to understand I suppose).
+      Much more to say, little time.
+      </p>
+      <div class="image">
+        <img src="https://place.dog/900/600" alt="Dog">
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- PREISE -->
-<section id="preise">
-  <div class="preise-header">
-    <div class="section-tag">Preisübersicht</div>
-    <h2 class="section-title">Transparent &amp; <em>fair</em></h2>
-    <div class="divider"></div>
-    <p class="section-body">Alle Preise verstehen sich pro Nacht inklusive Bettwäsche, Handtücher und WLAN. Kurtaxe nicht inbegriffen.</p>
-  </div>
+  <footer>
+    © Me
+  </footer>
 
-  <div class="tab-nav">
-    <button class="tab-btn active" onclick="showTab('saison')">Nach Saison</button>
-    <button class="tab-btn" onclick="showTab('wochen')">Wochenpauschalen</button>
-    <button class="tab-btn" onclick="showTab('extras')">Extras &amp; Gebühren</button>
-  </div>
+  <script>
+    const panes = document.querySelectorAll('.pane');
+    const orbs = document.querySelectorAll('.orb');
+    const floatingPhoto = document.getElementById('floatingPhoto');
+    const landing = document.querySelector('.landing');
 
-  <!-- Tab 1: Nach Saison -->
-  <div class="tab-content active" id="tab-saison">
-    <div class="preise-grid">
-      <div class="saison-card">
-        <div class="saison-name">Nebensaison</div>
-        <div class="saison-dates">Nov – Feb &amp; Apr – Mai (ausgenommen Feiertage)</div>
-        <div class="saison-prices">
-          <div class="saison-row">
-            <span class="saison-apt">Almstube (bis 4 P.)</span>
-            <div><span class="saison-amount">79 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-          <div class="saison-row">
-            <span class="saison-apt">Heustüble (bis 2 P.)</span>
-            <div><span class="saison-amount">65 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-          <div class="saison-row">
-            <span class="saison-apt">Bergerblick Suite (bis 6 P.)</span>
-            <div><span class="saison-amount">115 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-        </div>
-      </div>
+    function onScroll() {
+      const scrollY = window.scrollY;
 
-      <div class="saison-card">
-        <div class="saison-name">Hauptsaison Sommer</div>
-        <div class="saison-dates">Jun – Sep (mind. 3 Nächte)</div>
-        <div class="saison-prices">
-          <div class="saison-row">
-            <span class="saison-apt">Almstube (bis 4 P.)</span>
-            <div><span class="saison-amount">95 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-          <div class="saison-row">
-            <span class="saison-apt">Heustüble (bis 2 P.)</span>
-            <div><span class="saison-amount">79 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-          <div class="saison-row">
-            <span class="saison-apt">Bergerblick Suite (bis 6 P.)</span>
-            <div><span class="saison-amount">138 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-        </div>
-      </div>
+      panes.forEach(pane => {
+        const start = parseFloat(pane.dataset.start);
+        const end = parseFloat(pane.dataset.end);
+        const range = end - start;
+        
+        const progress = Math.max(0, Math.min(1, (scrollY - start) / range));
+        
+        // Smooth entrance and exit
+        const easeProgress = progress < 0.5 
+          ? 2 * progress * progress 
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        
+        // Transform based on scroll position
+        const translateY = (1 - easeProgress) * 100;
+        const scale = 0.85 + (easeProgress * 0.15);
+        const opacity = easeProgress;
+        const rotateX = (1 - easeProgress) * -8;
 
-      <div class="saison-card highlight">
-        <div class="saison-name">Wintersaison</div>
-        <div class="saison-dates">Dez – Mär (Ski &amp; Schnee, mind. 5 Nächte)</div>
-        <div class="saison-prices">
-          <div class="saison-row">
-            <span class="saison-apt">Almstube (bis 4 P.)</span>
-            <div><span class="saison-amount">110 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-          <div class="saison-row">
-            <span class="saison-apt">Heustüble (bis 2 P.)</span>
-            <div><span class="saison-amount">88 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-          <div class="saison-row">
-            <span class="saison-apt">Bergerblick Suite (bis 6 P.)</span>
-            <div><span class="saison-amount">158 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-        </div>
-      </div>
+        pane.style.transform = `
+          translateY(${translateY}px) 
+          scale(${scale})
+          perspective(1000px)
+          rotateX(${rotateX}deg)
+        `;
+        pane.style.opacity = opacity;
+      });
 
-      <div class="saison-card">
-        <div class="saison-name">Feiertage &amp; Brücken</div>
-        <div class="saison-dates">Weihnachten, Ostern, Pfingsten, Allerheiligen</div>
-        <div class="saison-prices">
-          <div class="saison-row">
-            <span class="saison-apt">Almstube (bis 4 P.)</span>
-            <div><span class="saison-amount">120 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-          <div class="saison-row">
-            <span class="saison-apt">Heustüble (bis 2 P.)</span>
-            <div><span class="saison-amount">95 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-          <div class="saison-row">
-            <span class="saison-apt">Bergerblick Suite (bis 6 P.)</span>
-            <div><span class="saison-amount">175 €</span> <span class="saison-unit">/ Nacht</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="preise-note">
-      * Mindestaufenthalt variiert je nach Saison. Preise für Kinder unter 3 Jahren frei. Kurtaxe: 1,80 € / Person / Nacht (ab 18 Jahren). Buchungen ab 7 Nächten erhalten 8 % Rabatt.
-    </div>
-  </div>
+      // Parallax orbs
+      orbs.forEach((orb, i) => {
+        const speed = 0.2 + (i * 0.1);
+        orb.style.transform = `translateY(${scrollY * speed}px)`;
+      });
 
-  <!-- Tab 2: Wochenpauschalen -->
-  <div class="tab-content" id="tab-wochen">
-    <table class="preise-table">
-      <thead>
-        <tr>
-          <th>Wohnung</th>
-          <th>Kapazität</th>
-          <th>Saison</th>
-          <th>7 Nächte</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>Almstube</td><td>bis 4 Personen</td><td>Nebensaison</td><td>490 €</td></tr>
-        <tr><td>Almstube</td><td>bis 4 Personen</td><td>Hauptsaison</td><td>595 €</td></tr>
-        <tr><td>Almstube</td><td>bis 4 Personen</td><td>Wintersaison</td><td>699 €</td></tr>
-        <tr><td>Heustüble</td><td>bis 2 Personen</td><td>Nebensaison</td><td>399 €</td></tr>
-        <tr><td>Heustüble</td><td>bis 2 Personen</td><td>Hauptsaison</td><td>499 €</td></tr>
-        <tr><td>Heustüble</td><td>bis 2 Personen</td><td>Wintersaison</td><td>565 €</td></tr>
-        <tr><td>Bergerblick Suite</td><td>bis 6 Personen</td><td>Nebensaison</td><td>735 €</td></tr>
-        <tr><td>Bergerblick Suite</td><td>bis 6 Personen</td><td>Hauptsaison</td><td>895 €</td></tr>
-        <tr><td>Bergerblick Suite</td><td>bis 6 Personen</td><td>Wintersaison</td><td>1.050 €</td></tr>
-      </tbody>
-    </table>
-    <div class="preise-note">
-      Wochenpauschalen gelten für Sa–Sa. Bettwäsche, Handtücher und Endreinigung sind inklusive. Haustiere auf Anfrage, zzgl. Gebühr.
-    </div>
-  </div>
+      // Floating photo lift/fall behavior:
+      if (floatingPhoto && landing) {
+        const landingRect = landing.getBoundingClientRect();
+        // We start affecting the photo once the landing section hits the top of the viewport.
+        // The effect progresses while landing scrolls up across roughly 60% of the viewport height.
+        const triggerRange = window.innerHeight * 0.6;
+        // landingRect.top is 0 when the top of landing is at the top of the viewport; negative when scrolled past.
+        const rawProgress = Math.max(0, Math.min(1, -landingRect.top / triggerRange));
+        // Map progress to a lift in px (negative -> upward)
+        const maxLift = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--photo-lift-max')) || 80;
+        const lift = rawProgress * -maxLift;
 
-  <!-- Tab 3: Extras -->
-  <div class="tab-content" id="tab-extras">
-    <div class="zusatz-grid">
-      <div class="zusatz-card">
-        <div class="zusatz-icon">🐕</div>
-        <div class="zusatz-name">Haustier</div>
-        <div class="zusatz-price">8 € <span style="font-size:.7rem;color:rgba(255,255,255,.35)">/Nacht</span></div>
-        <div class="zusatz-note">Max. 2 Haustiere, nur Almstube</div>
-      </div>
-      <div class="zusatz-card">
-        <div class="zusatz-icon">🧺</div>
-        <div class="zusatz-name">Zusatz-Wäsche</div>
-        <div class="zusatz-price">15 €</div>
-        <div class="zusatz-note">Pro Set Bettwäsche + Handtücher</div>
-      </div>
-      <div class="zusatz-card">
-        <div class="zusatz-icon">🌿</div>
-        <div class="zusatz-name">Willkommenskorb</div>
-        <div class="zusatz-price">29 €</div>
-        <div class="zusatz-note">Regional & saisonal zusammengestellt</div>
-      </div>
-      <div class="zusatz-card">
-        <div class="zusatz-icon">🧖</div>
-        <div class="zusatz-name">Sauna</div>
-        <div class="zusatz-price">12 € <span style="font-size:.7rem;color:rgba(255,255,255,.35)">/Nutzung</span></div>
-        <div class="zusatz-note">Buchung vorab, exklusiv für Heustüble-Gäste kostenlos</div>
-      </div>
-    </div>
-    <div class="preise-note">
-      Alle Zusatzleistungen bitte bei Buchung oder spätestens 48h vor Anreise anfragen. Preise inkl. MwSt. Stornobedingungen: kostenlos bis 30 Tage vor Anreise, danach 50 % der Buchungssumme.
-    </div>
-  </div>
-</section>
+        // Add a small natural bob while at rest; reduce bob as user scrolls (so it stabilizes when lifted)
+        const time = Date.now();
+        const idleBob = Math.sin(time / 700) * (3 * (1 - rawProgress)); // +-3px when not scrolled
+        const translateY = lift + idleBob;
 
-<!-- UMGEBUNG -->
-<section id="umgebung">
-  <div class="umgebung-inner">
-    <div class="section-tag">Die Region</div>
-    <h2 class="section-title">Allgäu — mehr als <em>Berge</em></h2>
-    <div class="divider"></div>
-    <p class="section-body">Von Gut Sonnenhang aus erreichen Sie in wenigen Minuten Wanderwege, Badeseen und den Skiverbund Oberstdorf-Kleinwalsertal.</p>
+        // Slight scale change when lifted (subtle)
+        const scale = 1 - (rawProgress * 0.03);
 
-    <div class="umgebung-cards">
-      <div class="umg-card">
-        <div class="umg-icon">⛷️</div>
-        <h4 class="umg-title">Skigebiet Grünten</h4>
-        <p class="umg-text">12 km entfernt — Anfänger- bis Profiabfahrten, Langlauf und Winterwandern direkt vor der Tür.</p>
-      </div>
-      <div class="umg-card">
-        <div class="umg-icon">🥾</div>
-        <h4 class="umg-title">Wanderparadies</h4>
-        <p class="umg-text">Über 200 km markierte Wanderwege ab Haustür — von der gemütlichen Talrunde bis zur Alpentour.</p>
-      </div>
-      <div class="umg-card">
-        <div class="umg-icon">🏰</div>
-        <h4 class="umg-title">Schloss Neuschwanstein</h4>
-        <p class="umg-text">45 min Fahrt. Das bekannteste Schloss der Welt — am besten früh morgens besucht.</p>
-      </div>
-      <div class="umg-card">
-        <div class="umg-icon">🧀</div>
-        <h4 class="umg-title">Kulinarik & Märkte</h4>
-        <p class="umg-text">Allgäuer Käsestraße, Wochenmärkte in Sonthofen und echte Hüttenwirtschaften mit Brettljause.</p>
-      </div>
-    </div>
+        floatingPhoto.style.transform = `translateX(-50%) translateY(${translateY}px) translateZ(0) scale(${scale})`;
 
-    <div class="umgebung-gallery">
-      <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=700&q=80" alt="Allgäu Landschaft" class="umg-img">
-      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80" alt="Berge" class="umg-img">
-      <img src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=400&q=80" alt="See" class="umg-img">
-      <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&q=80" alt="Wandern" class="umg-img">
-      <img src="https://images.unsplash.com/photo-1598135753163-6167c1a1ad65?w=400&q=80" alt="Dorf" class="umg-img">
-    </div>
-  </div>
-</section>
+        // Slightly increase shadow while lifted
+        const shadowOpacity = 0.18 + (rawProgress * 0.06);
+        floatingPhoto.style.boxShadow = `0 30px 60px rgba(0,0,0,${shadowOpacity}) , inset 0 0 0 1px rgba(255,255,255,0.22)`;
+      }
+    }
 
-<!-- KONTAKT -->
-<section id="kontakt">
-  <div class="kontakt-inner">
-    <div>
-      <div class="section-tag">Anfragen &amp; Buchung</div>
-      <h2 class="section-title">Schreiben Sie <em>uns</em></h2>
-      <div class="divider"></div>
-      <form class="kontakt-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Vorname</label>
-            <input type="text" placeholder="Anna">
-          </div>
-          <div class="form-group">
-            <label>Nachname</label>
-            <input type="text" placeholder="Müller">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>E-Mail</label>
-          <input type="email" placeholder="anna@beispiel.de">
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Anreise</label>
-            <input type="date">
-          </div>
-          <div class="form-group">
-            <label>Abreise</label>
-            <input type="date">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Gewünschte Wohnung</label>
-          <select>
-            <option>Bitte wählen …</option>
-            <option>Die Almstube (bis 4 Pers.)</option>
-            <option>Das Heustüble (bis 2 Pers.)</option>
-            <option>Bergerblick Suite (bis 6 Pers.)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Nachricht</label>
-          <textarea placeholder="Anzahl Personen, Wünsche, Fragen …"></textarea>
-        </div>
-        <button type="submit" class="submit-btn">Anfrage senden →</button>
-      </form>
-    </div>
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    onScroll();
+  </script>
 
-    <div class="kontakt-info">
-      <h3>Gut Sonnenhang</h3>
-      <div class="info-row">
-        <span class="info-icon">📍</span>
-        <p class="info-text"><strong>Adresse</strong>Sonnenhangweg 14<br>87527 Sonthofen-Altstädten</p>
-      </div>
-      <div class="info-row">
-        <span class="info-icon">📞</span>
-        <p class="info-text"><strong>Telefon</strong>+49 (0) 8321 / 48 72 60</p>
-      </div>
-      <div class="info-row">
-        <span class="info-icon">✉️</span>
-        <p class="info-text"><strong>E-Mail</strong>info@gut-sonnenhang.de</p>
-      </div>
-      <div class="info-row">
-        <span class="info-icon">🕐</span>
-        <p class="info-text"><strong>Check-in / Check-out</strong>Anreise: ab 15:00 Uhr<br>Abreise: bis 10:00 Uhr</p>
-      </div>
-      <div class="info-row">
-        <span class="info-icon">🚗</span>
-        <p class="info-text"><strong>Anfahrt</strong>A7 Ausfahrt Sonthofen, dann 8 km Richtung Altstädten. Kostenlose Parkplätze am Hof.</p>
-      </div>
-      <br>
-      <p style="font-size:0.8rem;line-height:1.8;color:rgba(42,34,24,0.5)">Wir antworten in der Regel innerhalb von 24 Stunden. Bei kurzfristigen Anfragen rufen Sie uns gerne direkt an.</p>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Gut <span>Sonnenhang</span></div>
-  <div>© 2024 Familie Berger · Alle Rechte vorbehalten</div>
-  <div class="footer-links">
-    <a href="#">Impressum</a>
-    <a href="#">Datenschutz</a>
-    <a href="#">AGB</a>
-  </div>
-</footer>
-
-<script>
-  function showTab(name) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    event.target.classList.add('active');
-  }
-
-  // Nav highlight on scroll
-  const sections = document.querySelectorAll('section[id]');
-  window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(s => {
-      if(window.scrollY >= s.offsetTop - 120) current = s.id;
-    });
-    document.querySelectorAll('.nav-links a').forEach(a => {
-      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
-    });
-  });
-</script>
 </body>
 </html>
