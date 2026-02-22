@@ -1,1 +1,581 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <title>Johannes Lima Spielhofen</title> <style> :root { --glass: rgba(255,255,255,0.25); --glass-border: rgba(255,255,255,0.35); --text-main: #1d1d1f; --text-sub: rgba(29,29,31,0.65); --bg-start: #d5d5e0; --bg-end: #f0f0f5; /* profile photo sizing */ --photo-size: 220px; --photo-size-lg: 400px; --photo-lift-max: 80px; /* max lift in px when scrolled */ } * { box-sizing: border-box; margin: 0; padding: 0; } body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui; background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%); color: var(--text-main); overflow-x: hidden; -webkit-font-smoothing: antialiased; } section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 8rem 2rem; position: relative; } .pane { background: var(--glass); backdrop-filter: blur(80px) saturate(250%); -webkit-backdrop-filter: blur(80px) saturate(250%); border: 1px solid var(--glass-border); border-radius: 36px; padding: 4.5rem 4rem; max-width: 880px; width: 100%; box-shadow: 0 25px 70px rgba(0,0,0,0.1), 0 10px 30px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(255,255,255,0.3); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform, opacity; } /* Landing section */ .landing { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2; position: relative; } .profile-card { background: var(--glass); backdrop-filter: blur(80px) saturate(250%); -webkit-backdrop-filter: blur(80px) saturate(250%); border: 1px solid var(--glass-border); border-radius: 40px; padding: 4rem 4.5rem 3.5rem; /* extra top space to accommodate floating photo */ max-width: 1400px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; box-shadow: 0 30px 80px rgba(0,0,0,0.12), 0 10px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(255,255,255,0.3); position: relative; /* for absolutely-positioned floating photo */ overflow: visible; } /* floating circular profile image positioned above the card */ .profile-image { width: var(--photo-size); height: var(--photo-size); border-radius: 50%; overflow: hidden; border: 4px solid rgba(255,255,255,0.45); box-shadow: 0 30px 60px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(255,255,255,0.22); position: absolute; left: 50%; top: calc(-1 * (var(--photo-size) / 2)); transform: translateX(-50%) translateY(0); z-index: 3; will-change: transform; transition: box-shadow 200ms ease, transform 120ms linear; background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.02)); display: flex; align-items: center; justify-content: center; } .profile-image img { width: 100%; height: 100%; object-fit: cover; display: block; } .profile-name { font-size: 5.5rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; padding-top: calc(var(--photo-size) / 2 + 0.5rem); /* ensure adequate spacing on small screens */ text-align: center; } .scroll-indicator { position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%); font-size: 0.9rem; color: var(--text-sub); animation: bounce 2s infinite; } @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } } h1 { font-size: clamp(3.5rem, 8vw, 6rem); font-weight: 700; letter-spacing: -0.055em; text-align: center; margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--text-main), rgba(29,29,31,0.6)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; } h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1.2rem; letter-spacing: -0.04em; } p { font-size: 1.2rem; font-weight: 400; line-height: 1.55; color: var(--text-sub); max-width: 640px; } .hero p { margin-left: auto; margin-right: auto; text-align: center; font-size: 1.35rem; } .image { margin-top: 2.8rem; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.35); box-shadow: 0 20px 50px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.4); transition: transform 0.4s ease; } .image img { width: 100%; display: block; } /* Enhanced glass orbs */ .orb { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.5), rgba(255,255,255,0.2) 35%, rgba(200,200,255,0.1) 60%, transparent 75%); filter: blur(70px); z-index: -1; pointer-events: none; } .orb.large { width: 900px; height: 900px; } .orb.medium { width: 600px; height: 600px; } .orb.small { width: 400px; height: 400px; } footer { padding: 5rem 2rem; text-align: center; font-size: 0.95rem; color: rgba(29,29,31,0.5); letter-spacing: 0.01em; font-weight: 500; } @media (min-width: 769px) { :root { --photo-size: var(--photo-size-lg); } .profile-name { font-size: 2.6rem; padding-top: calc(var(--photo-size) / 2 + 1rem); } } @media (max-width: 768px) { section { padding: 5rem 1.5rem; } .pane { padding: 3rem 2.5rem; } .profile-card { padding: 3rem 2rem 2.5rem; flex-direction: column; text-align: center; gap: 1.25rem; } .profile-image { width: var(--photo-size); height: var(--photo-size); top: calc(-1 * (var(--photo-size) / 2)); } .profile-name { font-size: 1.4rem; padding-top: calc(var(--photo-size) / 2 + 0.4rem); } h1 { font-size: 3rem; } h2 { font-size: 2rem; } p { font-size: 1.1rem; } } </style> </head> <body> <div class="orb large" style="left: -250px; top: 5%;"></div> <div class="orb medium" style="right: -200px; top: 30%;"></div> <div class="orb small" style="left: 15%; top: 70%;"></div> <div class="orb medium" style="right: 10%; bottom: 10%;"></div> <div class="landing"> <div class="profile-card" id="profileCard"> <div class="profile-image floating-photo" id="floatingPhoto" aria-hidden="true"> <img src="profile.jpg" alt="Johannes Lima Spielhofen"> </div> <h1 class="profile-name">Johannes Lima Spielhofen</h2> <p style="max-width:800px; text-align:center; color: var(--text-sub);"> Per Aspera Ad Astra </p> </div> </div> <section> <div class="pane hero" data-start="200" data-end="1000"> <h1>Hi, I'm Johannes.</h1> <p> I'm currently building SheetCheater, an App designed to help you learn reading sheet music quicker and more easily. </p> </div> </section> <section> <div class="pane" data-start="800" data-end="1800"> <h2>What's this even about</h2> <p> Honestly, I just wanted a website because it's cool. If you've found me; welcome, though </p> <div class="image"> <img src="https://placekitten.com/900/600" alt="Kitten"> </div> </div> </section> <section> <div class="pane" data-start="1600" data-end="2600"> <h2>At some point I'll include a Vita here, that day is not today.</h2> <p> :-) </p> <div class="image"> <img src="https://placebear.com/900/600" alt="Bear"> </div> </div> </section> <section> <div class="pane" data-start="2400" data-end="3400"> <h2>You're still here? Fine, some things about me, then.</h2> <p> I am half Brazilian, half German. Consequently, I love cultures and languages, of which I currently speak five (four?) German, Englisch, French, Japanese, Portuguese (and Spanish isn't too hard to understand I suppose). Much more to say, little time. </p> <div class="image"> <img src="https://place.dog/900/600" alt="Dog"> </div> </div> </section> <footer> © Me </footer> <script> const panes = document.querySelectorAll('.pane'); const orbs = document.querySelectorAll('.orb'); const floatingPhoto = document.getElementById('floatingPhoto'); const landing = document.querySelector('.landing'); function onScroll() { const scrollY = window.scrollY; panes.forEach(pane => { const start = parseFloat(pane.dataset.start); const end = parseFloat(pane.dataset.end); const range = end - start; const progress = Math.max(0, Math.min(1, (scrollY - start) / range)); // Smooth entrance and exit const easeProgress = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2; // Transform based on scroll position const translateY = (1 - easeProgress) * 100; const scale = 0.85 + (easeProgress * 0.15); const opacity = easeProgress; const rotateX = (1 - easeProgress) * -8; pane.style.transform = ` translateY(${translateY}px) scale(${scale}) perspective(1000px) rotateX(${rotateX}deg) `; pane.style.opacity = opacity; }); // Parallax orbs orbs.forEach((orb, i) => { const speed = 0.2 + (i * 0.1); orb.style.transform = `translateY(${scrollY * speed}px)`; }); // Floating photo lift/fall behavior: if (floatingPhoto && landing) { const landingRect = landing.getBoundingClientRect(); // We start affecting the photo once the landing section hits the top of the viewport. // The effect progresses while landing scrolls up across roughly 60% of the viewport height. const triggerRange = window.innerHeight * 0.6; // landingRect.top is 0 when the top of landing is at the top of the viewport; negative when scrolled past. const rawProgress = Math.max(0, Math.min(1, -landingRect.top / triggerRange)); // Map progress to a lift in px (negative -> upward) const maxLift = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--photo-lift-max')) || 80; const lift = rawProgress * -maxLift; // Add a small natural bob while at rest; reduce bob as user scrolls (so it stabilizes when lifted) const time = Date.now(); const idleBob = Math.sin(time / 700) * (3 * (1 - rawProgress)); // +-3px when not scrolled const translateY = lift + idleBob; // Slight scale change when lifted (subtle) const scale = 1 - (rawProgress * 0.03); floatingPhoto.style.transform = `translateX(-50%) translateY(${translateY}px) translateZ(0) scale(${scale})`; // Slightly increase shadow while lifted const shadowOpacity = 0.18 + (rawProgress * 0.06); floatingPhoto.style.boxShadow = `0 30px 60px rgba(0,0,0,${shadowOpacity}) , inset 0 0 0 1px rgba(255,255,255,0.22)`; } } window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll, { passive: true }); onScroll(); </script> </body> </html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seeberghof Fuschl am See – Ferienwohnungen am Fuschlsee</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --lake:   #2e6b8a;
+  --lakeL:  #5b9ab8;
+  --lakeXL: #c8e8f4;
+  --pine:   #3b5e3f;
+  --pineLt: #d6e8d8;
+  --cream:  #f8f5f0;
+  --sand:   #ede8df;
+  --dark:   #1c2b20;
+  --gold:   #c49a3a;
+  --text:   #2d3b2f;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--text); font-weight: 300; line-height: 1.6; }
+
+/* ─ NAV ─ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 3rem;
+  background: rgba(248,245,240,0.95); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(46,107,138,0.15);
+}
+.logo { font-family: 'Lora', serif; font-size: 1.35rem; color: var(--lake); text-decoration: none; }
+.logo span { color: var(--pine); font-style: italic; }
+.nav-links { display: flex; gap: 2.2rem; list-style: none; }
+.nav-links a { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; color: var(--text); text-decoration: none; opacity: 0.6; transition: opacity 0.2s, color 0.2s; }
+.nav-links a:hover { opacity: 1; color: var(--lake); }
+.nav-book { background: var(--lake); color: #fff; border: none; font-family: 'Source Sans 3', sans-serif; font-size: 0.76rem; font-weight: 600; letter-spacing: 0.1em; padding: 0.6rem 1.5rem; cursor: pointer; transition: background 0.2s; }
+.nav-book:hover { background: var(--pine); }
+
+/* ─ HERO ─ */
+#hero { height: 100vh; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding-bottom: 5rem; }
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to top, rgba(28,43,32,0.78) 0%, rgba(28,43,32,0.25) 55%, rgba(28,43,32,0.08) 100%),
+    url('https://assets.tourdata.at/1920x/127714/21BD158A5165471A00A97BB0B9152EE036D2E6810F09FC1586BB56D9D55F540D/sonnenuntergang-am-fuschlsee.jpg') center/cover no-repeat;
+  animation: hZoom 22s ease-in-out infinite alternate;
+}
+@keyframes hZoom { from { transform: scale(1); } to { transform: scale(1.06); } }
+.hero-inner { position: relative; z-index: 2; width: 100%; padding: 0 4rem; display: flex; justify-content: space-between; align-items: flex-end; }
+.hero-left { max-width: 580px; }
+.hero-pill {
+  display: inline-block; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); border: 1px solid rgba(196,154,58,0.5); padding: 0.35rem 0.9rem; margin-bottom: 1.3rem;
+  animation: fadeUp 0.8s 0.2s both;
+}
+.hero-h1 {
+  font-family: 'Lora', serif; font-size: clamp(2.6rem, 5.5vw, 4.6rem); font-weight: 400; line-height: 1.1; color: #fff;
+  animation: fadeUp 0.8s 0.35s both;
+}
+.hero-h1 em { font-style: italic; color: var(--lakeXL); }
+.hero-sub { font-size: 1rem; color: rgba(255,255,255,0.8); line-height: 1.8; margin: 1.4rem 0 2rem; max-width: 440px; animation: fadeUp 0.8s 0.5s both; }
+.hero-ctas { display: flex; gap: 1rem; animation: fadeUp 0.8s 0.65s both; }
+.btn { font-size: 0.76rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.85rem 2rem; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.2s; border: none; }
+.btn-gold { background: var(--gold); color: #fff; }
+.btn-gold:hover { background: #a07c28; }
+.btn-ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.5); }
+.btn-ghost:hover { background: rgba(255,255,255,0.1); }
+.hero-stats { display: flex; flex-direction: column; gap: 0.8rem; animation: fadeUp 0.8s 0.8s both; }
+.hero-stat { text-align: right; color: #fff; }
+.hero-stat strong { font-family: 'Lora', serif; font-size: 1.9rem; line-height: 1; display: block; }
+.hero-stat span { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.55; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+/* ─ STRIPE ─ */
+.stripe { background: var(--lake); color: #fff; padding: 0.9rem 3rem; display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; font-size: 0.79rem; letter-spacing: 0.06em; }
+.stripe span { display: flex; align-items: center; gap: 0.4rem; opacity: 0.85; }
+.stripe span::before { content: '✓'; color: var(--gold); font-weight: bold; }
+
+/* ─ SECTIONS ─ */
+section { padding: 6rem 3rem; }
+.inner { max-width: 1120px; margin: 0 auto; }
+.eyebrow { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--lake); display: block; margin-bottom: 0.7rem; }
+.h2 { font-family: 'Lora', serif; font-size: clamp(1.8rem, 3.5vw, 2.7rem); font-weight: 400; line-height: 1.2; color: var(--dark); margin-bottom: 1rem; }
+.h2 em { font-style: italic; color: var(--lake); }
+.rule { width: 44px; height: 3px; background: var(--gold); margin: 1rem 0 1.8rem; border-radius: 2px; }
+.lead { font-size: 0.97rem; line-height: 1.85; color: rgba(29,43,32,0.68); max-width: 560px; }
+
+/* ─ DER HOF ─ */
+#hof { background: #fff; }
+.hof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.hof-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.hof-photos .main-photo { grid-column: 1 / -1; height: 260px; overflow: hidden; }
+.hof-photos .main-photo img { width: 100%; height: 100%; object-fit: cover; }
+.hof-photos .sub-photo { height: 190px; overflow: hidden; }
+.hof-photos .sub-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.hof-photos .sub-photo:hover img { transform: scale(1.04); }
+.hof-callout { margin: 1.8rem 0; padding: 1.2rem 1.5rem; border-left: 3px solid var(--lake); background: var(--lakeXL); font-size: 0.92rem; line-height: 1.8; color: var(--lake); font-style: italic; }
+.hof-features { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; margin-top: 1.5rem; }
+.hof-feat { font-size: 0.83rem; display: flex; align-items: center; gap: 0.5rem; color: var(--pine); }
+.hof-feat::before { content: ''; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+
+/* ─ WOHNUNGEN ─ */
+#wohnungen { background: var(--cream); }
+.wohnungen-head { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end; margin-bottom: 3.5rem; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; }
+.card { background: #fff; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
+.card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,0.1); }
+.card-img-wrap { position: relative; overflow: hidden; }
+.card-img { width: 100%; height: 220px; object-fit: cover; display: block; transition: transform 0.5s; }
+.card:hover .card-img { transform: scale(1.05); }
+.card-badge { position: absolute; bottom: 0; left: 0; background: var(--lake); color: #fff; font-size: 0.64rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.4rem 1rem; }
+.card-body { padding: 1.6rem; }
+.card-name { font-family: 'Lora', serif; font-size: 1.35rem; color: var(--dark); margin-bottom: 0.25rem; }
+.card-size { font-size: 0.73rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lake); margin-bottom: 0.9rem; }
+.card-desc { font-size: 0.86rem; line-height: 1.75; color: rgba(29,43,32,0.62); margin-bottom: 1.2rem; }
+.card-amenities { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.3rem; }
+.pill { font-size: 0.66rem; font-weight: 500; letter-spacing: 0.05em; background: var(--lakeXL); color: var(--lake); padding: 0.25rem 0.65rem; }
+.card-footer { border-top: 1px solid var(--pineLt); padding-top: 1.1rem; display: flex; justify-content: space-between; align-items: center; }
+.card-price { font-family: 'Lora', serif; font-size: 1.55rem; color: var(--dark); }
+.card-price small { font-size: 0.7rem; font-family: 'Source Sans 3', sans-serif; color: rgba(29,43,32,0.45); font-weight: 300; }
+.card-link { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lake); text-decoration: none; border-bottom: 1px solid var(--lake); padding-bottom: 1px; transition: color 0.2s; }
+.card-link:hover { color: var(--pine); border-color: var(--pine); }
+
+/* ─ PREISE ─ */
+#preise { background: var(--dark); color: #fff; }
+.ph .h2 { color: #fff; }
+.ph .h2 em { color: var(--lakeXL); }
+.ph .lead { color: rgba(255,255,255,0.5); }
+.tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.12); margin: 2.5rem 0; }
+.tab { background: none; border: none; font-family: 'Source Sans 3', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.38); padding: 0.8rem 2rem; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
+.tab.on { color: var(--lakeXL); border-bottom-color: var(--lakeXL); }
+.tab:hover:not(.on) { color: rgba(255,255,255,0.65); }
+.panel { display: none; }
+.panel.on { display: block; }
+.preis-table { width: 100%; border-collapse: collapse; }
+.preis-table thead th { font-size: 0.66rem; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(255,255,255,0.38); padding: 0.8rem 1.2rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.preis-table thead th:not(:first-child) { text-align: center; }
+.preis-table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s; }
+.preis-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+.preis-table td { padding: 1.2rem; font-size: 0.88rem; color: rgba(255,255,255,0.7); vertical-align: middle; }
+.preis-table td:not(:first-child) { text-align: center; }
+.apt-n { color: #fff; font-weight: 500; font-size: 0.95rem; }
+.apt-d { font-size: 0.75rem; color: rgba(255,255,255,0.38); margin-top: 0.15rem; }
+.pc { font-family: 'Lora', serif; font-size: 1.25rem; color: var(--lakeXL); }
+.pc.hi { color: var(--gold); }
+.extras { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+.ex { border: 1px solid rgba(255,255,255,0.08); padding: 1.4rem; transition: border-color 0.2s; }
+.ex:hover { border-color: rgba(200,232,244,0.3); }
+.ex-icon { font-size: 1.4rem; margin-bottom: 0.7rem; }
+.ex-name { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 0.4rem; }
+.ex-val { font-family: 'Lora', serif; font-size: 1.2rem; color: var(--lakeXL); }
+.ex-note { font-size: 0.7rem; color: rgba(255,255,255,0.3); margin-top: 0.2rem; }
+.pnote { margin-top: 2.5rem; font-size: 0.78rem; line-height: 1.85; color: rgba(255,255,255,0.3); border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.8rem; }
+.pnote strong { color: rgba(255,255,255,0.55); }
+
+/* ─ GALERIE ─ */
+#galerie { background: #fff; padding: 5rem 3rem; }
+.gal { max-width: 1120px; margin: 2.5rem auto 0; display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 280px 200px; gap: 0.7rem; }
+.gal-big { overflow: hidden; grid-row: 1 / 3; }
+.gal-big img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+.gal-big:hover img { transform: scale(1.03); }
+.gc { overflow: hidden; }
+.gc img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+.gc:hover img { transform: scale(1.05); }
+
+/* ─ UMGEBUNG ─ */
+#umgebung { background: var(--cream); }
+.umb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.acts { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 2rem; }
+.act { display: flex; gap: 1.2rem; padding: 1.1rem 1.3rem; background: #fff; transition: background 0.2s; border-left: 3px solid transparent; }
+.act:hover { background: var(--lakeXL); border-left-color: var(--lake); }
+.act-icon { font-size: 1.4rem; flex-shrink: 0; }
+.act-t { font-weight: 600; font-size: 0.88rem; color: var(--dark); margin-bottom: 0.2rem; }
+.act-b { font-size: 0.82rem; line-height: 1.7; color: rgba(29,43,32,0.58); }
+.dists { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.2rem; }
+.dist { background: #fff; padding: 1rem 1.2rem; }
+.dist-l { font-size: 0.64rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lake); margin-bottom: 0.2rem; }
+.dist-v { font-size: 0.9rem; color: var(--dark); }
+
+/* ─ KONTAKT ─ */
+#kontakt { background: #fff; }
+.kt-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; }
+.form-box { background: var(--cream); padding: 2.5rem; }
+.fg { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
+.fg label { font-size: 0.66rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(29,43,32,0.5); }
+.fg input, .fg select, .fg textarea { border: 1px solid #d8d2c8; padding: 0.78rem 1rem; background: #fff; font-family: 'Source Sans 3', sans-serif; font-size: 0.9rem; color: var(--dark); outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
+.fg input:focus, .fg select:focus, .fg textarea:focus { border-color: var(--lake); }
+.fg textarea { min-height: 105px; resize: vertical; }
+.fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.btn-sub { width: 100%; background: var(--lake); color: #fff; border: none; font-family: 'Source Sans 3', sans-serif; font-size: 0.76rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.95rem 2rem; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem; }
+.btn-sub:hover { background: var(--pine); }
+.kinfo h3 { font-family: 'Lora', serif; font-size: 1.6rem; color: var(--dark); margin-bottom: 2rem; }
+.irow { display: flex; gap: 1rem; margin-bottom: 1.3rem; }
+.iicon { font-size: 1rem; flex-shrink: 0; margin-top: 0.15rem; }
+.ilabel { font-size: 0.64rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lake); margin-bottom: 0.2rem; }
+.ival { font-size: 0.88rem; color: rgba(29,43,32,0.7); line-height: 1.6; }
+.ival a { color: var(--lake); text-decoration: none; }
+.ival a:hover { text-decoration: underline; }
+.k-note { margin-top: 2rem; background: var(--pineLt); padding: 1.2rem 1.5rem; font-size: 0.83rem; line-height: 1.75; color: var(--pine); }
+
+/* ─ FOOTER ─ */
+footer { background: var(--dark); padding: 2.5rem 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+.footer-logo { font-family: 'Lora', serif; font-size: 1.2rem; color: #fff; }
+.footer-logo span { color: var(--lakeXL); font-style: italic; }
+.fl { display: flex; gap: 1.8rem; }
+.fl a { color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+.fl a:hover { color: var(--lakeXL); }
+
+/* ─ RESPONSIVE ─ */
+@media (max-width: 960px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  section { padding: 4rem 1.5rem; }
+  #hero { padding-bottom: 3rem; }
+  .hero-inner { flex-direction: column; align-items: flex-start; gap: 2rem; padding: 0 2rem; }
+  .hero-stats { flex-direction: row; gap: 2rem; }
+  .hero-stat { text-align: left; }
+  .hof-grid, .wohnungen-head, .umb-grid, .kt-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .cards { grid-template-columns: 1fr; }
+  .extras { grid-template-columns: 1fr 1fr; }
+  .gal { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .gal-big { grid-row: auto; }
+  .gal-big img, .gc img { height: 200px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="logo">Seeberghof <span>Fuschl</span></a>
+  <ul class="nav-links">
+    <li><a href="#hof">Der Hof</a></li>
+    <li><a href="#wohnungen">Wohnungen</a></li>
+    <li><a href="#preise">Preise</a></li>
+    <li><a href="#galerie">Fotos</a></li>
+    <li><a href="#umgebung">Umgebung</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <button class="nav-book" onclick="document.querySelector('#kontakt').scrollIntoView({behavior:'smooth'})">Anfragen</button>
+</nav>
+
+<!-- HERO: echtes Fuschlsee-Sonnenuntergang-Foto -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-pill">Fuschl am See · Salzburg · Österreich</div>
+      <h1 class="hero-h1">Urlaub am <em>Fuschlsee</em> —<br>natürlich &amp; familiär</h1>
+      <p class="hero-sub">Erholung pur am familiär geführten Bauernhof — inmitten schöner Bergwelt und Seenlandschaft, nur 800 m vom Ortszentrum Fuschl am See.</p>
+      <div class="hero-ctas">
+        <a href="#wohnungen" class="btn btn-gold">Wohnungen ansehen</a>
+        <a href="#kontakt" class="btn btn-ghost">Anfragen</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>8 min</strong><span>zum Badestrand</span></div>
+      <div class="hero-stat"><strong>800 m</strong><span>zum Ortszentrum</span></div>
+      <div class="hero-stat"><strong>3</strong><span>Ferienwohnungen</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- INFO STRIPE -->
+<div class="stripe">
+  <span>Ortstaxe inkl.</span>
+  <span>Freier Eintritt Fuschlseebad</span>
+  <span>Haustiere herzlich willkommen</span>
+  <span>Kostenloser Parkplatz</span>
+  <span>Kinderermäßigung auf Anfrage</span>
+</div>
+
+<!-- DER HOF -->
+<section id="hof">
+  <div class="inner">
+    <div class="hof-grid">
+      <div class="hof-photos">
+        <div class="main-photo">
+          <img src="https://assets.tourdata.at/1920x/127709/6D5CBB877AF32949FB9117E5688B951B4616C0DAF777B368A287F94BE9BAE038/hausfoto-seeberghof.jpg" alt="Seeberghof Hausansicht">
+        </div>
+        <div class="sub-photo">
+          <img src="https://assets.tourdata.at/1920x/127710/0499F5EF6DF205EA566C41341501CF4434AD946ACF69C1B4978448810E5BF93B/kaminraum.jpg" alt="Kaminraum">
+        </div>
+        <div class="sub-photo">
+          <img src="https://assets.tourdata.at/1920x/127711/32F428CF94430CCF32D8EC86E4BC44E03E98F42AD1D4AD94E6BCE6E75C2299EB/bauernhof.jpg" alt="Bauernhof">
+        </div>
+      </div>
+      <div>
+        <span class="eyebrow">Herzlich Willkommen</span>
+        <h2 class="h2">Erholung pur am <em>Bauernhof</em></h2>
+        <div class="rule"></div>
+        <p class="lead">Der Seeberghof ist ein Bauernhof inmitten schöner Bergwelt und Seenlandschaft. Weg vom Stress — hier können Sie sich wunderbar erholen, entspannen, Ihre Kinder frei laufen lassen und die Ruhe genießen.</p>
+        <div class="hof-callout">„Unsere Gäste schätzen die ruhige und leicht erreichbare Lage — mit traumhaftem Ausblick auf Berge und Fuschlsee. Vielleicht machen Sie auch mit uns eine lustige Almfahrt zu unserem Jungvieh!"</div>
+        <div class="hof-features">
+          <div class="hof-feat">800 m zum Ortszentrum</div>
+          <div class="hof-feat">8 min zum Badestrand</div>
+          <div class="hof-feat">Freier Eintritt Fuschlseebad</div>
+          <div class="hof-feat">Kostenloser Parkplatz</div>
+          <div class="hof-feat">Haustiere willkommen</div>
+          <div class="hof-feat">Hypoallerge Bettwäsche</div>
+          <div class="hof-feat">Aufenthaltsraum mit Spielen</div>
+          <div class="hof-feat">Almfahrt auf Anfrage</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WOHNUNGEN -->
+<section id="wohnungen">
+  <div class="inner">
+    <div class="wohnungen-head">
+      <div>
+        <span class="eyebrow">Unsere Unterkünfte</span>
+        <h2 class="h2">Drei <em>Ferienwohnungen</em> — alle mit Seeblick</h2>
+        <div class="rule"></div>
+      </div>
+      <p class="lead">Jede unserer drei Wohnungen verfügt über einen sonnigen Balkon mit Seeblick, vollausgestattete Küche und liegt direkt am Seeberghof — mitten in der Natur.</p>
+    </div>
+    <div class="cards">
+
+      <!-- Schober -->
+      <div class="card">
+        <div class="card-img-wrap">
+          <img src="https://assets.tourdata.at/1920x/127708/170C881826E64FA793CD306F670081CED2D782B164E82850E398BE0C1729F524/seeberghof.jpg" alt="Ferienwohnung Schober" class="card-img">
+          <div class="card-badge">Für Paare</div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Ferienwohnung Schober</h3>
+          <div class="card-size">40 m² · 1–2 Personen</div>
+          <p class="card-desc">Gemütliche Wohnung mit einem Schlafraum — auf Wunsch steht ein zweiter mit Verbindungstür zur Verfügung. Sonniger Balkon mit Seeblick und direktem Blick auf den Sonnenaufgang.</p>
+          <div class="card-amenities">
+            <span class="pill">1 Schlafzimmer</span>
+            <span class="pill">Küche</span>
+            <span class="pill">Dusche &amp; WC</span>
+            <span class="pill">Balkon mit Seeblick</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">ab 72 € <small>/ Tag</small></div>
+            <a href="#kontakt" class="card-link">Anfragen →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seeblick -->
+      <div class="card">
+        <div class="card-img-wrap">
+          <img src="https://assets.tourdata.at/1920x/127715/1DFFFAE335DEBF174FC28D6E28021BB56B990EDC34877BB4AE3B949585A4CEE0/ausblick-vom-balkon.jpg" alt="Ferienwohnung Seeblick" class="card-img">
+          <div class="card-badge">Für Familien</div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Ferienwohnung Seeblick</h3>
+          <div class="card-size">70 m² · 2–6 Personen</div>
+          <p class="card-desc">Geräumige Familienwohnung mit drei Schlafzimmern, separatem Dusche &amp; WC und sonnigem Balkon mit herrlichem Seeblick — viel Platz für die ganze Familie.</p>
+          <div class="card-amenities">
+            <span class="pill">3 Schlafzimmer</span>
+            <span class="pill">Küche</span>
+            <span class="pill">Dusche &amp; WC getrennt</span>
+            <span class="pill">Balkon mit Seeblick</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">ab 88 € <small>/ Tag</small></div>
+            <a href="#kontakt" class="card-link">Anfragen →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schafberg -->
+      <div class="card">
+        <div class="card-img-wrap">
+          <img src="https://assets.tourdata.at/1920x/127712/804EBF6BFD87E197E3EF2F43A50D6954BF36DDDFF5E00E1FA3DEA92EA18183C4/dscn9664-desktop-resolutie.jpg" alt="Ferienwohnung Schafberg" class="card-img">
+          <div class="card-badge">Für Gruppen</div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Ferienwohnung Schafberg</h3>
+          <div class="card-size">90 m² · 2–8 Personen</div>
+          <p class="card-desc">Die großzügige Wohnung für Großfamilien und Gruppen — drei Schlafzimmer, getrenntes Dusche &amp; WC, vollausgestattete Küche und der unvermeidliche Balkon mit Seeblick.</p>
+          <div class="card-amenities">
+            <span class="pill">3 Schlafzimmer</span>
+            <span class="pill">Küche</span>
+            <span class="pill">Dusche &amp; WC getrennt</span>
+            <span class="pill">Balkon mit Seeblick</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">ab 95 € <small>/ Tag</small></div>
+            <a href="#kontakt" class="card-link">Anfragen →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PREISE -->
+<section id="preise">
+  <div class="inner">
+    <div class="ph">
+      <span class="eyebrow" style="color:var(--lakeXL)">Preisübersicht 2025</span>
+      <h2 class="h2">Faire Preise — <em>transparent</em> &amp; aktuell</h2>
+      <div class="rule"></div>
+      <p class="lead">Alle Preise pro Ferienwohnung und Tag · ohne Verpflegung · inklusive Ortstaxe und kostenlosem Eintritt ins Fuschlseebad.</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab on" onclick="showTab('saison',this)">Saisonpreise 2025</button>
+      <button class="tab" onclick="showTab('extras',this)">Extras &amp; Konditionen</button>
+    </div>
+
+    <div class="panel on" id="p-saison">
+      <table class="preis-table">
+        <thead>
+          <tr>
+            <th>Wohnung</th>
+            <th>01.05. – 30.06.2025</th>
+            <th>01.07. – 31.08.2025 <span style="display:block;color:var(--gold);font-size:.58rem;letter-spacing:.04em">Hochsaison</span></th>
+            <th>01.09. – 01.11.2025</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="apt-n">Ferienwohnung Schober</div><div class="apt-d">40 m² · 1–2 Personen · 1 Schlafzimmer · Dusche &amp; WC · Balkon Seeblick</div></td>
+            <td><span class="pc">72 €</span></td>
+            <td><span class="pc hi">80 €</span></td>
+            <td><span class="pc">72 €</span></td>
+          </tr>
+          <tr>
+            <td><div class="apt-n">Ferienwohnung Seeblick</div><div class="apt-d">70 m² · 2–6 Personen · 3 Schlafzimmer · Dusche &amp; WC getrennt · Balkon Seeblick</div></td>
+            <td><span class="pc">88 €</span></td>
+            <td><span class="pc hi">95 €</span></td>
+            <td><span class="pc">88 €</span></td>
+          </tr>
+          <tr>
+            <td><div class="apt-n">Ferienwohnung Schafberg</div><div class="apt-d">90 m² · 2–8 Personen · 3 Schlafzimmer · Dusche &amp; WC getrennt · Balkon Seeblick</div></td>
+            <td><span class="pc">95 €</span></td>
+            <td><span class="pc hi">100 €</span></td>
+            <td><span class="pc">95 €</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pnote">
+        <strong>Inkludiert:</strong> Ortstaxe · Freier Eintritt ins Fuschlseebad · Bettwäsche &amp; Handtücher · Kostenloser Parkplatz am Hof ·
+        <strong>Zusätzlich:</strong> Endreinigung 40–50 € (je nach Wohnungsgröße) · Kinderermäßigung auf Anfrage · Haustiere willkommen ·
+        Preise für Zeiträume außerhalb der Saison (Nov.–Apr.) auf Anfrage bei <a href="mailto:seeberghof.fuschl@gmail.com" style="color:var(--lakeXL)">seeberghof.fuschl@gmail.com</a>
+      </div>
+    </div>
+
+    <div class="panel" id="p-extras">
+      <div class="extras">
+        <div class="ex"><div class="ex-icon">🧹</div><div class="ex-name">Endreinigung</div><div class="ex-val">40–50 €</div><div class="ex-note">Einmalig, je nach Wohnungsgröße</div></div>
+        <div class="ex"><div class="ex-icon">🐕</div><div class="ex-name">Haustiere</div><div class="ex-val">Willkommen!</div><div class="ex-note">Bitte bei Buchung angeben</div></div>
+        <div class="ex"><div class="ex-icon">👶</div><div class="ex-name">Kinderermäßigung</div><div class="ex-val">Auf Anfrage</div><div class="ex-note">Bitte bei Buchung erfragen</div></div>
+        <div class="ex"><div class="ex-icon">🏊</div><div class="ex-name">Fuschlseebad</div><div class="ex-val">Kostenlos</div><div class="ex-note">Freier Eintritt für alle Gäste</div></div>
+        <div class="ex"><div class="ex-icon">🚗</div><div class="ex-name">Parkplatz</div><div class="ex-val">Kostenlos</div><div class="ex-note">Direkt am Hof</div></div>
+        <div class="ex"><div class="ex-icon">🛏️</div><div class="ex-name">Bettwäsche</div><div class="ex-val">Inkludiert</div><div class="ex-note">Auch Allergiker-Bettwäsche möglich</div></div>
+        <div class="ex"><div class="ex-icon">🎲</div><div class="ex-name">Aufenthaltsraum</div><div class="ex-val">Kostenlos</div><div class="ex-note">Spieleklassiker zum Verleihen</div></div>
+        <div class="ex"><div class="ex-icon">⛰️</div><div class="ex-name">Almfahrt</div><div class="ex-val">Auf Anfrage</div><div class="ex-note">Mit Familie Pöckl, inkl. Almhütteneinkehr</div></div>
+      </div>
+      <div class="pnote">
+        Für unverbindliche Angebote und Stornobedingungen schreiben Sie uns jederzeit: <a href="mailto:seeberghof.fuschl@gmail.com" style="color:var(--lakeXL)">seeberghof.fuschl@gmail.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIE -->
+<section id="galerie">
+  <div class="inner">
+    <span class="eyebrow">Eindrücke</span>
+    <h2 class="h2">Der Seeberghof &amp; <em>seine Umgebung</em></h2>
+    <div class="rule"></div>
+  </div>
+  <div class="gal" style="max-width:1120px;margin:2.5rem auto 0">
+    <div class="gal-big">
+      <img src="https://assets.tourdata.at/1920x/127714/21BD158A5165471A00A97BB0B9152EE036D2E6810F09FC1586BB56D9D55F540D/sonnenuntergang-am-fuschlsee.jpg" alt="Sonnenuntergang am Fuschlsee">
+    </div>
+    <div class="gc"><img src="https://assets.tourdata.at/1920x/127709/6D5CBB877AF32949FB9117E5688B951B4616C0DAF777B368A287F94BE9BAE038/hausfoto-seeberghof.jpg" alt="Seeberghof Hausfoto"></div>
+    <div class="gc"><img src="https://assets.tourdata.at/1920x/127715/1DFFFAE335DEBF174FC28D6E28021BB56B990EDC34877BB4AE3B949585A4CEE0/ausblick-vom-balkon.jpg" alt="Ausblick vom Balkon"></div>
+    <div class="gc"><img src="https://assets.tourdata.at/1920x/127713/E3AE8718A0D047190051C3ABCE3971033CC530F07BD8C36EFA245715699E2F00/2008073154.jpg" alt="Familie am Hof"></div>
+    <div class="gc"><img src="https://assets.tourdata.at/1920x/127716/2F4C44116DDD324907F88D38D878DFA22E40D8FC68909FCD7713223C9B814A53/maja-fuschlsee.jpg" alt="Am Fuschlsee"></div>
+  </div>
+</section>
+
+<!-- UMGEBUNG -->
+<section id="umgebung">
+  <div class="inner">
+    <div class="umb-grid">
+      <div>
+        <span class="eyebrow">Die Region</span>
+        <h2 class="h2">Fuschlsee — <em>Natur pur</em> vor der Tür</h2>
+        <div class="rule"></div>
+        <p class="lead">Der Seeberghof ist der ideale Ausgangspunkt für viele schöne Wanderungen — der glasklare Fuschlsee liegt buchstäblich vor der Haustür.</p>
+        <div class="acts">
+          <div class="act"><span class="act-icon">🏊</span><div><div class="act-t">Naturbadestrand am Fuschlsee</div><div class="act-b">In nur 8 min. zu Fuß erreichbar — besonders familienfreundlich, da das Wasser langsam tiefer wird. Plus: freier Eintritt ins Fuschlseebad mit Parkplatz!</div></div></div>
+          <div class="act"><span class="act-icon">🥾</span><div><div class="act-t">Wandern &amp; Bergtouren</div><div class="act-b">Unzählige markierte Wege ab Haustür — Seeweg, Ruine Wartenfels, Schober (1.328 m), Ellmaustein, Filbling und vieles mehr.</div></div></div>
+          <div class="act"><span class="act-icon">🐄</span><div><div class="act-t">Almfahrt mit Familie Pöckl</div><div class="act-b">Eine lustige Almfahrt zu unserem Jungvieh, mit zünftiger Einkehr auf einer Almhütte — ein echtes Erlebnis für die ganze Familie!</div></div></div>
+          <div class="act"><span class="act-icon">🏰</span><div><div class="act-t">Salzburg &amp; Salzkammergut</div><div class="act-b">Salzburg ca. 30 km, Wolfgangsee und Mondsee schnell erreichbar, Schloss Fuschl direkt am Westufer des Sees.</div></div></div>
+          <div class="act"><span class="act-icon">⛷️</span><div><div class="act-t">Winter: Ski &amp; Schneeschuh</div><div class="act-b">Skigebiet Zwölferhorn (St. Gilgen, ca. 15 min), Gaissau-Hintersee ebenfalls in der Nähe. Schneeschuhwanderungen direkt ab Hof möglich.</div></div></div>
+        </div>
+      </div>
+      <div>
+        <img src="https://assets.tourdata.at/1920x/127711/32F428CF94430CCF32D8EC86E4BC44E03E98F42AD1D4AD94E6BCE6E75C2299EB/bauernhof.jpg" alt="Seeberghof von oben" style="width:100%;height:270px;object-fit:cover;display:block">
+        <img src="https://assets.tourdata.at/1920x/127716/2F4C44116DDD324907F88D38D878DFA22E40D8FC68909FCD7713223C9B814A53/maja-fuschlsee.jpg" alt="Fuschlsee" style="width:100%;height:175px;object-fit:cover;display:block;margin-top:0.7rem;margin-bottom:1.2rem">
+        <div class="dists">
+          <div class="dist"><div class="dist-l">Badestrand</div><div class="dist-v">8 min zu Fuß</div></div>
+          <div class="dist"><div class="dist-l">Ortszentrum</div><div class="dist-v">800 m</div></div>
+          <div class="dist"><div class="dist-l">Salzburg</div><div class="dist-v">ca. 30 km</div></div>
+          <div class="dist"><div class="dist-l">Zwölferhorn Ski</div><div class="dist-v">ca. 15 min</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="inner">
+    <div class="kt-grid">
+      <div>
+        <span class="eyebrow">Anfragen &amp; Buchung</span>
+        <h2 class="h2">Schreiben Sie <em>uns</em></h2>
+        <div class="rule"></div>
+        <div class="form-box">
+          <div class="fg-row">
+            <div class="fg"><label>Vorname</label><input type="text" placeholder="Maria"></div>
+            <div class="fg"><label>Nachname</label><input type="text" placeholder="Huber"></div>
+          </div>
+          <div class="fg"><label>E-Mail</label><input type="email" placeholder="ihre@email.at"></div>
+          <div class="fg-row">
+            <div class="fg"><label>Anreise</label><input type="date"></div>
+            <div class="fg"><label>Abreise</label><input type="date"></div>
+          </div>
+          <div class="fg">
+            <label>Gewünschte Wohnung</label>
+            <select>
+              <option value="">Bitte wählen …</option>
+              <option>Schober — 40 m², 1–2 Personen</option>
+              <option>Seeblick — 70 m², 2–6 Personen</option>
+              <option>Schafberg — 90 m², 2–8 Personen</option>
+            </select>
+          </div>
+          <div class="fg"><label>Personen, Kinder, Nachricht</label><textarea placeholder="Anzahl Personen, Kinder, Haustiere, Sonderwünsche …"></textarea></div>
+          <button class="btn-sub" type="button">Anfrage absenden →</button>
+        </div>
+      </div>
+      <div class="kinfo">
+        <h3>Seeberghof</h3>
+        <div class="irow"><span class="iicon">👩‍🌾</span><div><div class="ilabel">Gastgeberin</div><div class="ival">Mathilde Pöckl</div></div></div>
+        <div class="irow"><span class="iicon">📍</span><div><div class="ilabel">Adresse</div><div class="ival">Seestraße 88<br>5330 Fuschl am See<br>Salzburg, Österreich</div></div></div>
+        <div class="irow"><span class="iicon">📞</span><div><div class="ilabel">Telefon</div><div class="ival"><a href="tel:+4362268313">+43 6226 8313</a><br><a href="tel:+436644355160">+43 664 4355160</a> (Mobil)</div></div></div>
+        <div class="irow"><span class="iicon">✉️</span><div><div class="ilabel">E-Mail</div><div class="ival"><a href="mailto:seeberghof.fuschl@gmail.com">seeberghof.fuschl@gmail.com</a></div></div></div>
+        <div class="irow"><span class="iicon">🌐</span><div><div class="ilabel">Website</div><div class="ival"><a href="http://www.seeberghof-fuschl.at" target="_blank">www.seeberghof-fuschl.at</a></div></div></div>
+        <div class="irow"><span class="iicon">🕐</span><div><div class="ilabel">Check-in / Check-out</div><div class="ival">Anreise ab 14:00 Uhr<br>Abreise bis 10:00 Uhr</div></div></div>
+        <div class="k-note">Wir freuen uns auf Ihre Anfrage und melden uns schnellstmöglich zurück — auch unverbindliche Angebote jederzeit willkommen!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Seeberghof <span>Fuschl am See</span></div>
+  <div>© 2025 Mathilde Pöckl · Seestraße 88 · 5330 Fuschl am See · Österreich</div>
+  <div class="fl">
+    <a href="#">Impressum</a>
+    <a href="#">Datenschutz</a>
+  </div>
+</footer>
+
+<script>
+function showTab(name, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+  document.getElementById('p-' + name).classList.add('on');
+  btn.classList.add('on');
+}
+</script>
+</body>
+</html>
