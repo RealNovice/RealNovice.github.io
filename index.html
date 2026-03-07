@@ -18,7 +18,6 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: auto; }
 
     body {
@@ -41,58 +40,66 @@
       filter: blur(80px); z-index: 0; pointer-events: none;
     }
 
-    /* sticky viewport-height scene */
     .scene-wrap {
-      position: sticky;
-      top: 0;
+      position: sticky; top: 0;
       height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 1;
-      overflow: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 1; overflow: hidden;
     }
 
-    /* photo stays fixed above everything */
+    /* photo */
     .photo-wrap {
       position: absolute;
       top: calc(50% - var(--photo) * 0.85);
       left: 50%;
       transform: translateX(-50%);
-      width: var(--photo);
-      height: var(--photo);
-      border-radius: 50%;
-      overflow: hidden;
+      width: var(--photo); height: var(--photo);
+      border-radius: 50%; overflow: hidden;
       border: 4px solid rgba(255,255,255,0.55);
       box-shadow: 0 30px 70px rgba(0,0,0,0.20), inset 0 0 0 1px rgba(255,255,255,0.25);
       z-index: 10;
-      animation: float 4s ease-in-out infinite;
+      animation: float 6s ease-in-out infinite;
       will-change: transform;
-      transition: margin-top 0.05s linear;
     }
 
     @keyframes float {
-      0%,100% { transform: translateX(-50%) translateY(0);    }
-      50%      { transform: translateX(-50%) translateY(-12px);}
+      0%,100% { transform: translateX(-50%) translateY(0);   }
+      50%      { transform: translateX(-50%) translateY(-6px);}
     }
 
     .photo-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
 
-    /* card flip scene */
+    /* card */
     .card-scene {
       width: min(860px, 92vw);
       margin-top: calc(var(--photo) * 0.44);
       perspective: 1400px;
       perspective-origin: 50% 25%;
-      position: relative;
-      z-index: 5;
+      position: relative; z-index: 5;
     }
 
     .card-flipper {
       width: 100%;
       transform-style: preserve-3d;
+      /* snappy spring-like transition */
+      transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
       will-change: transform;
+    }
+
+    /* slid-down state – added by JS */
+    .card-flipper.slid {
+      transform: translateY(72px) rotateX(0deg);
+    }
+
+    /* flipped state – added by JS */
+    .card-flipper.flipped {
+      transform: translateY(72px) rotateX(180deg);
+    }
+
+    /* default: no slide, no flip */
+    .card-flipper:not(.slid):not(.flipped) {
+      transform: translateY(0px) rotateX(0deg);
     }
 
     .card-face {
@@ -109,12 +116,9 @@
         inset 0 -1px 0 rgba(255,255,255,0.32);
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: flex; flex-direction: column; align-items: center;
     }
 
-    /* FRONT */
     .card-front {
       padding: calc(var(--photo) * 0.54 + 1rem) 4rem 3.5rem;
     }
@@ -122,25 +126,18 @@
     .profile-name {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: clamp(2.2rem, 5vw, 3.6rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      text-align: center;
-      color: var(--text-main);
+      font-weight: 700; letter-spacing: -0.02em;
+      text-align: center; color: var(--text-main);
     }
 
     .tagline {
       margin-top: 0.65rem;
-      font-size: 0.88rem;
-      letter-spacing: 0.20em;
-      text-transform: uppercase;
-      color: var(--text-sub);
+      font-size: 0.88rem; letter-spacing: 0.20em;
+      text-transform: uppercase; color: var(--text-sub);
     }
 
-    /* BACK – pre-rotated 180° so it faces away, flip reveals it */
     .card-back {
-      position: absolute;
-      top: 0; left: 0;
-      height: 100%;
+      position: absolute; top: 0; left: 0; height: 100%;
       padding: 4rem 4.5rem;
       transform: rotateX(180deg);
       align-items: flex-start;
@@ -149,39 +146,27 @@
     .card-back h1 {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: clamp(3rem, 7vw, 5rem);
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1.05;
+      font-weight: 700; letter-spacing: -0.04em; line-height: 1.05;
       margin-bottom: 1.3rem;
       background: linear-gradient(135deg, var(--text-main), rgba(29,29,31,0.50));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
     .card-back p {
-      font-size: 1.15rem;
-      line-height: 1.7;
-      color: var(--text-sub);
-      max-width: 540px;
+      font-size: 1.15rem; line-height: 1.7;
+      color: var(--text-sub); max-width: 540px;
     }
 
     /* scroll hint */
     .scroll-hint {
-      position: fixed;
-      bottom: 2.5rem; left: 50%;
+      position: fixed; bottom: 2.5rem; left: 50%;
       transform: translateX(-50%);
-      font-size: 0.80rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(29,29,31,0.38);
-      z-index: 20;
-      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-      transition: opacity 0.5s;
+      font-size: 0.80rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(29,29,31,0.38);
+      z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      transition: opacity 0.4s;
     }
-
     .scroll-hint svg { animation: bounceDown 1.8s ease-in-out infinite; }
-
     @keyframes bounceDown {
       0%,100% { transform: translateY(0);   }
       50%      { transform: translateY(7px); }
@@ -208,8 +193,7 @@
 <div class="orb" style="width:380px;height:380px;left:22%;bottom:4%;opacity:.5;"></div>
 
 <div class="scene-wrap">
-
-  <div class="photo-wrap" id="photoWrap">
+  <div class="photo-wrap">
     <img src="profile.jpg" alt="Johannes Lima Spielhofen">
   </div>
 
@@ -228,7 +212,6 @@
 
     </div>
   </div>
-
 </div>
 
 <div class="scroll-hint" id="scrollHint">
@@ -250,16 +233,15 @@ const canvas = document.getElementById('bg-canvas');
 const ctx    = canvas.getContext('2d');
 let W, H, nodes;
 const N=55, MAXD=180, SPD=0.28;
-
-function resize() { W=canvas.width=innerWidth; H=canvas.height=innerHeight; }
-function initNodes() {
-  nodes = Array.from({length:N}, ()=>({
+function resize(){ W=canvas.width=innerWidth; H=canvas.height=innerHeight; }
+function initNodes(){
+  nodes=Array.from({length:N},()=>({
     x:Math.random()*W, y:Math.random()*H,
     vx:(Math.random()-.5)*SPD, vy:(Math.random()-.5)*SPD,
     r:Math.random()*1.6+.7
   }));
 }
-function drawBg() {
+function drawBg(){
   ctx.clearRect(0,0,W,H);
   nodes.forEach(n=>{
     n.x+=n.vx; n.y+=n.vy;
@@ -280,31 +262,28 @@ resize(); initNodes(); drawBg();
 window.addEventListener('resize',()=>{ resize(); initNodes(); });
 
 
-// ── Scroll-driven flip ──
+// ── Snap flip on scroll ──
 const flipper    = document.getElementById('flipper');
 const scrollHint = document.getElementById('scrollHint');
-const photoWrap  = document.getElementById('photoWrap');
 
-const SCROLL_RANGE = window.innerHeight * 2.0;
+// Two thresholds: scroll past FLIP_AT → flip; scroll back below UNFLIP_AT → unflip (hysteresis)
+const FLIP_AT   = window.innerHeight * 0.55;
+const UNFLIP_AT = window.innerHeight * 0.25;
 
-function ease(t){ return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+let isFlipped = false;
 
-function onScroll() {
-  const sy  = window.scrollY;
-  const raw = Math.min(1, sy / SCROLL_RANGE);
+function onScroll(){
+  const sy = window.scrollY;
 
-  // Phase 1 — slide card down, away from photo (0 → 0.40)
-  const slideRaw = Math.min(1, raw / 0.40);
-  const slideY   = ease(slideRaw) * 72;
-
-  // Phase 2 — flip (starts at 0.20, finishes at 1.0)
-  const flipRaw  = Math.max(0, Math.min(1, (raw - 0.20) / 0.80));
-  const rotateX  = ease(flipRaw) * 180;
-
-  flipper.style.transform = `translateY(${slideY}px) rotateX(${rotateX}deg)`;
-
-  // photo rises gently as card departs
-  photoWrap.style.marginTop = `${-ease(slideRaw) * 20}px`;
+  if (!isFlipped && sy > FLIP_AT) {
+    isFlipped = true;
+    flipper.classList.add('slid', 'flipped');
+  } else if (isFlipped && sy < UNFLIP_AT) {
+    isFlipped = false;
+    flipper.classList.remove('flipped');
+    // slight delay before re-tucking under photo
+    setTimeout(() => { flipper.classList.remove('slid'); }, 320);
+  }
 
   scrollHint.style.opacity = sy > 30 ? '0' : '1';
 }
