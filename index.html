@@ -1,1 +1,327 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <title>Johannes Lima Spielhofen</title> <style> :root { --glass: rgba(255,255,255,0.25); --glass-border: rgba(255,255,255,0.35); --text-main: #1d1d1f; --text-sub: rgba(29,29,31,0.65); --bg-start: #d5d5e0; --bg-end: #f0f0f5; /* profile photo sizing */ --photo-size: 220px; --photo-size-lg: 400px; --photo-lift-max: 80px; /* max lift in px when scrolled */ } * { box-sizing: border-box; margin: 0; padding: 0; } body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui; background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%); color: var(--text-main); overflow-x: hidden; -webkit-font-smoothing: antialiased; } section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 8rem 2rem; position: relative; } .pane { background: var(--glass); backdrop-filter: blur(80px) saturate(250%); -webkit-backdrop-filter: blur(80px) saturate(250%); border: 1px solid var(--glass-border); border-radius: 36px; padding: 4.5rem 4rem; max-width: 880px; width: 100%; box-shadow: 0 25px 70px rgba(0,0,0,0.1), 0 10px 30px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(255,255,255,0.3); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform, opacity; } /* Landing section */ .landing { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2; position: relative; } .profile-card { background: var(--glass); backdrop-filter: blur(80px) saturate(250%); -webkit-backdrop-filter: blur(80px) saturate(250%); border: 1px solid var(--glass-border); border-radius: 40px; padding: 4rem 4.5rem 3.5rem; /* extra top space to accommodate floating photo */ max-width: 1400px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; box-shadow: 0 30px 80px rgba(0,0,0,0.12), 0 10px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(255,255,255,0.3); position: relative; /* for absolutely-positioned floating photo */ overflow: visible; } /* floating circular profile image positioned above the card */ .profile-image { width: var(--photo-size); height: var(--photo-size); border-radius: 50%; overflow: hidden; border: 4px solid rgba(255,255,255,0.45); box-shadow: 0 30px 60px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(255,255,255,0.22); position: absolute; left: 50%; top: calc(-1 * (var(--photo-size) / 2)); transform: translateX(-50%) translateY(0); z-index: 3; will-change: transform; transition: box-shadow 200ms ease, transform 120ms linear; background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.02)); display: flex; align-items: center; justify-content: center; } .profile-image img { width: 100%; height: 100%; object-fit: cover; display: block; } .profile-name { font-size: 5.5rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; padding-top: calc(var(--photo-size) / 2 + 0.5rem); /* ensure adequate spacing on small screens */ text-align: center; } .scroll-indicator { position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%); font-size: 0.9rem; color: var(--text-sub); animation: bounce 2s infinite; } @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } } h1 { font-size: clamp(3.5rem, 8vw, 6rem); font-weight: 700; letter-spacing: -0.055em; text-align: center; margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--text-main), rgba(29,29,31,0.6)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; } h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1.2rem; letter-spacing: -0.04em; } p { font-size: 1.2rem; font-weight: 400; line-height: 1.55; color: var(--text-sub); max-width: 640px; } .hero p { margin-left: auto; margin-right: auto; text-align: center; font-size: 1.35rem; } .image { margin-top: 2.8rem; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.35); box-shadow: 0 20px 50px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.4); transition: transform 0.4s ease; } .image img { width: 100%; display: block; } /* Enhanced glass orbs */ .orb { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.5), rgba(255,255,255,0.2) 35%, rgba(200,200,255,0.1) 60%, transparent 75%); filter: blur(70px); z-index: -1; pointer-events: none; } .orb.large { width: 900px; height: 900px; } .orb.medium { width: 600px; height: 600px; } .orb.small { width: 400px; height: 400px; } footer { padding: 5rem 2rem; text-align: center; font-size: 0.95rem; color: rgba(29,29,31,0.5); letter-spacing: 0.01em; font-weight: 500; } @media (min-width: 769px) { :root { --photo-size: var(--photo-size-lg); } .profile-name { font-size: 2.6rem; padding-top: calc(var(--photo-size) / 2 + 1rem); } } @media (max-width: 768px) { section { padding: 5rem 1.5rem; } .pane { padding: 3rem 2.5rem; } .profile-card { padding: 3rem 2rem 2.5rem; flex-direction: column; text-align: center; gap: 1.25rem; } .profile-image { width: var(--photo-size); height: var(--photo-size); top: calc(-1 * (var(--photo-size) / 2)); } .profile-name { font-size: 1.4rem; padding-top: calc(var(--photo-size) / 2 + 0.4rem); } h1 { font-size: 3rem; } h2 { font-size: 2rem; } p { font-size: 1.1rem; } } </style> </head> <body> <div class="orb large" style="left: -250px; top: 5%;"></div> <div class="orb medium" style="right: -200px; top: 30%;"></div> <div class="orb small" style="left: 15%; top: 70%;"></div> <div class="orb medium" style="right: 10%; bottom: 10%;"></div> <div class="landing"> <div class="profile-card" id="profileCard"> <div class="profile-image floating-photo" id="floatingPhoto" aria-hidden="true"> <img src="profile.jpg" alt="Johannes Lima Spielhofen"> </div> <h1 class="profile-name">Johannes Lima Spielhofen</h2> <p style="max-width:800px; text-align:center; color: var(--text-sub);"> Per Aspera Ad Astra </p> </div> </div> <section> <div class="pane hero" data-start="200" data-end="1000"> <h1>Hi, I'm Johannes.</h1> <p> I'm currently building SheetCheater, an App designed to help you learn reading sheet music quicker and more easily. </p> </div> </section> <section> <div class="pane" data-start="800" data-end="1800"> <h2>What's this even about</h2> <p> Honestly, I just wanted a website because it's cool. If you've found me; welcome, though </p> <div class="image"> <img src="https://placekitten.com/900/600" alt="Kitten"> </div> </div> </section> <section> <div class="pane" data-start="1600" data-end="2600"> <h2>At some point I'll include a Vita here, that day is not today.</h2> <p> :-) </p> <div class="image"> <img src="https://placebear.com/900/600" alt="Bear"> </div> </div> </section> <section> <div class="pane" data-start="2400" data-end="3400"> <h2>You're still here? Fine, some things about me, then.</h2> <p> I am half Brazilian, half German. Consequently, I love cultures and languages, of which I currently speak five (four?) German, Englisch, French, Japanese, Portuguese (and Spanish isn't too hard to understand I suppose). Much more to say, little time. </p> <div class="image"> <img src="https://place.dog/900/600" alt="Dog"> </div> </div> </section> <footer> © Me </footer> <script> const panes = document.querySelectorAll('.pane'); const orbs = document.querySelectorAll('.orb'); const floatingPhoto = document.getElementById('floatingPhoto'); const landing = document.querySelector('.landing'); function onScroll() { const scrollY = window.scrollY; panes.forEach(pane => { const start = parseFloat(pane.dataset.start); const end = parseFloat(pane.dataset.end); const range = end - start; const progress = Math.max(0, Math.min(1, (scrollY - start) / range)); // Smooth entrance and exit const easeProgress = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2; // Transform based on scroll position const translateY = (1 - easeProgress) * 100; const scale = 0.85 + (easeProgress * 0.15); const opacity = easeProgress; const rotateX = (1 - easeProgress) * -8; pane.style.transform = ` translateY(${translateY}px) scale(${scale}) perspective(1000px) rotateX(${rotateX}deg) `; pane.style.opacity = opacity; }); // Parallax orbs orbs.forEach((orb, i) => { const speed = 0.2 + (i * 0.1); orb.style.transform = `translateY(${scrollY * speed}px)`; }); // Floating photo lift/fall behavior: if (floatingPhoto && landing) { const landingRect = landing.getBoundingClientRect(); // We start affecting the photo once the landing section hits the top of the viewport. // The effect progresses while landing scrolls up across roughly 60% of the viewport height. const triggerRange = window.innerHeight * 0.6; // landingRect.top is 0 when the top of landing is at the top of the viewport; negative when scrolled past. const rawProgress = Math.max(0, Math.min(1, -landingRect.top / triggerRange)); // Map progress to a lift in px (negative -> upward) const maxLift = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--photo-lift-max')) || 80; const lift = rawProgress * -maxLift; // Add a small natural bob while at rest; reduce bob as user scrolls (so it stabilizes when lifted) const time = Date.now(); const idleBob = Math.sin(time / 700) * (3 * (1 - rawProgress)); // +-3px when not scrolled const translateY = lift + idleBob; // Slight scale change when lifted (subtle) const scale = 1 - (rawProgress * 0.03); floatingPhoto.style.transform = `translateX(-50%) translateY(${translateY}px) translateZ(0) scale(${scale})`; // Slightly increase shadow while lifted const shadowOpacity = 0.18 + (rawProgress * 0.06); floatingPhoto.style.boxShadow = `0 30px 60px rgba(0,0,0,${shadowOpacity}) , inset 0 0 0 1px rgba(255,255,255,0.22)`; } } window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll, { passive: true }); onScroll(); </script> </body> </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Johannes Lima Spielhofen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --glass: rgba(255,255,255,0.22);
+      --glass-border: rgba(255,255,255,0.38);
+      --text-main: #1d1d1f;
+      --text-sub: rgba(29,29,31,0.6);
+      --bg-start: #cfd0df;
+      --bg-end: #eeeef5;
+      --photo-size: 220px;
+      --photo-size-lg: 380px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      color: var(--text-main);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── Background canvas ── */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Orbs ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.45), rgba(200,200,255,0.15) 50%, transparent 75%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Layout ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 0 2rem 6rem;
+      gap: 0;
+    }
+
+    /* ── Landing card ── */
+    .landing {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: calc(var(--photo-size-lg) / 2 + 5rem);
+      position: relative;
+    }
+
+    .profile-card {
+      background: var(--glass);
+      backdrop-filter: blur(80px) saturate(250%);
+      -webkit-backdrop-filter: blur(80px) saturate(250%);
+      border: 1px solid var(--glass-border);
+      border-radius: 40px;
+      padding: calc(var(--photo-size-lg) / 2 + 2.5rem) 4rem 3.5rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.1),
+        0 10px 30px rgba(0,0,0,0.07),
+        inset 0 1px 0 rgba(255,255,255,0.7),
+        inset 0 -1px 0 rgba(255,255,255,0.3);
+      position: relative;
+      overflow: visible;
+    }
+
+    .profile-image {
+      width: var(--photo-size-lg);
+      height: var(--photo-size-lg);
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid rgba(255,255,255,0.5);
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.18),
+        inset 0 0 0 1px rgba(255,255,255,0.22);
+      position: absolute;
+      left: 50%;
+      top: calc(-1 * (var(--photo-size-lg) / 2));
+      transform: translateX(-50%);
+      z-index: 3;
+      will-change: transform;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0px); }
+      50%       { transform: translateX(-50%) translateY(-12px); }
+    }
+
+    .profile-image img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    .profile-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      text-align: center;
+      color: var(--text-main);
+    }
+
+    .tagline {
+      font-size: 0.95rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-sub);
+      font-weight: 400;
+    }
+
+    /* ── Hi pane ── */
+    .hi-section {
+      width: 100%;
+      max-width: 860px;
+      margin-top: 3rem;
+    }
+
+    .pane {
+      background: var(--glass);
+      backdrop-filter: blur(80px) saturate(250%);
+      -webkit-backdrop-filter: blur(80px) saturate(250%);
+      border: 1px solid var(--glass-border);
+      border-radius: 36px;
+      padding: 4rem 4.5rem;
+      width: 100%;
+      box-shadow:
+        0 25px 70px rgba(0,0,0,0.09),
+        0 10px 30px rgba(0,0,0,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.7),
+        inset 0 -1px 0 rgba(255,255,255,0.3);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .pane.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .pane h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(3rem, 7vw, 5rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.2rem;
+      background: linear-gradient(135deg, var(--text-main), rgba(29,29,31,0.55));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .pane p {
+      font-size: 1.15rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+      max-width: 560px;
+    }
+
+    footer {
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: rgba(29,29,31,0.4);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      :root { --photo-size-lg: 200px; }
+      .pane { padding: 3rem 2.5rem; }
+      .profile-card { padding: calc(var(--photo-size-lg) / 2 + 2rem) 2.5rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Animated background -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- Soft orbs -->
+<div class="orb" style="width:700px;height:700px;left:-200px;top:0%;opacity:0.7;"></div>
+<div class="orb" style="width:500px;height:500px;right:-150px;top:40%;opacity:0.6;"></div>
+<div class="orb" style="width:400px;height:400px;left:20%;bottom:5%;opacity:0.5;"></div>
+
+<div class="page">
+
+  <!-- Landing -->
+  <div class="landing">
+    <div class="profile-card">
+      <div class="profile-image">
+        <img src="profile.jpg" alt="Johannes Lima Spielhofen">
+      </div>
+      <h2 class="profile-name">Johannes Lima Spielhofen</h2>
+      <span class="tagline">Per Aspera Ad Astra</span>
+    </div>
+  </div>
+
+  <!-- Hi pane -->
+  <div class="hi-section">
+    <div class="pane" id="hiPane">
+      <h1>Hi, I'm Johannes.</h1>
+      <p>I'm currently building SheetCheater, an app designed to help you learn to read sheet music quicker and more easily.</p>
+    </div>
+  </div>
+
+  <footer>© Johannes Lima Spielhofen</footer>
+
+</div>
+
+<script>
+  // ── Geometric line network background ──
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+
+  let W, H, nodes;
+
+  const NODE_COUNT = 55;
+  const MAX_DIST = 180;
+  const SPEED = 0.28;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function initNodes() {
+    nodes = Array.from({ length: NODE_COUNT }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * SPEED,
+      vy: (Math.random() - 0.5) * SPEED,
+      r: Math.random() * 1.8 + 0.8,
+    }));
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Update positions
+    nodes.forEach(n => {
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < 0 || n.x > W) n.vx *= -1;
+      if (n.y < 0 || n.y > H) n.vy *= -1;
+    });
+
+    // Draw edges
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < MAX_DIST) {
+          const alpha = (1 - dist / MAX_DIST) * 0.18;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.strokeStyle = `rgba(80, 80, 120, ${alpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw nodes
+    nodes.forEach(n => {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(90, 90, 140, 0.35)';
+      ctx.fill();
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  initNodes();
+  draw();
+  window.addEventListener('resize', () => { resize(); initNodes(); });
+
+  // ── Scroll reveal for hi pane ──
+  const hiPane = document.getElementById('hiPane');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  obs.observe(hiPane);
+
+  // Show pane immediately if already in view on load
+  setTimeout(() => {
+    const rect = hiPane.getBoundingClientRect();
+    if (rect.top < window.innerHeight) hiPane.classList.add('visible');
+  }, 100);
+</script>
+
+</body>
+</html>
