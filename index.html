@@ -5,323 +5,312 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Johannes Lima Spielhofen</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --glass: rgba(255,255,255,0.22);
-      --glass-border: rgba(255,255,255,0.38);
+      --glass-border: rgba(255,255,255,0.40);
       --text-main: #1d1d1f;
-      --text-sub: rgba(29,29,31,0.6);
+      --text-sub: rgba(29,29,31,0.60);
       --bg-start: #cfd0df;
-      --bg-end: #eeeef5;
-      --photo-size: 220px;
-      --photo-size-lg: 380px;
+      --bg-end:   #eeeef5;
+      --photo: 340px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: auto; }
 
     body {
       font-family: 'DM Sans', system-ui, sans-serif;
       background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 100%);
       color: var(--text-main);
-      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
+      height: 350vh;
     }
 
-    /* ── Background canvas ── */
     #bg-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
     }
 
-    /* ── Orbs ── */
     .orb {
-      position: fixed;
-      border-radius: 50%;
+      position: fixed; border-radius: 50%;
       background: radial-gradient(circle, rgba(255,255,255,0.45), rgba(200,200,255,0.15) 50%, transparent 75%);
-      filter: blur(80px);
-      z-index: 0;
-      pointer-events: none;
+      filter: blur(80px); z-index: 0; pointer-events: none;
     }
 
-    /* ── Layout ── */
-    .page {
-      position: relative;
+    /* sticky viewport-height scene */
+    .scene-wrap {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 0 2rem 6rem;
-      gap: 0;
+      overflow: hidden;
     }
 
-    /* ── Landing card ── */
-    .landing {
-      width: 100%;
-      max-width: 860px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: calc(var(--photo-size-lg) / 2 + 5rem);
-      position: relative;
-    }
-
-    .profile-card {
-      background: var(--glass);
-      backdrop-filter: blur(80px) saturate(250%);
-      -webkit-backdrop-filter: blur(80px) saturate(250%);
-      border: 1px solid var(--glass-border);
-      border-radius: 40px;
-      padding: calc(var(--photo-size-lg) / 2 + 2.5rem) 4rem 3.5rem;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.75rem;
-      box-shadow:
-        0 30px 80px rgba(0,0,0,0.1),
-        0 10px 30px rgba(0,0,0,0.07),
-        inset 0 1px 0 rgba(255,255,255,0.7),
-        inset 0 -1px 0 rgba(255,255,255,0.3);
-      position: relative;
-      overflow: visible;
-    }
-
-    .profile-image {
-      width: var(--photo-size-lg);
-      height: var(--photo-size-lg);
+    /* photo stays fixed above everything */
+    .photo-wrap {
+      position: absolute;
+      top: calc(50% - var(--photo) * 0.85);
+      left: 50%;
+      transform: translateX(-50%);
+      width: var(--photo);
+      height: var(--photo);
       border-radius: 50%;
       overflow: hidden;
-      border: 4px solid rgba(255,255,255,0.5);
-      box-shadow:
-        0 30px 60px rgba(0,0,0,0.18),
-        inset 0 0 0 1px rgba(255,255,255,0.22);
-      position: absolute;
-      left: 50%;
-      top: calc(-1 * (var(--photo-size-lg) / 2));
-      transform: translateX(-50%);
-      z-index: 3;
-      will-change: transform;
+      border: 4px solid rgba(255,255,255,0.55);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.20), inset 0 0 0 1px rgba(255,255,255,0.25);
+      z-index: 10;
       animation: float 4s ease-in-out infinite;
+      will-change: transform;
+      transition: margin-top 0.05s linear;
     }
 
     @keyframes float {
-      0%, 100% { transform: translateX(-50%) translateY(0px); }
-      50%       { transform: translateX(-50%) translateY(-12px); }
+      0%,100% { transform: translateX(-50%) translateY(0);    }
+      50%      { transform: translateX(-50%) translateY(-12px);}
     }
 
-    .profile-image img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
+    .photo-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+
+    /* card flip scene */
+    .card-scene {
+      width: min(860px, 92vw);
+      margin-top: calc(var(--photo) * 0.44);
+      perspective: 1400px;
+      perspective-origin: 50% 25%;
+      position: relative;
+      z-index: 5;
+    }
+
+    .card-flipper {
+      width: 100%;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .card-face {
+      width: 100%;
+      background: var(--glass);
+      backdrop-filter: blur(80px) saturate(260%);
+      -webkit-backdrop-filter: blur(80px) saturate(260%);
+      border: 1px solid var(--glass-border);
+      border-radius: 40px;
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.10),
+        0 10px 30px rgba(0,0,0,0.07),
+        inset 0 1px 0 rgba(255,255,255,0.72),
+        inset 0 -1px 0 rgba(255,255,255,0.32);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* FRONT */
+    .card-front {
+      padding: calc(var(--photo) * 0.54 + 1rem) 4rem 3.5rem;
     }
 
     .profile-name {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
       font-weight: 700;
       letter-spacing: -0.02em;
-      line-height: 1.1;
       text-align: center;
       color: var(--text-main);
     }
 
     .tagline {
-      font-size: 0.95rem;
-      letter-spacing: 0.18em;
+      margin-top: 0.65rem;
+      font-size: 0.88rem;
+      letter-spacing: 0.20em;
       text-transform: uppercase;
       color: var(--text-sub);
-      font-weight: 400;
     }
 
-    /* ── Hi pane ── */
-    .hi-section {
-      width: 100%;
-      max-width: 860px;
-      margin-top: 3rem;
-    }
-
-    .pane {
-      background: var(--glass);
-      backdrop-filter: blur(80px) saturate(250%);
-      -webkit-backdrop-filter: blur(80px) saturate(250%);
-      border: 1px solid var(--glass-border);
-      border-radius: 36px;
+    /* BACK – pre-rotated 180° so it faces away, flip reveals it */
+    .card-back {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
       padding: 4rem 4.5rem;
-      width: 100%;
-      box-shadow:
-        0 25px 70px rgba(0,0,0,0.09),
-        0 10px 30px rgba(0,0,0,0.05),
-        inset 0 1px 0 rgba(255,255,255,0.7),
-        inset 0 -1px 0 rgba(255,255,255,0.3);
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+      transform: rotateX(180deg);
+      align-items: flex-start;
     }
 
-    .pane.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .pane h1 {
+    .card-back h1 {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: clamp(3rem, 7vw, 5rem);
       font-weight: 700;
       letter-spacing: -0.04em;
-      margin-bottom: 1.2rem;
-      background: linear-gradient(135deg, var(--text-main), rgba(29,29,31,0.55));
+      line-height: 1.05;
+      margin-bottom: 1.3rem;
+      background: linear-gradient(135deg, var(--text-main), rgba(29,29,31,0.50));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .pane p {
+    .card-back p {
       font-size: 1.15rem;
-      line-height: 1.65;
+      line-height: 1.7;
       color: var(--text-sub);
-      max-width: 560px;
+      max-width: 540px;
+    }
+
+    /* scroll hint */
+    .scroll-hint {
+      position: fixed;
+      bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.80rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(29,29,31,0.38);
+      z-index: 20;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      transition: opacity 0.5s;
+    }
+
+    .scroll-hint svg { animation: bounceDown 1.8s ease-in-out infinite; }
+
+    @keyframes bounceDown {
+      0%,100% { transform: translateY(0);   }
+      50%      { transform: translateY(7px); }
     }
 
     footer {
-      margin-top: 4rem;
-      font-size: 0.85rem;
-      color: rgba(29,29,31,0.4);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-weight: 500;
+      position: fixed; bottom: 1.2rem; right: 2rem;
+      font-size: 0.78rem; letter-spacing: 0.06em;
+      text-transform: uppercase; color: rgba(29,29,31,0.28); z-index: 20;
     }
 
-    @media (max-width: 768px) {
-      :root { --photo-size-lg: 200px; }
-      .pane { padding: 3rem 2.5rem; }
-      .profile-card { padding: calc(var(--photo-size-lg) / 2 + 2rem) 2.5rem 3rem; }
+    @media (max-width: 600px) {
+      :root { --photo: 190px; }
+      .card-front { padding: calc(var(--photo) * 0.54 + 1rem) 2.2rem 2.8rem; }
+      .card-back  { padding: 3rem 2.2rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- Animated background -->
 <canvas id="bg-canvas"></canvas>
+<div class="orb" style="width:700px;height:700px;left:-200px;top:0;opacity:.7;"></div>
+<div class="orb" style="width:500px;height:500px;right:-150px;top:38%;opacity:.6;"></div>
+<div class="orb" style="width:380px;height:380px;left:22%;bottom:4%;opacity:.5;"></div>
 
-<!-- Soft orbs -->
-<div class="orb" style="width:700px;height:700px;left:-200px;top:0%;opacity:0.7;"></div>
-<div class="orb" style="width:500px;height:500px;right:-150px;top:40%;opacity:0.6;"></div>
-<div class="orb" style="width:400px;height:400px;left:20%;bottom:5%;opacity:0.5;"></div>
+<div class="scene-wrap">
 
-<div class="page">
+  <div class="photo-wrap" id="photoWrap">
+    <img src="profile.jpg" alt="Johannes Lima Spielhofen">
+  </div>
 
-  <!-- Landing -->
-  <div class="landing">
-    <div class="profile-card">
-      <div class="profile-image">
-        <img src="profile.jpg" alt="Johannes Lima Spielhofen">
+  <div class="card-scene">
+    <div class="card-flipper" id="flipper">
+
+      <div class="card-face card-front">
+        <div class="profile-name">Johannes Lima Spielhofen</div>
+        <div class="tagline">Per Aspera Ad Astra</div>
       </div>
-      <h2 class="profile-name">Johannes Lima Spielhofen</h2>
-      <span class="tagline">Per Aspera Ad Astra</span>
+
+      <div class="card-face card-back">
+        <h1>Hi, I'm Johannes.</h1>
+        <p>I'm currently building SheetCheater, an app designed to help you learn to read sheet music quicker and more easily.</p>
+      </div>
+
     </div>
   </div>
-
-  <!-- Hi pane -->
-  <div class="hi-section">
-    <div class="pane" id="hiPane">
-      <h1>Hi, I'm Johannes.</h1>
-      <p>I'm currently building SheetCheater, an app designed to help you learn to read sheet music quicker and more easily.</p>
-    </div>
-  </div>
-
-  <footer>© Johannes Lima Spielhofen</footer>
 
 </div>
 
+<div class="scroll-hint" id="scrollHint">
+  <span>scroll</span>
+  <svg width="16" height="22" viewBox="0 0 16 22" fill="none">
+    <rect x="1" y="1" width="14" height="20" rx="7" stroke="rgba(29,29,31,0.35)" stroke-width="1.4"/>
+    <circle cx="8" cy="6" r="2" fill="rgba(29,29,31,0.35)">
+      <animate attributeName="cy" values="6;12;6" dur="1.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
+    </circle>
+  </svg>
+</div>
+
+<footer>© Johannes Lima Spielhofen</footer>
+
 <script>
-  // ── Geometric line network background ──
-  const canvas = document.getElementById('bg-canvas');
-  const ctx = canvas.getContext('2d');
+// ── Background network ──
+const canvas = document.getElementById('bg-canvas');
+const ctx    = canvas.getContext('2d');
+let W, H, nodes;
+const N=55, MAXD=180, SPD=0.28;
 
-  let W, H, nodes;
-
-  const NODE_COUNT = 55;
-  const MAX_DIST = 180;
-  const SPEED = 0.28;
-
-  function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-
-  function initNodes() {
-    nodes = Array.from({ length: NODE_COUNT }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      vx: (Math.random() - 0.5) * SPEED,
-      vy: (Math.random() - 0.5) * SPEED,
-      r: Math.random() * 1.8 + 0.8,
-    }));
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-
-    // Update positions
-    nodes.forEach(n => {
-      n.x += n.vx;
-      n.y += n.vy;
-      if (n.x < 0 || n.x > W) n.vx *= -1;
-      if (n.y < 0 || n.y > H) n.vy *= -1;
-    });
-
-    // Draw edges
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const dx = nodes[i].x - nodes[j].x;
-        const dy = nodes[i].y - nodes[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < MAX_DIST) {
-          const alpha = (1 - dist / MAX_DIST) * 0.18;
-          ctx.beginPath();
-          ctx.moveTo(nodes[i].x, nodes[i].y);
-          ctx.lineTo(nodes[j].x, nodes[j].y);
-          ctx.strokeStyle = `rgba(80, 80, 120, ${alpha})`;
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
-        }
-      }
+function resize() { W=canvas.width=innerWidth; H=canvas.height=innerHeight; }
+function initNodes() {
+  nodes = Array.from({length:N}, ()=>({
+    x:Math.random()*W, y:Math.random()*H,
+    vx:(Math.random()-.5)*SPD, vy:(Math.random()-.5)*SPD,
+    r:Math.random()*1.6+.7
+  }));
+}
+function drawBg() {
+  ctx.clearRect(0,0,W,H);
+  nodes.forEach(n=>{
+    n.x+=n.vx; n.y+=n.vy;
+    if(n.x<0||n.x>W) n.vx*=-1;
+    if(n.y<0||n.y>H) n.vy*=-1;
+  });
+  for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
+    const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
+    if(d<MAXD){
+      ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y);
+      ctx.strokeStyle=`rgba(80,80,120,${(1-d/MAXD)*.15})`; ctx.lineWidth=.8; ctx.stroke();
     }
-
-    // Draw nodes
-    nodes.forEach(n => {
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(90, 90, 140, 0.35)';
-      ctx.fill();
-    });
-
-    requestAnimationFrame(draw);
   }
+  nodes.forEach(n=>{ ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle='rgba(90,90,140,0.28)'; ctx.fill(); });
+  requestAnimationFrame(drawBg);
+}
+resize(); initNodes(); drawBg();
+window.addEventListener('resize',()=>{ resize(); initNodes(); });
 
-  resize();
-  initNodes();
-  draw();
-  window.addEventListener('resize', () => { resize(); initNodes(); });
 
-  // ── Scroll reveal for hi pane ──
-  const hiPane = document.getElementById('hiPane');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.15 });
-  obs.observe(hiPane);
+// ── Scroll-driven flip ──
+const flipper    = document.getElementById('flipper');
+const scrollHint = document.getElementById('scrollHint');
+const photoWrap  = document.getElementById('photoWrap');
 
-  // Show pane immediately if already in view on load
-  setTimeout(() => {
-    const rect = hiPane.getBoundingClientRect();
-    if (rect.top < window.innerHeight) hiPane.classList.add('visible');
-  }, 100);
+const SCROLL_RANGE = window.innerHeight * 2.0;
+
+function ease(t){ return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+
+function onScroll() {
+  const sy  = window.scrollY;
+  const raw = Math.min(1, sy / SCROLL_RANGE);
+
+  // Phase 1 — slide card down, away from photo (0 → 0.40)
+  const slideRaw = Math.min(1, raw / 0.40);
+  const slideY   = ease(slideRaw) * 72;
+
+  // Phase 2 — flip (starts at 0.20, finishes at 1.0)
+  const flipRaw  = Math.max(0, Math.min(1, (raw - 0.20) / 0.80));
+  const rotateX  = ease(flipRaw) * 180;
+
+  flipper.style.transform = `translateY(${slideY}px) rotateX(${rotateX}deg)`;
+
+  // photo rises gently as card departs
+  photoWrap.style.marginTop = `${-ease(slideRaw) * 20}px`;
+
+  scrollHint.style.opacity = sy > 30 ? '0' : '1';
+}
+
+window.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
 </script>
-
 </body>
 </html>
