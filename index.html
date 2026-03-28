@@ -12,9 +12,15 @@
       --glass-border: rgba(255,255,255,0.40);
       --text-main: #1d1d1f;
       --text-sub: rgba(29,29,31,0.60);
+      --text-dim: rgba(29,29,31,0.32);
       --bg-start: #cfd0df;
       --bg-end:   #eeeef5;
       --photo: 340px;
+      --green:#2d8a4e;--yellow:#b8860b;--red:#c0392b;
+      --green-soft:#4a9e6a;--yellow-soft:#d4a017;--red-soft:#d64541;
+      --serif:'Cormorant Garamond',Georgia,serif;
+      --sans:'DM Sans',system-ui,sans-serif;
+      --radius:28px;--radius-sm:16px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,7 +31,6 @@
       background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 100%);
       color: var(--text-main);
       -webkit-font-smoothing: antialiased;
-      height: 350vh;
     }
 
     #bg-canvas {
@@ -40,7 +45,14 @@
       filter: blur(80px); z-index: 0; pointer-events: none;
     }
 
+    /* ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+       HERO SECTION (original site)
+       ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ */
     .scene-wrap {
+      position: relative;
+      min-height: 200vh;
+    }
+    .scene-sticky {
       position: sticky; top: 0;
       height: 100vh;
       display: flex; flex-direction: column;
@@ -48,12 +60,10 @@
       z-index: 1; overflow: hidden;
     }
 
-    /* photo */
     .photo-wrap {
       position: absolute;
       top: calc(50% - var(--photo) * 0.85);
-      left: 50%;
-      transform: translateX(-50%);
+      left: 50%; transform: translateX(-50%);
       width: var(--photo); height: var(--photo);
       border-radius: 50%; overflow: hidden;
       border: 4px solid rgba(255,255,255,0.55);
@@ -62,15 +72,12 @@
       animation: float 6s ease-in-out infinite;
       will-change: transform;
     }
-
     @keyframes float {
-      0%,100% { transform: translateX(-50%) translateY(0);   }
-      50%      { transform: translateX(-50%) translateY(-6px);}
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%     { transform: translateX(-50%) translateY(-6px); }
     }
-
     .photo-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
 
-    /* card */
     .card-scene {
       width: min(860px, 92vw);
       margin-top: calc(var(--photo) * 0.44);
@@ -78,29 +85,15 @@
       perspective-origin: 50% 25%;
       position: relative; z-index: 5;
     }
-
     .card-flipper {
       width: 100%;
       transform-style: preserve-3d;
-      /* snappy spring-like transition */
       transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
       will-change: transform;
     }
-
-    /* slid-down state – added by JS */
-    .card-flipper.slid {
-      transform: translateY(72px) rotateX(0deg);
-    }
-
-    /* flipped state – added by JS */
-    .card-flipper.flipped {
-      transform: translateY(72px) rotateX(180deg);
-    }
-
-    /* default: no slide, no flip */
-    .card-flipper:not(.slid):not(.flipped) {
-      transform: translateY(0px) rotateX(0deg);
-    }
+    .card-flipper.slid { transform: translateY(72px) rotateX(0deg); }
+    .card-flipper.flipped { transform: translateY(72px) rotateX(180deg); }
+    .card-flipper:not(.slid):not(.flipped) { transform: translateY(0px) rotateX(0deg); }
 
     .card-face {
       width: 100%;
@@ -109,68 +102,49 @@
       -webkit-backdrop-filter: blur(80px) saturate(260%);
       border: 1px solid var(--glass-border);
       border-radius: 40px;
-      box-shadow:
-        0 30px 80px rgba(0,0,0,0.10),
-        0 10px 30px rgba(0,0,0,0.07),
-        inset 0 1px 0 rgba(255,255,255,0.72),
-        inset 0 -1px 0 rgba(255,255,255,0.32);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.10), 0 10px 30px rgba(0,0,0,0.07),
+        inset 0 1px 0 rgba(255,255,255,0.72), inset 0 -1px 0 rgba(255,255,255,0.32);
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       display: flex; flex-direction: column; align-items: center;
     }
-
-    .card-front {
-      padding: calc(var(--photo) * 0.54 + 1rem) 4rem 3.5rem;
-    }
-
+    .card-front { padding: calc(var(--photo) * 0.54 + 1rem) 4rem 3.5rem; }
     .profile-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: var(--serif);
       font-size: clamp(2.2rem, 5vw, 3.6rem);
       font-weight: 700; letter-spacing: -0.02em;
       text-align: center; color: var(--text-main);
     }
-
     .tagline {
-      margin-top: 0.65rem;
-      font-size: 0.88rem; letter-spacing: 0.20em;
+      margin-top: 0.65rem; font-size: 0.88rem; letter-spacing: 0.20em;
       text-transform: uppercase; color: var(--text-sub);
     }
-
     .card-back {
-      position: absolute; top: 0; left: 0; height: 100%;
-      padding: 4rem 4.5rem;
-      transform: rotateX(180deg);
-      align-items: flex-start;
+      position: absolute; top: 0; left: 0;
+      min-height: 100%;
+      padding: calc(var(--photo) * 0.54 + 1rem) 4.5rem 3.5rem;
+      transform: rotateX(180deg); align-items: flex-start;
+      justify-content: flex-start;
     }
-
     .card-back h1 {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: var(--serif);
       font-size: clamp(3rem, 7vw, 5rem);
       font-weight: 700; letter-spacing: -0.04em; line-height: 1.05;
       margin-bottom: 1.3rem;
       background: linear-gradient(135deg, var(--text-main), rgba(29,29,31,0.50));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
+    .card-back p { font-size: 1.15rem; line-height: 1.7; color: var(--text-sub); max-width: 540px; }
 
-    .card-back p {
-      font-size: 1.15rem; line-height: 1.7;
-      color: var(--text-sub); max-width: 540px;
-    }
-
-    /* scroll hint */
     .scroll-hint {
-      position: fixed; bottom: 2.5rem; left: 50%;
-      transform: translateX(-50%);
+      position: fixed; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
       font-size: 0.80rem; letter-spacing: 0.14em;
       text-transform: uppercase; color: rgba(29,29,31,0.38);
       z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
       transition: opacity 0.4s;
     }
     .scroll-hint svg { animation: bounceDown 1.8s ease-in-out infinite; }
-    @keyframes bounceDown {
-      0%,100% { transform: translateY(0);   }
-      50%      { transform: translateY(7px); }
-    }
+    @keyframes bounceDown { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
 
     footer {
       position: fixed; bottom: 1.2rem; right: 2rem;
@@ -178,10 +152,135 @@
       text-transform: uppercase; color: rgba(29,29,31,0.28); z-index: 20;
     }
 
-    @media (max-width: 600px) {
-      :root { --photo: 190px; }
-      .card-front { padding: calc(var(--photo) * 0.54 + 1rem) 2.2rem 2.8rem; }
-      .card-back  { padding: 3rem 2.2rem; }
+    /* ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+       STRESS BOARD SECTION
+       ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ */
+    .board-section {
+      position: relative; z-index: 2;
+      max-width: 1200px; width: 94vw;
+      margin: 0 auto;
+      padding: 2rem 0 4rem;
+    }
+
+    .gp {
+      background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius);
+      backdrop-filter: blur(80px) saturate(260%); -webkit-backdrop-filter: blur(80px) saturate(260%);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.45);
+      padding: 1.25rem 1.5rem; margin-bottom: 1rem;
+    }
+
+    /* Header */
+    .hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.6rem}
+    .hdr-title{font-family:var(--serif);font-size:1.1rem;font-weight:700;letter-spacing:-0.01em}
+    .hdr-title em{font-style:normal;color:var(--red-soft)}
+    .hdr-r{display:flex;gap:.5rem;align-items:center}
+    .yh-badge{font-size:.65rem;color:var(--text-dim);display:flex;align-items:center;gap:4px;letter-spacing:.08em}
+    .yh-dot{width:7px;height:7px;border-radius:50%;background:var(--text-dim);flex-shrink:0}
+    .yh-dot.live{background:var(--green);animation:pdot 2s infinite}
+    .yh-dot.stale{background:var(--yellow)}.yh-dot.err{background:var(--red)}
+    @keyframes pdot{0%,100%{opacity:1}50%{opacity:.3}}
+    .btn{font-family:var(--sans);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+      background:rgba(255,255,255,.35);border:1px solid var(--glass-border);color:var(--text-sub);
+      padding:5px 14px;border-radius:10px;cursor:pointer;transition:all .2s}
+    .btn:hover{background:rgba(255,255,255,.55);color:var(--text-main)}.btn:disabled{opacity:.4;cursor:default}
+
+    /* Summary */
+    .summary{display:flex;gap:.8rem;font-size:.8rem;font-weight:600;letter-spacing:.05em;margin-bottom:.5rem;flex-wrap:wrap}
+    .sc{color:var(--red)}.sw{color:var(--yellow)}.sn{color:var(--green)}.ss{color:var(--text-dim);font-weight:400}
+
+    /* Event */
+    .ev{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.18);border:1px solid var(--glass-border);border-radius:12px;padding:.45rem 1rem}
+    .ev.imm{border-color:var(--yellow-soft)}.ev.live{border-color:var(--red-soft);animation:bflash .6s infinite}
+    @keyframes bflash{0%,100%{opacity:1}50%{opacity:.5}}
+    .ev-name{font-size:.7rem;font-weight:700;letter-spacing:.12em;color:var(--text-sub)}
+    .ev-name.imm{color:var(--yellow)}.ev-name.live{color:var(--red)}
+    .ev-date{font-size:.62rem;color:var(--text-dim)}
+    .ev-cd{font-size:.82rem;font-weight:700;color:var(--text-main)}
+    .ev-cd.imm{color:var(--yellow)}.ev-cd.live{color:var(--red)}
+
+    /* Prices */
+    .sec-label{font-size:.68rem;font-weight:700;letter-spacing:.16em;color:var(--text-dim);text-transform:uppercase;margin-bottom:.4rem;display:flex;justify-content:space-between}
+    .pgrid{display:grid;gap:1px;background:rgba(29,29,31,.06);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:.75rem}
+    .pgrid.c3{grid-template-columns:repeat(3,1fr)}.pgrid.c4{grid-template-columns:repeat(4,1fr)}
+    .pcell{background:rgba(255,255,255,.25);padding:.5rem .7rem}
+    .psym{font-size:.62rem;font-weight:700;letter-spacing:.08em;color:var(--text-dim);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pval{font-size:1.1rem;font-weight:700;color:var(--text-main);font-variant-numeric:tabular-nums;transition:color .3s}
+    .pval.up{color:var(--green)}.pval.down{color:var(--red)}
+    .pchg{font-size:.62rem;color:var(--text-dim)}.pchg.up{color:var(--green)}.pchg.down{color:var(--red)}
+    .ptime{font-size:.58rem;color:var(--text-dim);opacity:.6;margin-top:1px}
+    .pstale{font-size:.58rem;color:var(--yellow);font-weight:600}
+    @keyframes tick{from{opacity:.4}to{opacity:1}}.tick-f{animation:tick .2s ease}
+
+    /* Two-column layout */
+    .top2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+
+    /* Yield Curve */
+    .yc-h{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem}
+    .yc-lbl{font-size:.68rem;font-weight:700;letter-spacing:.14em;color:var(--text-dim);text-transform:uppercase}
+    .yc-sub{font-size:.6rem;color:var(--text-dim);margin-top:1px}
+    .yc-sb{text-align:right}.yc-st{font-size:.6rem;color:var(--text-dim);letter-spacing:.06em}
+    .yc-sv{font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums}
+    .yc-sv.inv{color:var(--red)}.yc-sv.flat{color:var(--yellow)}.yc-sv.ok{color:var(--green)}
+    .yc-ss{font-size:.58rem;color:var(--text-dim)}
+    .yc-cg{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(29,29,31,.06);border-radius:12px;overflow:hidden}
+    .yc-cc{background:rgba(255,255,255,.2);padding:.5rem}
+    .yc-ch{font-size:.6rem;font-weight:700;letter-spacing:.08em;color:var(--text-dim);display:flex;justify-content:space-between;margin-bottom:3px}
+    .yc-cv{font-size:.88rem;font-weight:700;color:var(--text-main);font-variant-numeric:tabular-nums}
+    .yc-cv.rising{color:var(--red)}.yc-cv.falling{color:var(--green)}
+    svg.spark{width:100%;height:44px;overflow:visible}
+    .spark-line{fill:none;stroke-width:1.5px;stroke-linecap:round;stroke-linejoin:round}
+    .spark-area{opacity:.1}.spark-dot{r:2.5px}
+    .spark-zero{stroke:rgba(29,29,31,.1);stroke-width:1px;stroke-dasharray:3,3}
+
+    /* Carousel */
+    .car-nav{display:flex;gap:6px;justify-content:center;margin-bottom:.5rem}
+    .car-dot{width:8px;height:8px;border-radius:50%;background:rgba(29,29,31,.12);border:none;cursor:pointer;transition:all .3s;padding:0}
+    .car-dot.active{background:rgba(29,29,31,.45);transform:scale(1.3)}
+    .car-label{text-align:center;font-size:.78rem;font-weight:700;letter-spacing:.14em;color:var(--text-sub);margin-bottom:.5rem;user-select:none}
+    .car-vp{perspective:1200px;overflow:hidden;cursor:grab;touch-action:pan-y;border-radius:20px}
+    .car-vp:active{cursor:grabbing}
+    .car-track{position:relative;width:100%;min-height:200px;transform-style:preserve-3d}
+    .car-panel{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+      background:rgba(255,255,255,.18);border:1px solid var(--glass-border);border-radius:20px;padding:1rem 1.25rem;overflow-y:auto}
+    .drag-hint{text-align:center;font-size:.62rem;color:var(--text-dim);letter-spacing:.1em;margin-top:.4rem;opacity:.5}
+
+    /* Metrics */
+    .cl{font-size:.66rem;font-weight:700;letter-spacing:.16em;color:var(--text-dim);text-transform:uppercase;
+      padding-bottom:.2rem;margin-bottom:.25rem;margin-top:.75rem;border-bottom:1px solid rgba(29,29,31,.07);display:flex;justify-content:space-between}
+    .cl:first-child{margin-top:0}
+    .pb{font-weight:400}.pb.fast{color:var(--yellow)}
+    .mr{display:flex;align-items:center;padding:4px 0;gap:.55rem;border-bottom:1px solid rgba(29,29,31,.03)}
+    .md{width:8px;height:8px;flex-shrink:0;border-radius:2px;border:1px solid currentColor}
+    .md.concern{color:var(--red);background:var(--red)}.md.watch{color:var(--yellow);background:var(--yellow)}
+    .md.normal{color:var(--green);background:var(--green)}.md.loading{color:var(--text-dim);background:transparent;animation:pdot 1s infinite}
+    .mn{font-size:.8rem;color:var(--text-main);flex:1}.ms{font-size:.6rem;color:var(--text-dim);display:block}
+    .mrt{display:flex;align-items:center;gap:.4rem}
+    .mv{font-size:.85rem;font-weight:600;min-width:55px;text-align:right;font-variant-numeric:tabular-nums}
+    .mv.concern{color:var(--red)}.mv.watch{color:var(--yellow)}.mv.normal{color:var(--green)}.mv.loading{color:var(--text-dim)}
+    .mst{font-size:.65rem;color:var(--text-dim);min-width:80px;text-align:right}
+    .mi{background:transparent;border:none;border-bottom:1px dashed rgba(29,29,31,.18);font-family:var(--sans);
+      font-size:.85rem;font-weight:600;color:var(--green);width:55px;text-align:right;outline:none;padding:1px 2px}
+    .mi:focus{border-bottom-color:rgba(29,29,31,.45)}
+
+    .rph{text-align:center;padding:2rem 1.2rem;color:var(--text-dim)}
+    .rph h3{font-family:var(--serif);font-size:1.3rem;font-weight:700;color:var(--text-sub);margin-bottom:.5rem}
+    .rph p{font-size:.75rem;line-height:1.8;max-width:360px;margin:0 auto}
+
+    .bfooter{display:flex;justify-content:space-between;align-items:center;padding-top:.5rem}
+    .bf-live{font-size:.62rem;color:var(--text-dim);letter-spacing:.06em;display:flex;align-items:center;gap:4px}
+    .bf-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pdot 1.5s infinite}
+    .bf-ts{font-size:.62rem;color:var(--text-dim)}
+
+    @media(max-width:800px){.top2{grid-template-columns:1fr}}
+    @media(max-width:600px){
+      :root{--photo:190px}
+      .card-front{padding:calc(var(--photo)*.54 + 1rem) 2.2rem 2.8rem}
+      .card-back{padding:3rem 2.2rem}
+      .board-section{width:98vw}
+      .gp{padding:1rem;border-radius:20px}
+      .pgrid.c3,.pgrid.c4{grid-template-columns:repeat(2,1fr)}
+      .yc-cg{grid-template-columns:1fr}
+      .car-panel{padding:.8rem}
     }
   </style>
 </head>
@@ -192,24 +291,25 @@
 <div class="orb" style="width:500px;height:500px;right:-150px;top:38%;opacity:.6;"></div>
 <div class="orb" style="width:380px;height:380px;left:22%;bottom:4%;opacity:.5;"></div>
 
+<!-- ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+     HERO ÔÇö original site
+     ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ -->
 <div class="scene-wrap">
-  <div class="photo-wrap">
-    <img src="profile.jpg" alt="Johannes Lima Spielhofen">
-  </div>
-
-  <div class="card-scene">
-    <div class="card-flipper" id="flipper">
-
-      <div class="card-face card-front">
-        <div class="profile-name">Johannes Lima Spielhofen</div>
-        <div class="tagline">Per Aspera Ad Astra</div>
+  <div class="scene-sticky">
+    <div class="photo-wrap">
+      <img src="profile.jpg" alt="Johannes Lima Spielhofen">
+    </div>
+    <div class="card-scene">
+      <div class="card-flipper" id="flipper">
+        <div class="card-face card-front">
+          <div class="profile-name">Johannes Lima Spielhofen</div>
+          <div class="tagline">Per Aspera Ad Astra</div>
+        </div>
+        <div class="card-face card-back">
+          <h1>Hi, I'm Johannes.</h1>
+          <p>I've designed this economic stressboard for a quick overview of global financial movements and important metrics. Several relevant economies are reflected, although the tool is not entirely comprehensive, as few would be. Hovering the various metrics, you will notice that their relevancy is explained to you in a simple fashion.</p>
+        </div>
       </div>
-
-      <div class="card-face card-back">
-        <h1>Hi, I'm Johannes.</h1>
-        <p>I've designed this economic stressboard for a quick overview of global financial movements and important metrics. Several relevant economies are reflected, although the tool is not entirely comprehensive, as few would be. Hovering the various metrics, you will notice that their relevancy is explained to you in a simple fashion.</p>
-      </div>
-
     </div>
   </div>
 </div>
@@ -225,71 +325,364 @@
   </svg>
 </div>
 
-<footer>© Johannes Lima Spielhofen</footer>
+<!-- ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+     STRESS BOARD ÔÇö below the hero
+     ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ -->
+<div class="board-section">
+
+  <!-- Header -->
+  <div class="gp">
+    <div class="hdr">
+      <div class="hdr-title">Global <em>Stress</em> Monitor</div>
+      <div class="hdr-r">
+        <div class="yh-badge"><div class="yh-dot" id="yhDot"></div><span id="yhLabel">IDLE</span></div>
+        <button class="btn" id="refreshBtn" onclick="fetchAll()">Refresh</button>
+      </div>
+    </div>
+    <div class="summary">
+      <span class="sc" id="cC">ÔÇö concern</span><span class="ss">┬À</span>
+      <span class="sw" id="cW">ÔÇö watch</span><span class="ss">┬À</span>
+      <span class="sn" id="cN">ÔÇö normal</span>
+    </div>
+    <div class="ev" id="evBanner">
+      <div><div class="ev-name" id="evName">NEXT RELEASE</div><div class="ev-date" id="evDate">ÔÇö</div></div>
+      <div class="ev-cd" id="evCd">ÔÇö</div>
+    </div>
+  </div>
+
+  <!-- Prices + Yield Curve side by side -->
+  <div class="top2">
+    <div class="gp">
+      <div class="sec-label">Indices & Volatility</div>
+      <div class="pgrid c3">
+        <div class="pcell"><div class="psym">SPY ┬À S&P 500</div><div class="pval" id="p-spy">ÔÇö</div><div class="pchg" id="c-spy">ÔÇö</div><div class="ptime" id="t-spy">awaiting</div></div>
+        <div class="pcell"><div class="psym">DIA ┬À Dow Jones</div><div class="pval" id="p-dia">ÔÇö</div><div class="pchg" id="c-dia">ÔÇö</div><div class="ptime" id="t-dia">awaiting</div></div>
+        <div class="pcell"><div class="psym">VIX</div><div class="pval" id="p-vix">ÔÇö</div><div class="pchg" id="c-vix">ÔÇö</div><div class="ptime" id="t-vix">awaiting</div></div>
+      </div>
+      <div class="sec-label">Commodities & FX</div>
+      <div class="pgrid c4">
+        <div class="pcell"><div class="psym">WTI Crude</div><div class="pval" id="p-wti">ÔÇö</div><div class="pchg" id="c-wti">ÔÇö</div><div class="ptime" id="t-wti">awaiting</div></div>
+        <div class="pcell"><div class="psym">Brent</div><div class="pval" id="p-brent">ÔÇö</div><div class="pchg" id="c-brent">ÔÇö</div><div class="ptime" id="t-brent">awaiting</div></div>
+        <div class="pcell"><div class="psym">Gold</div><div class="pval" id="p-gold">ÔÇö</div><div class="pchg" id="c-gold">ÔÇö</div><div class="ptime" id="t-gold">awaiting</div></div>
+        <div class="pcell"><div class="psym">DXY Dollar</div><div class="pval" id="p-dxy">ÔÇö</div><div class="pchg" id="c-dxy">ÔÇö</div><div class="ptime" id="t-dxy">awaiting</div></div>
+      </div>
+      <div class="sec-label">Sector ETFs</div>
+      <div class="pgrid c4">
+        <div class="pcell"><div class="psym">XLE ┬À Energy</div><div class="pval" id="p-xle">ÔÇö</div><div class="pchg" id="c-xle">ÔÇö</div><div class="ptime" id="t-xle">awaiting</div></div>
+        <div class="pcell"><div class="psym">ITA ┬À Defense</div><div class="pval" id="p-ita">ÔÇö</div><div class="pchg" id="c-ita">ÔÇö</div><div class="ptime" id="t-ita">awaiting</div></div>
+        <div class="pcell"><div class="psym">XLP ┬À Staples</div><div class="pval" id="p-xlp">ÔÇö</div><div class="pchg" id="c-xlp">ÔÇö</div><div class="ptime" id="t-xlp">awaiting</div></div>
+        <div class="pcell"><div class="psym">MOO ┬À Agri</div><div class="pval" id="p-moo">ÔÇö</div><div class="pchg" id="c-moo">ÔÇö</div><div class="ptime" id="t-moo">awaiting</div></div>
+      </div>
+    </div>
+
+    <div class="gp">
+      <div class="yc-h">
+        <div><div class="yc-lbl">US Treasury Yield Curve</div><div class="yc-sub">Last 12 months ┬À FRED daily</div></div>
+        <div class="yc-sb"><div class="yc-st">10Y ÔêÆ 2Y SPREAD</div><div class="yc-sv" id="ycSV">ÔÇö</div><div class="yc-ss" id="ycSL">loading...</div></div>
+      </div>
+      <div class="yc-cg">
+        <div class="yc-cc"><div class="yc-ch"><span>2-YEAR YIELD</span><span class="yc-cv" id="y2C">ÔÇö</span></div><svg class="spark" id="sp2y" viewBox="0 0 200 48"><text x="100" y="28" text-anchor="middle" fill="rgba(29,29,31,.2)" font-size="10" font-family="sans-serif">loading...</text></svg></div>
+        <div class="yc-cc"><div class="yc-ch"><span>10-YEAR YIELD</span><span class="yc-cv" id="y10C">ÔÇö</span></div><svg class="spark" id="sp10y" viewBox="0 0 200 48"><text x="100" y="28" text-anchor="middle" fill="rgba(29,29,31,.2)" font-size="10" font-family="sans-serif">loading...</text></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Region Carousel -->
+  <div class="gp">
+    <div class="car-nav" id="carNav"></div>
+    <div class="car-label" id="carLabel">­ƒç║­ƒç© UNITED STATES</div>
+    <div class="car-vp" id="carVP">
+      <div class="car-track" id="carTrack">
+
+        <!-- US -->
+        <div class="car-panel" id="pan-0">
+          <div class="cl">Labor Market <span class="pb" id="bl">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-sahm"></div><div class="mn">Sahm Rule<span class="ms">FRED: SAHMREALTIME</span></div><div class="mrt"><div class="mv loading" id="v-sahm">ÔÇö</div><div class="mst" id="s-sahm">ÔÇö</div></div></div>
+          <div class="mr"><div class="md loading" id="d-claims"></div><div class="mn">Initial Claims<span class="ms">FRED: ICSA ┬À weekly</span></div><div class="mrt"><div class="mv loading" id="v-claims">ÔÇö</div><div class="mst" id="s-claims">ÔÇö</div></div></div>
+
+          <div class="cl">Rates & Credit <span class="pb" id="br">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-yc"></div><div class="mn">Yield Curve (10Y-2Y)<span class="ms">FRED: T10Y2Y</span></div><div class="mrt"><div class="mv loading" id="v-yc">ÔÇö</div><div class="mst" id="s-yc">ÔÇö</div></div></div>
+          <div class="mr"><div class="md loading" id="d-hy"></div><div class="mn">HY Credit Spread<span class="ms">FRED: BAMLH0A0HYM2</span></div><div class="mrt"><div class="mv loading" id="v-hy">ÔÇö</div><div class="mst" id="s-hy">ÔÇö</div></div></div>
+          <div class="mr"><div class="md loading" id="d-mort"></div><div class="mn">30Y Mortgage Rate<span class="ms">FRED: MORTGAGE30US</span></div><div class="mrt"><div class="mv loading" id="v-mort">ÔÇö</div><div class="mst" id="s-mort">ÔÇö</div></div></div>
+
+          <div class="cl">Real Economy <span class="pb" id="bre">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-indpro"></div><div class="mn">Industrial Production<span class="ms">FRED: INDPRO ┬À MoM%</span></div><div class="mrt"><div class="mv loading" id="v-indpro">ÔÇö</div><div class="mst" id="s-indpro">ÔÇö</div></div></div>
+          <div class="mr"><div class="md loading" id="d-permits"></div><div class="mn">Building Permits<span class="ms">FRED: PERMIT</span></div><div class="mrt"><div class="mv loading" id="v-permits">ÔÇö</div><div class="mst" id="s-permits">ÔÇö</div></div></div>
+          <div class="mr"><div class="md normal" id="d-ism-mfg"></div><div class="mn">ISM Manufacturing PMI<span class="ms">Manual ┬À &lt;50 = contraction</span></div><div class="mrt"><input class="mi" id="i-ism-mfg" value="49.0" onchange="evalManual()"/><div class="mst" id="s-ism-mfg">ÔÇö</div></div></div>
+          <div class="mr"><div class="md normal" id="d-ism-svc"></div><div class="mn">ISM Services PMI<span class="ms">Manual ┬À 70% of GDP</span></div><div class="mrt"><input class="mi" id="i-ism-svc" value="53.5" onchange="evalManual()"/><div class="mst" id="s-ism-svc">ÔÇö</div></div></div>
+
+          <div class="cl">Consumer <span class="pb" id="bc">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-umcs"></div><div class="mn">Consumer Sentiment<span class="ms">FRED: UMCSENT</span></div><div class="mrt"><div class="mv loading" id="v-umcs">ÔÇö</div><div class="mst" id="s-umcs">ÔÇö</div></div></div>
+
+          <div class="cl">Market</div>
+          <div class="mr"><div class="md normal" id="d-vixm"></div><div class="mn">VIX Level<span class="ms">Auto-sync from Yahoo Finance</span></div><div class="mrt"><input class="mi" id="i-vix" value="31.2" onchange="evalManual()"/><div class="mst" id="s-vixm">ÔÇö</div></div></div>
+          <div class="mr"><div class="md normal" id="d-spx"></div><div class="mn">S&P 500 Drawdown<span class="ms">Manual ┬À % from ATH</span></div><div class="mrt"><input class="mi" id="i-spx" value="-8.7" onchange="evalManual()"/><div class="mst" id="s-spx">ÔÇö</div></div></div>
+
+          <div class="cl">Inflation <span class="pb" id="bi">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-cpi"></div><div class="mn">CPI Y/Y<span class="ms">FRED: CPIAUCSL ┬À computed</span></div><div class="mrt"><div class="mv loading" id="v-cpi">ÔÇö</div><div class="mst" id="s-cpi">ÔÇö</div></div></div>
+          <div class="mr"><div class="md loading" id="d-bei"></div><div class="mn">5Y Breakeven Inflation<span class="ms">FRED: T5YIE</span></div><div class="mrt"><div class="mv loading" id="v-bei">ÔÇö</div><div class="mst" id="s-bei">ÔÇö</div></div></div>
+
+          <div class="cl">Valuation</div>
+          <div class="mr"><div class="md normal" id="d-pe"></div><div class="mn">S&P 500 P/E<span class="ms">Manual ┬À trailing 12M</span></div><div class="mrt"><input class="mi" id="i-pe" value="25.2" onchange="evalManual()"/><div class="mst" id="s-pe">ÔÇö</div></div></div>
+          <div class="mr"><div class="md normal" id="d-mktm2"></div><div class="mn">Mkt Cap / M2<span class="ms">Manual ┬À Buffett indicator %</span></div><div class="mrt"><input class="mi" id="i-mktm2" value="286" onchange="evalManual()"/><div class="mst" id="s-mktm2">ÔÇö</div></div></div>
+
+          <div class="cl">Financial Conditions <span class="pb" id="bn">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-nfci"></div><div class="mn">NFCI<span class="ms">FRED: NFCI ┬À Chicago Fed</span></div><div class="mrt"><div class="mv loading" id="v-nfci">ÔÇö</div><div class="mst" id="s-nfci">ÔÇö</div></div></div>
+        </div>
+
+        <!-- EU -->
+        <div class="car-panel" id="pan-1"><div class="rph"><h3>Euro Area</h3><p>ECB Main Refinancing Rate ┬À HICP Inflation Y/Y ┬À EU Composite PMI ┬À ZEW Sentiment ┬À EUR/USD ┬À BTP-Bund Spread ┬À TARGET2 Balances</p></div></div>
+        <!-- China -->
+        <div class="car-panel" id="pan-2"><div class="rph"><h3>China</h3><p>NBS Manufacturing PMI ┬À Caixin Services PMI ┬À PPI Y/Y ┬À CPI Y/Y ┬À CNY/USD ┬À FX Reserves ┬À Credit Impulse ┬À Li Keqiang Index ┬À CSI 300</p></div></div>
+        <!-- Japan -->
+        <div class="car-panel" id="pan-3"><div class="rph"><h3>Japan</h3><p>BOJ Policy Rate ┬À CPI ex-fresh food ┬À Tankan ┬À JPY/USD Carry ┬À 10Y JGB ┬À Nikkei 225 ┬À au Jibun Bank PMI</p></div></div>
+        <!-- UK -->
+        <div class="car-panel" id="pan-4"><div class="rph"><h3>United Kingdom</h3><p>BOE Base Rate ┬À CPI Y/Y ┬À GDP Nowcast ┬À GBP/USD ┬À FTSE 100 ┬À UK PMI ┬À Halifax House Prices ┬À 10Y Gilt</p></div></div>
+      </div>
+    </div>
+    <div class="drag-hint">ÔåÉ drag to flip between regions ÔåÆ</div>
+  </div>
+
+  <div class="bfooter">
+    <div class="bf-live"><div class="bf-dot"></div>FRED ┬À Yahoo Finance ┬À Smart Polling</div>
+    <div class="bf-ts" id="ts">ÔÇö</div>
+  </div>
+
+</div>
+
+<footer>┬® Johannes Lima Spielhofen</footer>
 
 <script>
-// ── Background network ──
-const canvas = document.getElementById('bg-canvas');
-const ctx    = canvas.getContext('2d');
-let W, H, nodes;
-const N=55, MAXD=180, SPD=0.28;
-function resize(){ W=canvas.width=innerWidth; H=canvas.height=innerHeight; }
-function initNodes(){
-  nodes=Array.from({length:N},()=>({
-    x:Math.random()*W, y:Math.random()*H,
-    vx:(Math.random()-.5)*SPD, vy:(Math.random()-.5)*SPD,
-    r:Math.random()*1.6+.7
-  }));
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// PARTICLE NETWORK
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+const canvas=document.getElementById('bg-canvas'),ctx=canvas.getContext('2d');
+let W,H;const N=55,MAXD=180,SPD=0.28;let nodes=[];
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}
+function initNodes(){nodes=Array.from({length:N},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*SPD,vy:(Math.random()-.5)*SPD,r:Math.random()*1.6+.7}))}
+function drawBg(){ctx.clearRect(0,0,W,H);nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1});
+for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<MAXD){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(80,80,120,${(1-d/MAXD)*.15})`;ctx.lineWidth=.8;ctx.stroke()}}
+nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(90,90,140,0.28)';ctx.fill()});requestAnimationFrame(drawBg)}
+resize();initNodes();drawBg();addEventListener('resize',()=>{resize();initNodes()});
+
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// SCROLL FLIP (original site logic)
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+const flipper=document.getElementById('flipper'),scrollHint=document.getElementById('scrollHint');
+const FLIP_AT=innerHeight*.55,UNFLIP_AT=innerHeight*.25;
+let isFlipped=false;
+function onScroll(){const sy=scrollY;
+if(!isFlipped&&sy>FLIP_AT){isFlipped=true;flipper.classList.add('slid','flipped')}
+else if(isFlipped&&sy<UNFLIP_AT){isFlipped=false;flipper.classList.remove('flipped');setTimeout(()=>flipper.classList.remove('slid'),320)}
+scrollHint.style.opacity=sy>30?'0':'1'}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// CAROUSEL
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+const REGIONS=[{f:'­ƒç║­ƒç©',n:'UNITED STATES'},{f:'­ƒç¬­ƒç║',n:'EURO AREA'},{f:'­ƒç¿­ƒç│',n:'CHINA'},{f:'­ƒç»­ƒçÁ',n:'JAPAN'},{f:'­ƒç¼­ƒçº',n:'UNITED KINGDOM'}];
+let curP=0;const vp=document.getElementById('carVP'),trk=document.getElementById('carTrack'),lbl=document.getElementById('carLabel'),nav=document.getElementById('carNav'),pans=document.querySelectorAll('.car-panel');
+REGIONS.forEach((_,i)=>{const d=document.createElement('button');d.className='car-dot'+(i===0?' active':'');d.onclick=()=>goP(i);nav.appendChild(d)});
+function goP(i){if(i<0||i>=REGIONS.length)return;curP=i;layP();lbl.textContent=`${REGIONS[i].f} ${REGIONS[i].n}`;nav.querySelectorAll('.car-dot').forEach((d,j)=>d.classList.toggle('active',j===i));requestAnimationFrame(()=>{const p=document.getElementById(`pan-${i}`);if(p)trk.style.minHeight=p.scrollHeight+'px'})}
+function layP(){pans.forEach((p,i)=>{const o=i-curP;if(o===0){p.style.transform='rotateY(0)';p.style.opacity='1';p.style.pointerEvents='auto';p.style.zIndex='2'}else{p.style.transform=`rotateY(${o*90}deg) translateZ(400px)`;p.style.opacity='0';p.style.pointerEvents='none';p.style.zIndex='0'}p.style.transition='transform .55s cubic-bezier(.34,1.56,.64,1),opacity .4s ease'})}
+let dsx=0,dragging=false,dd=0;const DTH=50;
+vp.addEventListener('mousedown',e=>{dsx=e.clientX;dragging=true;dd=0});
+vp.addEventListener('mousemove',e=>{if(!dragging)return;dd=e.clientX-dsx;const t=Math.max(-45,Math.min(45,dd*.3));pans[curP].style.transition='none';pans[curP].style.transform=`rotateY(${t}deg)`});
+vp.addEventListener('mouseup',endD);vp.addEventListener('mouseleave',e=>{if(dragging)endD()});
+vp.addEventListener('touchstart',e=>{dsx=e.touches[0].clientX;dragging=true;dd=0},{passive:true});
+vp.addEventListener('touchmove',e=>{if(!dragging)return;dd=e.touches[0].clientX-dsx;const t=Math.max(-45,Math.min(45,dd*.3));pans[curP].style.transition='none';pans[curP].style.transform=`rotateY(${t}deg)`},{passive:true});
+vp.addEventListener('touchend',endD);
+function endD(){if(!dragging)return;dragging=false;if(dd<-DTH&&curP<REGIONS.length-1)goP(curP+1);else if(dd>DTH&&curP>0)goP(curP-1);else{pans[curP].style.transition='transform .4s cubic-bezier(.34,1.56,.64,1)';pans[curP].style.transform='rotateY(0)'}}
+layP();goP(0);
+
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// ECONOMIC CALENDAR
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+const REL=[
+  {name:'NFP RELEASE',dt:'2026-04-03T08:30:00-04:00'},{name:'CPI RELEASE',dt:'2026-04-10T08:30:00-04:00'},
+  {name:'NFP RELEASE',dt:'2026-05-01T08:30:00-04:00'},{name:'FOMC DECISION',dt:'2026-05-07T14:00:00-04:00'},
+  {name:'CPI RELEASE',dt:'2026-05-13T08:30:00-04:00'},{name:'NFP RELEASE',dt:'2026-06-05T08:30:00-04:00'},
+  {name:'CPI RELEASE',dt:'2026-06-11T08:30:00-04:00'},{name:'FOMC DECISION',dt:'2026-06-18T14:00:00-04:00'},
+  {name:'FOMC DECISION',dt:'2026-07-30T14:00:00-04:00'},
+].map(e=>({...e,ts:new Date(e.dt).getTime()}));
+const IMM=5*60000,LWIN=2*60000;let fastP=false,pTimer=null;
+function nextEv(){const n=Date.now();return REL.filter(e=>e.ts>n-LWIN).sort((a,b)=>a.ts-b.ts)[0]}
+function fmtCd(ms){if(ms<0)return'JUST RELEASED';const h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4),s=Math.floor(ms%6e4/1e3);if(h>48)return`${Math.floor(h/24)}d ${h%24}h`;if(h>0)return`${h}h ${m}m`;return`${m}m ${s}s`}
+function updEv(){const ev=nextEv(),b=document.getElementById('evBanner'),nm=document.getElementById('evName'),dt=document.getElementById('evDate'),cd=document.getElementById('evCd');
+if(!ev){nm.textContent='NO UPCOMING RELEASES';cd.textContent='ÔÇö';b.className='ev';return}
+const now=Date.now(),df=ev.ts-now,isL=df<0&&df>-LWIN,isI=df>=0&&df<IMM;
+nm.textContent=ev.name;dt.textContent=new Date(ev.ts).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',timeZoneName:'short'});
+cd.textContent=isL?'LIVE NOW':fmtCd(df);const cl=isL?' live':isI?' imm':'';
+b.className='ev'+cl;nm.className='ev-name'+cl;cd.className='ev-cd'+cl;
+const sf=isL||isI;if(sf!==fastP){fastP=sf;schedP();['bl','br','bre','bc','bi','bn'].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.textContent=fastP?'10s ÔÜí':'60s';el.className='pb'+(fastP?' fast':'')})}}
+function schedP(){if(pTimer)clearTimeout(pTimer);pTimer=setTimeout(async()=>{await fetchAll();schedP()},fastP?10000:60000)}
+
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// THRESHOLDS
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+const TH={
+  sahm:{t:[{s:'concern',l:'Triggered',f:v=>v>=.5},{s:'watch',l:'Elevated',f:v=>v>=.2},{s:'normal',l:'Below trigger',f:()=>1}],fmt:v=>v.toFixed(2)},
+  claims:{t:[{s:'concern',l:'Elevated',f:v=>v>=280},{s:'watch',l:'Rising',f:v=>v>=230},{s:'normal',l:'Normal',f:()=>1}],fmt:v=>`${Math.round(v)}K`},
+  yc:{t:[{s:'concern',l:'Inverted',f:v=>v<0},{s:'watch',l:'Flat',f:v=>v<.5},{s:'normal',l:'Normal',f:()=>1}],fmt:v=>`${v>=0?'+':''}${v.toFixed(2)}%`},
+  hy:{t:[{s:'concern',l:'Stress',f:v=>v>=600},{s:'watch',l:'Elevated',f:v=>v>=400},{s:'normal',l:'Tight',f:()=>1}],fmt:v=>`${Math.round(v)}bps`},
+  mort:{t:[{s:'concern',l:'Very high',f:v=>v>=7.5},{s:'watch',l:'Elevated',f:v=>v>=6.5},{s:'normal',l:'Normal',f:()=>1}],fmt:v=>`${v.toFixed(2)}%`},
+  indpro:{t:[{s:'concern',l:'Contracting',f:v=>v<-.3},{s:'watch',l:'Slowing',f:v=>v<0},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>`${v>=0?'+':''}${v.toFixed(1)}%`},
+  permits:{t:[{s:'concern',l:'Declining',f:v=>v.p<=-5},{s:'watch',l:'Declining',f:v=>v.p<0},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>`${Math.round(v.n).toLocaleString()}K`},
+  ismmfg:{t:[{s:'concern',l:'Contracting',f:v=>v<48},{s:'watch',l:'Slowing',f:v=>v<50},{s:'normal',l:'Expanding',f:()=>1}]},
+  ismsvc:{t:[{s:'concern',l:'Contracting',f:v=>v<48},{s:'watch',l:'Slowing',f:v=>v<50},{s:'normal',l:'Expanding',f:()=>1}]},
+  umcs:{t:[{s:'concern',l:'Pessimistic',f:v=>v<60},{s:'watch',l:'Cautious',f:v=>v<75},{s:'normal',l:'Confident',f:()=>1}],fmt:v=>v.toFixed(1)},
+  vixm:{t:[{s:'concern',l:'Fearful',f:v=>v>=30},{s:'watch',l:'Elevated',f:v=>v>=20},{s:'normal',l:'Calm',f:()=>1}]},
+  spx:{t:[{s:'concern',l:'Bear market',f:v=>v<=-20},{s:'watch',l:'Pullback',f:v=>v<=-5},{s:'normal',l:'Near high',f:()=>1}]},
+  cpi:{t:[{s:'concern',l:'High',f:v=>v>=3.5},{s:'watch',l:'Above target',f:v=>v>=2.5},{s:'normal',l:'Near target',f:()=>1}],fmt:v=>`${v.toFixed(1)}%`},
+  bei:{t:[{s:'concern',l:'Unanchored',f:v=>v>=2.8},{s:'watch',l:'Rising',f:v=>v>=2.3},{s:'normal',l:'Anchored',f:()=>1}],fmt:v=>`${v.toFixed(2)}%`},
+  pe:{t:[{s:'concern',l:'Extreme',f:v=>v>=30},{s:'watch',l:'Elevated',f:v=>v>=23},{s:'normal',l:'Fair',f:()=>1}]},
+  mktm2:{t:[{s:'concern',l:'Extreme',f:v=>v>=270},{s:'watch',l:'Elevated',f:v=>v>=220},{s:'normal',l:'Normal',f:()=>1}]},
+  nfci:{t:[{s:'concern',l:'Tight',f:v=>v>=.5},{s:'watch',l:'Neutral',f:v=>v>=0},{s:'normal',l:'Loose',f:()=>1}],fmt:v=>v.toFixed(2)},
+};
+function evSt(k,v){for(const t of TH[k].t)if(t.f(v))return{status:t.s,label:t.l};return{status:'normal',label:'Normal'}}
+function setM(id,fmt,st,lb){const d=document.getElementById(`d-${id}`),v=document.getElementById(`v-${id}`),s=document.getElementById(`s-${id}`);if(d)d.className=`md ${st}`;if(v){v.className=`mv ${st}`;v.textContent=fmt}if(s)s.textContent=lb}
+
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// FRED
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+const FK='04d4649f95b21c5845e90225e70ea524';
+async function fredF(series,limit=3){
+  const r=await fetch(`https://api.stlouisfed.org/fred/series/observations?series_id=${series}&api_key=${FK}&sort_order=desc&limit=${limit}&file_type=json`);
+  if(!r.ok)throw new Error(`FRED ${r.status}`);return(await r.json()).observations.filter(o=>o.value!=='.').map(o=>parseFloat(o.value))}
+
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// YAHOO FINANCE ÔÇö multi-proxy fallback, fixed encoding
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// Raw symbols as Yahoo expects them in the URL path
+const YH_RAW={
+  'SPY':'spy','DIA':'dia','%5EVIX':'vix',
+  'CL%3DF':'wti','BZ%3DF':'brent','GC%3DF':'gold',
+  'DX-Y.NYB':'dxy','XLE':'xle','ITA':'ita','XLP':'xlp','MOO':'moo'
+};
+const PROXIES=[
+  raw=>`https://corsproxy.io/?url=${encodeURIComponent(raw)}`,
+  raw=>`https://api.allorigins.win/raw?url=${encodeURIComponent(raw)}`,
+  raw=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(raw)}`,
+];
+let prevPr={},proxyIdx=0;
+
+async function fetchYH(symbol){
+  const raw=`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d`;
+  for(let i=0;i<PROXIES.length;i++){
+    const pi=(proxyIdx+i)%PROXIES.length;
+    try{
+      const r=await fetch(PROXIES[pi](raw),{signal:AbortSignal.timeout(8000)});
+      if(!r.ok)continue;
+      const j=await r.json();
+      const meta=j.chart.result[0].meta;
+      proxyIdx=pi; // remember working proxy
+      return{price:meta.regularMarketPrice,prevClose:meta.chartPreviousClose||meta.previousClose||meta.regularMarketPrice};
+    }catch(e){continue}
+  }
+  throw new Error('All proxies failed for '+symbol);
 }
-function drawBg(){
-  ctx.clearRect(0,0,W,H);
-  nodes.forEach(n=>{
-    n.x+=n.vx; n.y+=n.vy;
-    if(n.x<0||n.x>W) n.vx*=-1;
-    if(n.y<0||n.y>H) n.vy*=-1;
+
+async function pollYH(){
+  setYhSt('fetching');
+  const entries=Object.entries(YH_RAW);
+  const results=await Promise.allSettled(entries.map(([sym])=>fetchYH(sym)));
+  let ok=0,fail=0;
+  results.forEach((r,i)=>{
+    const[,id]=entries[i];
+    if(r.status==='fulfilled'){ok++;const{price,prevClose}=r.value;updPr(id,price,prevClose);
+      if(id==='vix'){document.getElementById('i-vix').value=price.toFixed(1);evalManual()}}
+    else{fail++;const el=document.getElementById(`t-${id}`);if(el){el.textContent='stale';el.className='pstale'}}
   });
-  for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
-    const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
-    if(d<MAXD){
-      ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y);
-      ctx.strokeStyle=`rgba(80,80,120,${(1-d/MAXD)*.15})`; ctx.lineWidth=.8; ctx.stroke();
-    }
-  }
-  nodes.forEach(n=>{ ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle='rgba(90,90,140,0.28)'; ctx.fill(); });
-  requestAnimationFrame(drawBg);
-}
-resize(); initNodes(); drawBg();
-window.addEventListener('resize',()=>{ resize(); initNodes(); });
-
-
-// ── Snap flip on scroll ──
-const flipper    = document.getElementById('flipper');
-const scrollHint = document.getElementById('scrollHint');
-
-// Two thresholds: scroll past FLIP_AT → flip; scroll back below UNFLIP_AT → unflip (hysteresis)
-const FLIP_AT   = window.innerHeight * 0.55;
-const UNFLIP_AT = window.innerHeight * 0.25;
-
-let isFlipped = false;
-
-function onScroll(){
-  const sy = window.scrollY;
-
-  if (!isFlipped && sy > FLIP_AT) {
-    isFlipped = true;
-    flipper.classList.add('slid', 'flipped');
-  } else if (isFlipped && sy < UNFLIP_AT) {
-    isFlipped = false;
-    flipper.classList.remove('flipped');
-    // slight delay before re-tucking under photo
-    setTimeout(() => { flipper.classList.remove('slid'); }, 320);
-  }
-
-  scrollHint.style.opacity = sy > 30 ? '0' : '1';
+  setYhSt(fail===entries.length?'error':ok>0?'live':'stale');
 }
 
-window.addEventListener('scroll', onScroll, {passive:true});
-onScroll();
+function updPr(id,price,prevClose){
+  const pE=document.getElementById(`p-${id}`),cE=document.getElementById(`c-${id}`),tE=document.getElementById(`t-${id}`);
+  if(!pE)return;const old=prevPr[id],dir=old?(price>old?'up':price<old?'down':''):'';prevPr[id]=price;
+  pE.textContent=price.toFixed(2);pE.className=`pval ${dir}`;pE.classList.add('tick-f');setTimeout(()=>pE.classList.remove('tick-f'),200);
+  if(prevClose&&cE){const d=price-prevClose,pct=(d/prevClose)*100;cE.textContent=`${d>=0?'+':''}${d.toFixed(2)} (${pct>=0?'+':''}${pct.toFixed(2)}%)`;cE.className=`pchg ${pct>=0?'up':'down'}`}
+  if(tE){tE.textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});tE.className='ptime'}
+}
+
+function setYhSt(st){const d=document.getElementById('yhDot'),l=document.getElementById('yhLabel');
+  const m={live:['live','LIVE'],fetching:['live','...'],stale:['stale','STALE'],error:['err','ERR'],idle:['','IDLE']};
+  const[c,t]=m[st]||m.idle;d.className=`yh-dot ${c}`;l.textContent=t}
+
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// FETCH ALL (FRED)
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+async function fetchAll(){
+  const btn=document.getElementById('refreshBtn');btn.disabled=true;btn.textContent='Loading...';
+  const run=async(id,fn)=>{try{await fn()}catch(e){setM(id,'ERR','watch','fetch failed')}};
+  await Promise.all([
+    run('sahm',async()=>{const d=await fredF('SAHMREALTIME',1);const v=d[0];const{status,label}=evSt('sahm',v);setM('sahm',TH.sahm.fmt(v),status,label)}),
+    run('claims',async()=>{const d=await fredF('ICSA',1);const v=d[0]/1000;const{status,label}=evSt('claims',v);setM('claims',TH.claims.fmt(v),status,label)}),
+    run('yc',async()=>{const d=await fredF('T10Y2Y',1);const v=d[0];const{status,label}=evSt('yc',v);setM('yc',TH.yc.fmt(v),status,label)}),
+    run('hy',async()=>{const d=await fredF('BAMLH0A0HYM2',1);const v=d[0];const{status,label}=evSt('hy',v);setM('hy',TH.hy.fmt(v),status,label)}),
+    run('mort',async()=>{const d=await fredF('MORTGAGE30US',1);const v=d[0];const{status,label}=evSt('mort',v);setM('mort',TH.mort.fmt(v),status,label)}),
+    run('indpro',async()=>{const d=await fredF('INDPRO',2);const v=((d[0]-d[1])/d[1])*100;const{status,label}=evSt('indpro',v);setM('indpro',TH.indpro.fmt(v),status,label)}),
+    run('permits',async()=>{const d=await fredF('PERMIT',2);const n=d[0]/1000,p=((d[0]-d[1])/d[1])*100;const{status,label}=evSt('permits',{n,p});setM('permits',TH.permits.fmt({n,p}),status,label)}),
+    run('umcs',async()=>{const d=await fredF('UMCSENT',1);const v=d[0];const{status,label}=evSt('umcs',v);setM('umcs',TH.umcs.fmt(v),status,label)}),
+    run('cpi',async()=>{const d=await fredF('CPIAUCSL',14);const v=((d[0]-d[12])/d[12])*100;const{status,label}=evSt('cpi',v);setM('cpi',TH.cpi.fmt(v),status,label)}),
+    run('bei',async()=>{const d=await fredF('T5YIE',1);const v=d[0];const{status,label}=evSt('bei',v);setM('bei',TH.bei.fmt(v),status,label)}),
+    run('nfci',async()=>{const d=await fredF('NFCI',1);const v=d[0];const{status,label}=evSt('nfci',v);setM('nfci',TH.nfci.fmt(v),status,label)}),
+  ]);
+  evalManual();updSum();fetchYC();
+  document.getElementById('ts').textContent=new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  btn.disabled=false;btn.textContent='Refresh';
+}
+
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// MANUAL METRICS
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+function evalManual(){[
+  {id:'vixm',inp:'vix',cfg:'vixm'},{id:'spx',inp:'spx',cfg:'spx'},
+  {id:'pe',inp:'pe',cfg:'pe'},{id:'mktm2',inp:'mktm2',cfg:'mktm2'},
+  {id:'ism-mfg',inp:'ism-mfg',cfg:'ismmfg'},{id:'ism-svc',inp:'ism-svc',cfg:'ismsvc'},
+].forEach(m=>{
+  const inp=document.getElementById(`i-${m.inp}`),dot=document.getElementById(`d-${m.id}`),stat=document.getElementById(`s-${m.id}`);
+  if(!inp)return;const v=parseFloat(inp.value);if(isNaN(v))return;
+  const{status,label}=evSt(m.cfg,v);if(dot)dot.className=`md ${status}`;
+  inp.style.color=`var(--${status==='concern'?'red':status==='watch'?'yellow':'green'})`;
+  if(stat)stat.textContent=label});updSum()}
+
+function updSum(){let c=0,w=0,n=0;document.querySelectorAll('#pan-0 .md').forEach(d=>{if(d.classList.contains('concern'))c++;else if(d.classList.contains('watch'))w++;else if(d.classList.contains('normal'))n++});
+document.getElementById('cC').textContent=`${c} concern`;document.getElementById('cW').textContent=`${w} watch`;document.getElementById('cN').textContent=`${n} normal`}
+
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// YIELD CURVE
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+async function fetchYC(){try{
+  const[d2,d10]=await Promise.all([fredF('DGS2',260),fredF('DGS10',260)]);
+  if(!d2||!d10)return;const y2=d2.slice().reverse(),y10=d10.slice().reverse();
+  const len=Math.min(y2.length,y10.length),a2=y2.slice(-len),a10=y10.slice(-len);
+  const c2=a2[a2.length-1],c10=a10[a10.length-1],sp=c10-c2;
+  const sE=document.getElementById('ycSV'),sL=document.getElementById('ycSL');
+  sE.textContent=`${sp>=0?'+':''}${sp.toFixed(2)}%`;
+  if(sp<0){sE.className='yc-sv inv';sL.textContent='INVERTED'}else if(sp<.5){sE.className='yc-sv flat';sL.textContent='FLAT'}else{sE.className='yc-sv ok';sL.textContent='NORMAL'}
+  const p2=a2[a2.length-2],p10=a10[a10.length-2];
+  const e2=document.getElementById('y2C'),e10=document.getElementById('y10C');
+  e2.textContent=`${c2.toFixed(2)}%`;e10.textContent=`${c10.toFixed(2)}%`;
+  e2.className=`yc-cv ${c2>p2?'rising':c2<p2?'falling':''}`;e10.className=`yc-cv ${c10>p10?'rising':c10<p10?'falling':''}`;
+  drawSp('sp2y',a2,'rgba(74,158,255,.8)');drawSp('sp10y',a10,'rgba(184,134,11,.8)');
+}catch(e){console.error('YC fail',e)}}
+
+function drawSp(id,data,color){const svg=document.getElementById(id);if(!svg)return;svg.innerHTML='';
+const W=200,H=48,P=4,min=Math.min(...data)-.05,max=Math.max(...data)+.05,rng=max-min||1;
+const tX=i=>P+(i/(data.length-1))*(W-P*2),tY=v=>H-P-((v-min)/rng)*(H-P*2);
+const pts=data.map((v,i)=>`${tX(i).toFixed(1)},${tY(v).toFixed(1)}`).join(' ');
+if(min<0&&max>0){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',P);l.setAttribute('x2',W-P);l.setAttribute('y1',tY(0));l.setAttribute('y2',tY(0));l.setAttribute('class','spark-zero');svg.appendChild(l)}
+const ap=`M${tX(0)},${H-P} `+data.map((v,i)=>`L${tX(i).toFixed(1)},${tY(v).toFixed(1)}`).join(' ')+` L${tX(data.length-1)},${H-P} Z`;
+const a=document.createElementNS('http://www.w3.org/2000/svg','path');a.setAttribute('d',ap);a.setAttribute('fill',color);a.setAttribute('class','spark-area');svg.appendChild(a);
+const pl=document.createElementNS('http://www.w3.org/2000/svg','polyline');pl.setAttribute('points',pts);pl.setAttribute('class','spark-line');pl.setAttribute('stroke',color);svg.appendChild(pl);
+const dt=document.createElementNS('http://www.w3.org/2000/svg','circle');dt.setAttribute('cx',tX(data.length-1));dt.setAttribute('cy',tY(data[data.length-1]));dt.setAttribute('class','spark-dot');dt.setAttribute('fill',color);svg.appendChild(dt)}
+
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// INIT
+// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+evalManual();updEv();setInterval(updEv,1000);schedP();
+pollYH();setInterval(pollYH,15000);
+fetchAll();
 </script>
 </body>
 </html>
