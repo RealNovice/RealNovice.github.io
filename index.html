@@ -237,11 +237,12 @@
     .car-dot{width:8px;height:8px;border-radius:50%;background:rgba(29,29,31,.12);border:none;cursor:pointer;transition:all .3s;padding:0}
     .car-dot.active{background:rgba(29,29,31,.45);transform:scale(1.3)}
     .car-label{text-align:center;font-size:.78rem;font-weight:700;letter-spacing:.14em;color:var(--text-sub);margin-bottom:.5rem;user-select:none}
-    .car-vp{perspective:1200px;overflow:hidden;cursor:grab;touch-action:pan-y;border-radius:20px}
+    .car-vp{overflow:hidden;cursor:grab;touch-action:pan-y;border-radius:20px}
     .car-vp:active{cursor:grabbing}
-    .car-track{position:relative;width:100%;min-height:200px;transform-style:preserve-3d}
-    .car-panel{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
-      background:rgba(255,255,255,.18);border:1px solid var(--glass-border);border-radius:20px;padding:1rem 1.25rem;overflow-y:auto}
+    .car-track{position:relative;width:100%;min-height:200px}
+    .car-panel{position:absolute;inset:0;
+      background:rgba(255,255,255,.18);border:1px solid var(--glass-border);border-radius:20px;padding:1rem 1.25rem;overflow-y:auto;
+      will-change:transform,opacity;transition:transform .35s ease,opacity .25s ease}
     .drag-hint{text-align:center;font-size:.62rem;color:var(--text-dim);letter-spacing:.1em;margin-top:.4rem;opacity:.5}
 
     /* Metrics */
@@ -294,6 +295,16 @@
     .oil-spread .osp-val{font-size:1rem;font-weight:700;font-variant-numeric:tabular-nums}
     .oil-spread .osp-val.contango{color:var(--red)}.oil-spread .osp-val.backw{color:var(--green)}.oil-spread .osp-val.neutral{color:var(--text-dim)}
     @media(max-width:800px){.oil-grid{grid-template-columns:1fr}.pgrid.c5{grid-template-columns:repeat(3,1fr)}}
+
+    /* Tooltips */
+    [data-tip]{position:relative;cursor:help}
+    [data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+      background:rgba(29,29,31,.92);color:#fff;font-size:.65rem;font-weight:400;letter-spacing:.02em;line-height:1.4;
+      padding:6px 10px;border-radius:8px;white-space:normal;width:max-content;max-width:240px;z-index:100;
+      pointer-events:none;animation:tipIn .15s ease}
+    [data-tip]:hover::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);
+      border:4px solid transparent;border-top-color:rgba(29,29,31,.92);z-index:100;pointer-events:none;animation:tipIn .15s ease}
+    @keyframes tipIn{from{opacity:0;transform:translateX(-50%) translateY(4px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
     .bfooter{display:flex;justify-content:space-between;align-items:center;padding-top:.5rem}
     .bf-live{font-size:.62rem;color:var(--text-dim);letter-spacing:.06em;display:flex;align-items:center;gap:4px}
@@ -542,13 +553,65 @@
         </div>
 
         <!-- EU -->
-        <div class="car-panel" id="pan-1"><div class="rph"><h3>Euro Area</h3><p>ECB Main Refinancing Rate · HICP Inflation Y/Y · EU Composite PMI · ZEW Sentiment · EUR/USD · BTP-Bund Spread · TARGET2 Balances</p></div></div>
+        <div class="car-panel" id="pan-1">
+          <div class="cl">Monetary Policy <span class="pb" id="beu1">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-ecbrate"></div><div class="mn">ECB Refi Rate<span class="ms">FRED: ECBMRRFR</span></div><div class="mrt"><div class="mv loading" id="v-ecbrate">—</div><div class="mst" id="s-ecbrate">—</div></div></div>
+          <div class="mr"><div class="md loading" id="d-eurusd"></div><div class="mn">EUR/USD<span class="ms">FRED: DEXUSEU · daily</span></div><div class="mrt"><div class="mv loading" id="v-eurusd">—</div><div class="mst" id="s-eurusd">—</div></div></div>
+
+          <div class="cl">Inflation & Economy <span class="pb" id="beu2">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-eucpi"></div><div class="mn">HICP Inflation<span class="ms">FRED: CP0000EZ19M086NEST</span></div><div class="mrt"><div class="mv loading" id="v-eucpi">—</div><div class="mst" id="s-eucpi">—</div></div></div>
+          <div class="mr"><div class="md loading" id="d-euunemp"></div><div class="mn">Unemployment Rate<span class="ms">FRED: LRHUTTTTEZM156S</span></div><div class="mrt"><div class="mv loading" id="v-euunemp">—</div><div class="mst" id="s-euunemp">—</div></div></div>
+          <div class="mr"><div class="md loading" id="d-euconf"></div><div class="mn">Consumer Confidence<span class="ms">FRED: CSCICP02EZM460S</span></div><div class="mrt"><div class="mv loading" id="v-euconf">—</div><div class="mst" id="s-euconf">—</div></div></div>
+
+          <div class="cl">Market</div>
+          <div class="mr"><div class="md normal" id="d-eupmi"></div><div class="mn">Composite PMI<span class="ms">Manual · &gt;50 = expansion</span></div><div class="mrt"><input class="mi" id="i-eupmi" value="50.4" onchange="evalManual()"/><div class="mst" id="s-eupmi">—</div></div></div>
+          <div class="mr"><div class="md normal" id="d-bund"></div><div class="mn">BTP-Bund Spread<span class="ms">Manual · Italian risk premium bps</span></div><div class="mrt"><input class="mi" id="i-bund" value="130" onchange="evalManual()"/><div class="mst" id="s-bund">—</div></div></div>
+        </div>
+
         <!-- China -->
-        <div class="car-panel" id="pan-2"><div class="rph"><h3>China</h3><p>NBS Manufacturing PMI · Caixin Services PMI · PPI Y/Y · CPI Y/Y · CNY/USD · FX Reserves · Credit Impulse · Li Keqiang Index · CSI 300</p></div></div>
+        <div class="car-panel" id="pan-2">
+          <div class="cl">Prices <span class="pb" id="bcn1">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-cncpi"></div><div class="mn">CPI Y/Y<span class="ms">FRED: CPALTT01CNM657N</span></div><div class="mrt"><div class="mv loading" id="v-cncpi">—</div><div class="mst" id="s-cncpi">—</div></div></div>
+          <div class="mr"><div class="md loading" id="d-cnppi"></div><div class="mn">PPI Y/Y<span class="ms">FRED: CHNPIEATI01GYM</span></div><div class="mrt"><div class="mv loading" id="v-cnppi">—</div><div class="mst" id="s-cnppi">—</div></div></div>
+
+          <div class="cl">Currency <span class="pb" id="bcn2">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-cny"></div><div class="mn">USD/CNY<span class="ms">FRED: DEXCHUS · daily</span></div><div class="mrt"><div class="mv loading" id="v-cny">—</div><div class="mst" id="s-cny">—</div></div></div>
+
+          <div class="cl">Activity</div>
+          <div class="mr"><div class="md normal" id="d-cnpmi"></div><div class="mn">NBS Manufacturing PMI<span class="ms">Manual · &lt;50 = contraction</span></div><div class="mrt"><input class="mi" id="i-cnpmi" value="50.5" onchange="evalManual()"/><div class="mst" id="s-cnpmi">—</div></div></div>
+          <div class="mr"><div class="md normal" id="d-cxpmi"></div><div class="mn">Caixin Services PMI<span class="ms">Manual · private survey</span></div><div class="mrt"><input class="mi" id="i-cxpmi" value="51.9" onchange="evalManual()"/><div class="mst" id="s-cxpmi">—</div></div></div>
+          <div class="mr"><div class="md normal" id="d-cnfx"></div><div class="mn">FX Reserves<span class="ms">Manual · $T</span></div><div class="mrt"><input class="mi" id="i-cnfx" value="3.2" onchange="evalManual()"/><div class="mst" id="s-cnfx">—</div></div></div>
+        </div>
+
         <!-- Japan -->
-        <div class="car-panel" id="pan-3"><div class="rph"><h3>Japan</h3><p>BOJ Policy Rate · CPI ex-fresh food · Tankan · JPY/USD Carry · 10Y JGB · Nikkei 225 · au Jibun Bank PMI</p></div></div>
+        <div class="car-panel" id="pan-3">
+          <div class="cl">Monetary Policy <span class="pb" id="bjp1">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-bojrate"></div><div class="mn">BOJ Policy Rate<span class="ms">FRED: IRSTCB01JPM156N</span></div><div class="mrt"><div class="mv loading" id="v-bojrate">—</div><div class="mst" id="s-bojrate">—</div></div></div>
+          <div class="mr"><div class="md loading" id="d-jgb"></div><div class="mn">10Y JGB Yield<span class="ms">FRED: IRLTLT01JPM156N</span></div><div class="mrt"><div class="mv loading" id="v-jgb">—</div><div class="mst" id="s-jgb">—</div></div></div>
+
+          <div class="cl">Prices & FX <span class="pb" id="bjp2">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-jpcpi"></div><div class="mn">CPI (All Items)<span class="ms">FRED: JPNCPIALLMINMEI</span></div><div class="mrt"><div class="mv loading" id="v-jpcpi">—</div><div class="mst" id="s-jpcpi">—</div></div></div>
+          <div class="mr"><div class="md loading" id="d-jpyusd"></div><div class="mn">JPY/USD<span class="ms">FRED: DEXJPUS · daily</span></div><div class="mrt"><div class="mv loading" id="v-jpyusd">—</div><div class="mst" id="s-jpyusd">—</div></div></div>
+
+          <div class="cl">Market <span class="pb" id="bjp3">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-nikkei"></div><div class="mn">Nikkei 225<span class="ms">FRED: NIKKEI225 · daily</span></div><div class="mrt"><div class="mv loading" id="v-nikkei">—</div><div class="mst" id="s-nikkei">—</div></div></div>
+          <div class="mr"><div class="md normal" id="d-tankan"></div><div class="mn">Tankan Index<span class="ms">Manual · BOJ survey</span></div><div class="mrt"><input class="mi" id="i-tankan" value="14" onchange="evalManual()"/><div class="mst" id="s-tankan">—</div></div></div>
+        </div>
+
         <!-- UK -->
-        <div class="car-panel" id="pan-4"><div class="rph"><h3>United Kingdom</h3><p>BOE Base Rate · CPI Y/Y · GDP Nowcast · GBP/USD · FTSE 100 · UK PMI · Halifax House Prices · 10Y Gilt</p></div></div>
+        <div class="car-panel" id="pan-4">
+          <div class="cl">Monetary Policy <span class="pb" id="buk1">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-boerate"></div><div class="mn">BOE Base Rate<span class="ms">FRED: BOERUKM · monthly</span></div><div class="mrt"><div class="mv loading" id="v-boerate">—</div><div class="mst" id="s-boerate">—</div></div></div>
+          <div class="mr"><div class="md loading" id="d-gbpusd"></div><div class="mn">GBP/USD<span class="ms">FRED: DEXUSUK · daily</span></div><div class="mrt"><div class="mv loading" id="v-gbpusd">—</div><div class="mst" id="s-gbpusd">—</div></div></div>
+
+          <div class="cl">Economy <span class="pb" id="buk2">60s</span></div>
+          <div class="mr"><div class="md loading" id="d-ukcpi"></div><div class="mn">CPI (All Items)<span class="ms">FRED: GBRCPIALLMINMEI</span></div><div class="mrt"><div class="mv loading" id="v-ukcpi">—</div><div class="mst" id="s-ukcpi">—</div></div></div>
+          <div class="mr"><div class="md loading" id="d-ukuem"></div><div class="mn">Unemployment Rate<span class="ms">FRED: LRHUTTTTGBM156S</span></div><div class="mrt"><div class="mv loading" id="v-ukuem">—</div><div class="mst" id="s-ukuem">—</div></div></div>
+
+          <div class="cl">Market</div>
+          <div class="mr"><div class="md normal" id="d-ukpmi"></div><div class="mn">UK Composite PMI<span class="ms">Manual · &gt;50 = expansion</span></div><div class="mrt"><input class="mi" id="i-ukpmi" value="51.5" onchange="evalManual()"/><div class="mst" id="s-ukpmi">—</div></div></div>
+          <div class="mr"><div class="md normal" id="d-gilt"></div><div class="mn">10Y Gilt Yield<span class="ms">Manual · %</span></div><div class="mrt"><input class="mi" id="i-gilt" value="4.5" onchange="evalManual()"/><div class="mst" id="s-gilt">—</div></div></div>
+        </div>
       </div>
     </div>
     <div class="drag-hint">← drag to flip between regions →</div>
@@ -607,15 +670,15 @@ const REGIONS=[{f:'🇺🇸',n:'UNITED STATES'},{f:'🇪🇺',n:'EURO AREA'},{f:
 let curP=0;const vp=document.getElementById('carVP'),trk=document.getElementById('carTrack'),lbl=document.getElementById('carLabel'),nav=document.getElementById('carNav'),pans=document.querySelectorAll('.car-panel');
 REGIONS.forEach((_,i)=>{const d=document.createElement('button');d.className='car-dot'+(i===0?' active':'');d.onclick=()=>goP(i);nav.appendChild(d)});
 function goP(i){if(i<0||i>=REGIONS.length)return;curP=i;layP();lbl.textContent=`${REGIONS[i].f} ${REGIONS[i].n}`;nav.querySelectorAll('.car-dot').forEach((d,j)=>d.classList.toggle('active',j===i));requestAnimationFrame(()=>{const p=document.getElementById(`pan-${i}`);if(p)trk.style.minHeight=p.scrollHeight+'px'})}
-function layP(){pans.forEach((p,i)=>{const o=i-curP;if(o===0){p.style.transform='rotateY(0)';p.style.opacity='1';p.style.pointerEvents='auto';p.style.zIndex='2'}else{p.style.transform=`rotateY(${o*90}deg) translateZ(400px)`;p.style.opacity='0';p.style.pointerEvents='none';p.style.zIndex='0'}p.style.transition='transform .55s cubic-bezier(.34,1.56,.64,1),opacity .4s ease'})}
+function layP(){pans.forEach((p,i)=>{const o=i-curP;if(o===0){p.style.transform='translateX(0)';p.style.opacity='1';p.style.pointerEvents='auto';p.style.zIndex='2'}else{p.style.transform=`translateX(${o>0?'100':'-100'}%)`;p.style.opacity='0';p.style.pointerEvents='none';p.style.zIndex='0'}})}
 let dsx=0,dragging=false,dd=0;const DTH=50;
 vp.addEventListener('mousedown',e=>{dsx=e.clientX;dragging=true;dd=0});
-vp.addEventListener('mousemove',e=>{if(!dragging)return;dd=e.clientX-dsx;const t=Math.max(-45,Math.min(45,dd*.3));pans[curP].style.transition='none';pans[curP].style.transform=`rotateY(${t}deg)`});
+vp.addEventListener('mousemove',e=>{if(!dragging)return;dd=e.clientX-dsx;pans[curP].style.transition='none';pans[curP].style.transform=`translateX(${dd}px)`;pans[curP].style.opacity=`${1-Math.abs(dd)/400}`});
 vp.addEventListener('mouseup',endD);vp.addEventListener('mouseleave',e=>{if(dragging)endD()});
 vp.addEventListener('touchstart',e=>{dsx=e.touches[0].clientX;dragging=true;dd=0},{passive:true});
-vp.addEventListener('touchmove',e=>{if(!dragging)return;dd=e.touches[0].clientX-dsx;const t=Math.max(-45,Math.min(45,dd*.3));pans[curP].style.transition='none';pans[curP].style.transform=`rotateY(${t}deg)`},{passive:true});
+vp.addEventListener('touchmove',e=>{if(!dragging)return;dd=e.touches[0].clientX-dsx;pans[curP].style.transition='none';pans[curP].style.transform=`translateX(${dd}px)`;pans[curP].style.opacity=`${1-Math.abs(dd)/400}`},{passive:true});
 vp.addEventListener('touchend',endD);
-function endD(){if(!dragging)return;dragging=false;if(dd<-DTH&&curP<REGIONS.length-1)goP(curP+1);else if(dd>DTH&&curP>0)goP(curP-1);else{pans[curP].style.transition='transform .4s cubic-bezier(.34,1.56,.64,1)';pans[curP].style.transform='rotateY(0)'}}
+function endD(){if(!dragging)return;dragging=false;if(dd<-DTH&&curP<REGIONS.length-1)goP(curP+1);else if(dd>DTH&&curP>0)goP(curP-1);else{pans[curP].style.transition='transform .35s ease, opacity .25s ease';pans[curP].style.transform='translateX(0)';pans[curP].style.opacity='1'}}
 layP();goP(0);
 
 // ═══════════════════════════════════════════════════════════════
@@ -670,6 +733,35 @@ const TH={
   jet:{t:[{s:'concern',l:'Very high',f:v=>v>=3.5},{s:'watch',l:'Elevated',f:v=>v>=2.5},{s:'normal',l:'Normal',f:()=>1}],fmt:v=>`$${v.toFixed(3)}/gal`},
   wtispot:{t:[{s:'concern',l:'Spike',f:v=>v>=100},{s:'watch',l:'Elevated',f:v=>v>=80},{s:'normal',l:'Normal',f:()=>1}],fmt:v=>`$${v.toFixed(2)}`},
   brentspot:{t:[{s:'concern',l:'Spike',f:v=>v>=110},{s:'watch',l:'Elevated',f:v=>v>=85},{s:'normal',l:'Normal',f:()=>1}],fmt:v=>`$${v.toFixed(2)}`},
+  // EU
+  ecbrate:{t:[{s:'concern',l:'Very tight',f:v=>v>=4},{s:'watch',l:'Tight',f:v=>v>=2.5},{s:'normal',l:'Accommodative',f:()=>1}],fmt:v=>`${v.toFixed(2)}%`},
+  eurusd:{t:[{s:'concern',l:'Weak EUR',f:v=>v<=1.0},{s:'watch',l:'Under pressure',f:v=>v<=1.05},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>v.toFixed(4)},
+  eucpi:{t:[{s:'concern',l:'Hot',f:v=>v>=4},{s:'watch',l:'Above target',f:v=>v>=2.5},{s:'normal',l:'Near target',f:()=>1}],fmt:v=>`${v.toFixed(1)}%`},
+  euunemp:{t:[{s:'concern',l:'High',f:v=>v>=8},{s:'watch',l:'Elevated',f:v=>v>=7},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>`${v.toFixed(1)}%`},
+  euconf:{t:[{s:'concern',l:'Pessimistic',f:v=>v<=-15},{s:'watch',l:'Cautious',f:v=>v<=-5},{s:'normal',l:'Confident',f:()=>1}],fmt:v=>v.toFixed(1)},
+  eupmi:{t:[{s:'concern',l:'Contracting',f:v=>v<48},{s:'watch',l:'Slowing',f:v=>v<50},{s:'normal',l:'Expanding',f:()=>1}]},
+  bund:{t:[{s:'concern',l:'Stress',f:v=>v>=250},{s:'watch',l:'Elevated',f:v=>v>=150},{s:'normal',l:'Stable',f:()=>1}]},
+  // China
+  cncpi:{t:[{s:'concern',l:'Deflation',f:v=>v<0},{s:'watch',l:'Low',f:v=>v<1},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>`${v.toFixed(1)}%`},
+  cnppi:{t:[{s:'concern',l:'Deflation',f:v=>v<-3},{s:'watch',l:'Falling',f:v=>v<0},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>`${v.toFixed(1)}%`},
+  cny:{t:[{s:'concern',l:'Weak CNY',f:v=>v>=7.3},{s:'watch',l:'Depreciating',f:v=>v>=7.1},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>v.toFixed(4)},
+  cnpmi:{t:[{s:'concern',l:'Contracting',f:v=>v<48},{s:'watch',l:'Slowing',f:v=>v<50},{s:'normal',l:'Expanding',f:()=>1}]},
+  cxpmi:{t:[{s:'concern',l:'Contracting',f:v=>v<48},{s:'watch',l:'Slowing',f:v=>v<50},{s:'normal',l:'Expanding',f:()=>1}]},
+  cnfx:{t:[{s:'concern',l:'Low',f:v=>v<2.8},{s:'watch',l:'Declining',f:v=>v<3.0},{s:'normal',l:'Adequate',f:()=>1}]},
+  // Japan
+  bojrate:{t:[{s:'watch',l:'Tightening',f:v=>v>0.25},{s:'normal',l:'Accommodative',f:v=>v>=0},{s:'concern',l:'Negative',f:()=>1}],fmt:v=>`${v.toFixed(2)}%`},
+  jgb:{t:[{s:'concern',l:'Spiking',f:v=>v>=1.5},{s:'watch',l:'Rising',f:v=>v>=1.0},{s:'normal',l:'Controlled',f:()=>1}],fmt:v=>`${v.toFixed(2)}%`},
+  jpcpi:{t:[{s:'concern',l:'High',f:v=>v>=4},{s:'watch',l:'Above target',f:v=>v>=2.5},{s:'normal',l:'Near target',f:()=>1}],fmt:v=>v.toFixed(1)},
+  jpyusd:{t:[{s:'concern',l:'Weak JPY',f:v=>v>=155},{s:'watch',l:'Depreciating',f:v=>v>=145},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>v.toFixed(2)},
+  nikkei:{t:[{s:'normal',l:'Bull',f:v=>v>=35000},{s:'normal',l:'Stable',f:v=>v>=30000},{s:'watch',l:'Declining',f:()=>1}],fmt:v=>Math.round(v).toLocaleString()},
+  tankan:{t:[{s:'concern',l:'Pessimistic',f:v=>v<0},{s:'watch',l:'Cautious',f:v=>v<10},{s:'normal',l:'Optimistic',f:()=>1}]},
+  // UK
+  boerate:{t:[{s:'concern',l:'Very tight',f:v=>v>=5},{s:'watch',l:'Tight',f:v=>v>=4},{s:'normal',l:'Moderate',f:()=>1}],fmt:v=>`${v.toFixed(2)}%`},
+  gbpusd:{t:[{s:'concern',l:'Weak GBP',f:v=>v<=1.15},{s:'watch',l:'Under pressure',f:v=>v<=1.22},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>v.toFixed(4)},
+  ukcpi:{t:[{s:'concern',l:'Hot',f:v=>v>=5},{s:'watch',l:'Above target',f:v=>v>=3},{s:'normal',l:'Near target',f:()=>1}],fmt:v=>v.toFixed(1)},
+  ukuem:{t:[{s:'concern',l:'High',f:v=>v>=5},{s:'watch',l:'Rising',f:v=>v>=4.5},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>`${v.toFixed(1)}%`},
+  ukpmi:{t:[{s:'concern',l:'Contracting',f:v=>v<48},{s:'watch',l:'Slowing',f:v=>v<50},{s:'normal',l:'Expanding',f:()=>1}]},
+  gilt:{t:[{s:'concern',l:'Spiking',f:v=>v>=5},{s:'watch',l:'Elevated',f:v=>v>=4.5},{s:'normal',l:'Normal',f:()=>1}]},
 };
 function evSt(k,v){for(const t of TH[k].t)if(t.f(v))return{status:t.s,label:t.l};return{status:'normal',label:'Normal'}}
 function setM(id,fmt,st,lb){const d=document.getElementById(`d-${id}`),v=document.getElementById(`v-${id}`),s=document.getElementById(`s-${id}`);if(d)d.className=`md ${st}`;if(v){v.className=`mv ${st}`;v.textContent=fmt}if(s)s.textContent=lb}
@@ -692,7 +784,11 @@ function saveCache(){
   });
   // Save FRED metric cells
   ['sahm','claims','yc','hy','mort','indpro','permits','umcs','cpi','bei','nfci',
-   'cstocks','spr','prod','gas','diesel','jet','wtispot','brentspot'].forEach(id=>{
+   'cstocks','spr','prod','gas','diesel','jet','wtispot','brentspot',
+   'ecbrate','eurusd','eucpi','euunemp','euconf',
+   'cncpi','cnppi','cny',
+   'bojrate','jgb','jpcpi','jpyusd','nikkei',
+   'boerate','gbpusd','ukcpi','ukuem'].forEach(id=>{
     const v=document.getElementById(`v-${id}`),s=document.getElementById(`s-${id}`),d=document.getElementById(`d-${id}`);
     if(v&&v.textContent!=='—'&&v.textContent!=='ERR')data.metrics[id]={val:v.textContent,st:s?s.textContent:'',cls:d?d.className:''};
   });
@@ -928,6 +1024,27 @@ async function fetchAll(){
     run('brentspot',async()=>{const d=await fredF('DCOILBRENTEU',1);const v=d[0];const{status,label}=evSt('brentspot',v);setM('brentspot',TH.brentspot.fmt(v),status,label)}),
     // Henry Hub spot → oil tab HH cell
     (async()=>{try{const d=await fredF('DHHNGSP',1);if(d[0])updPr('o-hh',d[0],null)}catch(e){}})(),
+    // EU metrics
+    run('ecbrate',async()=>{const d=await fredF('ECBMRRFR',1);const v=d[0];const{status,label}=evSt('ecbrate',v);setM('ecbrate',TH.ecbrate.fmt(v),status,label)}),
+    run('eurusd',async()=>{const d=await fredF('DEXUSEU',1);const v=d[0];const{status,label}=evSt('eurusd',v);setM('eurusd',TH.eurusd.fmt(v),status,label)}),
+    run('eucpi',async()=>{const d=await fredF('CP0000EZ19M086NEST',13);const v=((d[0]-d[12])/d[12])*100;const{status,label}=evSt('eucpi',v);setM('eucpi',TH.eucpi.fmt(v),status,label)}),
+    run('euunemp',async()=>{const d=await fredF('LRHUTTTTEZM156S',1);const v=d[0];const{status,label}=evSt('euunemp',v);setM('euunemp',TH.euunemp.fmt(v),status,label)}),
+    run('euconf',async()=>{const d=await fredF('CSCICP02EZM460S',1);const v=d[0];const{status,label}=evSt('euconf',v);setM('euconf',TH.euconf.fmt(v),status,label)}),
+    // China metrics
+    run('cncpi',async()=>{const d=await fredF('CPALTT01CNM657N',1);const v=d[0];const{status,label}=evSt('cncpi',v);setM('cncpi',TH.cncpi.fmt(v),status,label)}),
+    run('cnppi',async()=>{const d=await fredF('CHNPIEATI01GYM',1);const v=d[0];const{status,label}=evSt('cnppi',v);setM('cnppi',TH.cnppi.fmt(v),status,label)}),
+    run('cny',async()=>{const d=await fredF('DEXCHUS',1);const v=d[0];const{status,label}=evSt('cny',v);setM('cny',TH.cny.fmt(v),status,label)}),
+    // Japan metrics
+    run('bojrate',async()=>{const d=await fredF('IRSTCB01JPM156N',1);const v=d[0];const{status,label}=evSt('bojrate',v);setM('bojrate',TH.bojrate.fmt(v),status,label)}),
+    run('jgb',async()=>{const d=await fredF('IRLTLT01JPM156N',1);const v=d[0];const{status,label}=evSt('jgb',v);setM('jgb',TH.jgb.fmt(v),status,label)}),
+    run('jpcpi',async()=>{const d=await fredF('JPNCPIALLMINMEI',2);const v=((d[0]-d[1])/d[1])*100;const{status,label}=evSt('jpcpi',v);setM('jpcpi',TH.jpcpi.fmt(v),status,label)}),
+    run('jpyusd',async()=>{const d=await fredF('DEXJPUS',1);const v=d[0];const{status,label}=evSt('jpyusd',v);setM('jpyusd',TH.jpyusd.fmt(v),status,label)}),
+    run('nikkei',async()=>{const d=await fredF('NIKKEI225',1);const v=d[0];const{status,label}=evSt('nikkei',v);setM('nikkei',TH.nikkei.fmt(v),status,label)}),
+    // UK metrics
+    run('boerate',async()=>{const d=await fredF('BOERUKM',1);const v=d[0];const{status,label}=evSt('boerate',v);setM('boerate',TH.boerate.fmt(v),status,label)}),
+    run('gbpusd',async()=>{const d=await fredF('DEXUSUK',1);const v=d[0];const{status,label}=evSt('gbpusd',v);setM('gbpusd',TH.gbpusd.fmt(v),status,label)}),
+    run('ukcpi',async()=>{const d=await fredF('GBRCPIALLMINMEI',13);const v=((d[0]-d[12])/d[12])*100;const{status,label}=evSt('ukcpi',v);setM('ukcpi',TH.ukcpi.fmt(v),status,label)}),
+    run('ukuem',async()=>{const d=await fredF('LRHUTTTTGBM156S',1);const v=d[0];const{status,label}=evSt('ukuem',v);setM('ukuem',TH.ukuem.fmt(v),status,label)}),
   ]);
   evalManual();updSum();fetchYC();
   document.getElementById('ts').textContent=new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
@@ -942,6 +1059,14 @@ function evalManual(){[
   {id:'vixm',inp:'vix',cfg:'vixm'},{id:'spx',inp:'spx',cfg:'spx'},
   {id:'pe',inp:'pe',cfg:'pe'},{id:'mktm2',inp:'mktm2',cfg:'mktm2'},
   {id:'ism-mfg',inp:'ism-mfg',cfg:'ismmfg'},{id:'ism-svc',inp:'ism-svc',cfg:'ismsvc'},
+  // EU
+  {id:'eupmi',inp:'eupmi',cfg:'eupmi'},{id:'bund',inp:'bund',cfg:'bund'},
+  // China
+  {id:'cnpmi',inp:'cnpmi',cfg:'cnpmi'},{id:'cxpmi',inp:'cxpmi',cfg:'cxpmi'},{id:'cnfx',inp:'cnfx',cfg:'cnfx'},
+  // Japan
+  {id:'tankan',inp:'tankan',cfg:'tankan'},
+  // UK
+  {id:'ukpmi',inp:'ukpmi',cfg:'ukpmi'},{id:'gilt',inp:'gilt',cfg:'gilt'},
 ].forEach(m=>{
   const inp=document.getElementById(`i-${m.inp}`),dot=document.getElementById(`d-${m.id}`),stat=document.getElementById(`s-${m.id}`);
   if(!inp)return;const v=parseFloat(inp.value);if(isNaN(v))return;
@@ -984,6 +1109,120 @@ const dt=document.createElementNS('http://www.w3.org/2000/svg','circle');dt.setA
 // INIT
 // ═══════════════════════════════════════════════════════════════
 // Load cached data instantly, then fetch fresh data in background
+// ═══════════════════════════════════════════════════════════════
+// HOVER TOOLTIPS
+// ═══════════════════════════════════════════════════════════════
+const TIPS={
+  // Prices
+  'p-spy':'Tracks the S&P 500 — broadest US large-cap equity benchmark',
+  'p-dia':'Tracks the Dow Jones Industrial Average — 30 blue-chip US stocks',
+  'p-vix':'CBOE Volatility Index — market fear gauge derived from S&P 500 options',
+  'p-wti':'West Texas Intermediate crude oil futures — US oil benchmark (NYMEX)',
+  'p-brent':'Brent crude oil futures — global oil benchmark (ICE)',
+  'p-gold':'Gold futures — safe haven asset, inflation hedge',
+  'p-dxy':'US Dollar Index — USD strength vs basket of 6 major currencies',
+  'p-xle':'Energy sector ETF — tracks major US oil, gas & energy companies',
+  'p-ita':'US Aerospace & Defense ETF — tracks defense contractors',
+  'p-xlp':'Consumer Staples ETF — defensive sector, essentials companies',
+  'p-moo':'Agribusiness ETF — global farming, fertilizers, food production',
+  'p-rbob':'RBOB Gasoline futures — refined product, key crack spread input',
+  'p-ho':'Heating Oil futures (ULSD) — diesel proxy, refinery product',
+  'p-natgas':'Natural Gas futures — Henry Hub benchmark (NYMEX)',
+  'p-uso':'US Oil Fund — tracks near-month WTI futures',
+  'p-bno':'Brent Oil Fund — tracks near-month Brent futures',
+  'p-crak':'VanEck Oil Refiners ETF — proxy for refining margins',
+  'p-xop':'Oil & Gas Exploration & Production ETF',
+  'p-oih':'Oil Services ETF — drillers, equipment, oilfield services',
+  // US metrics
+  'v-sahm':'Sahm Rule — recession indicator based on unemployment rate rise',
+  'v-claims':'Weekly initial jobless claims — early signal of labor market stress',
+  'v-yc':'10Y minus 2Y Treasury yield — inversion signals recession risk',
+  'v-hy':'High-yield corporate bond spread — credit market stress indicator',
+  'v-mort':'30-year fixed mortgage rate — key consumer borrowing cost',
+  'v-indpro':'Month-over-month change in factory output',
+  'v-permits':'New residential building permits — housing demand leading indicator',
+  'v-umcs':'University of Michigan consumer sentiment survey',
+  'v-cpi':'Consumer Price Index year-over-year — headline US inflation',
+  'v-bei':'Market-implied inflation expectations over next 5 years',
+  'v-nfci':'Chicago Fed financial conditions — positive = tightening',
+  'i-ism-mfg':'ISM Manufacturing PMI — below 50 signals factory contraction',
+  'i-ism-svc':'ISM Services PMI — covers ~70% of US GDP',
+  'i-vix':'VIX level auto-synced from Yahoo Finance',
+  'i-spx':'S&P 500 drawdown from all-time high — bear market below -20%',
+  'i-pe':'S&P 500 trailing P/E ratio — valuation measure',
+  'i-mktm2':'Total market cap as % of money supply — Buffett indicator',
+  // Oil
+  'p-o-wti':'WTI crude front-month futures (NYMEX CL)',
+  'p-o-brent':'Brent crude futures (ICE BZ)',
+  'p-o-hh':'Henry Hub natural gas spot price',
+  'v-cstocks':'US commercial crude oil inventories excluding SPR',
+  'v-spr':'US Strategic Petroleum Reserve — government emergency stockpile',
+  'v-prod':'US domestic crude oil field production (weekly)',
+  'v-gas':'Average US retail regular gasoline price',
+  'v-diesel':'Gulf Coast ultra-low-sulfur diesel price',
+  'v-jet':'Gulf Coast kerosene-type jet fuel price',
+  'v-wtispot':'WTI spot price at Cushing, Oklahoma delivery hub',
+  'v-brentspot':'Brent spot price for European delivery',
+  'i-lls':'Louisiana Light Sweet — premium Gulf Coast crude, often trades above WTI',
+  'i-wcs':'Western Canadian Select — heavy sour crude, deep discount to WTI',
+  'i-urals':'Russian Urals blend — key benchmark for sanctioned crude flows',
+  'oilSpread':'WTI minus Brent — positive = WTI premium, negative = Brent premium',
+  'crackSpread':'Refinery profit margin: (2×gasoline + 1×heating oil − 3×crude) / 3',
+  // Hyperliquid
+  'hl-xyzCL':'Hyperliquid WTI perpetual (xyz DEX) — most liquid, 20x leverage',
+  'hl-xyzBRENT':'Hyperliquid Brent perpetual (xyz DEX) — 24/7 trading',
+  'hl-kmUSOIL':'Hyperliquid US Oil perpetual (km DEX) — 10x leverage',
+  'hl-cashWTI':'Hyperliquid WTI perpetual (cash DEX) — 10x leverage',
+  // EU
+  'v-ecbrate':'ECB main refinancing rate — primary eurozone policy rate',
+  'v-eurusd':'Euros per US Dollar — key global FX pair',
+  'v-eucpi':'Euro area HICP year-over-year — ECB targets 2%',
+  'v-euunemp':'Eurozone harmonised unemployment rate',
+  'v-euconf':'EU consumer confidence survey — negative = pessimistic',
+  'i-eupmi':'Euro area composite PMI — manufacturing + services activity',
+  'i-bund':'Italian 10Y minus German 10Y yield — EU fragmentation risk',
+  // China
+  'v-cncpi':'China consumer inflation — deflation risk if negative',
+  'v-cnppi':'China producer prices — factory-gate deflation signals weak demand',
+  'v-cny':'Chinese Yuan per USD — weaker CNY = capital outflow pressure',
+  'i-cnpmi':'Official NBS manufacturing PMI — state-sector weighted',
+  'i-cxpmi':'Caixin services PMI — private-sector, small-firm weighted',
+  'i-cnfx':'PBOC foreign exchange reserves — buffer against capital flight',
+  // Japan
+  'v-bojrate':'Bank of Japan policy rate — recently exited negative rates',
+  'v-jgb':'10-year Japanese Government Bond yield — BOJ yield curve control target',
+  'v-jpcpi':'Japan CPI month-over-month — BOJ targets 2% inflation',
+  'v-jpyusd':'Japanese Yen per USD — weak yen = import inflation pressure',
+  'v-nikkei':'Nikkei 225 stock index — Japan equity benchmark',
+  'i-tankan':'BOJ Tankan survey — large manufacturer sentiment, positive = optimistic',
+  // UK
+  'v-boerate':'Bank of England base rate — primary UK policy rate',
+  'v-gbpusd':'US Dollars per British Pound — cable rate',
+  'v-ukcpi':'UK CPI year-over-year — BOE targets 2%',
+  'v-ukuem':'UK unemployment rate (ILO definition)',
+  'i-ukpmi':'UK composite PMI — manufacturing + services activity',
+  'i-gilt':'UK 10-year government bond yield — gilt market stress',
+  // Yield curve
+  'ycSV':'10Y minus 2Y Treasury spread — negative = inverted, recession signal',
+};
+Object.entries(TIPS).forEach(([id,tip])=>{const el=document.getElementById(id);if(el)el.setAttribute('data-tip',tip)});
+// Also add tips to pcells by finding parent
+document.querySelectorAll('.pcell').forEach(cell=>{
+  const pval=cell.querySelector('.pval');
+  if(pval&&pval.id&&TIPS[pval.id])cell.setAttribute('data-tip',TIPS[pval.id]);
+});
+document.querySelectorAll('.mr').forEach(row=>{
+  const mv=row.querySelector('.mv')||row.querySelector('.mi');
+  if(mv&&mv.id&&TIPS[mv.id])row.setAttribute('data-tip',TIPS[mv.id]);
+});
+document.querySelectorAll('.hl-cell').forEach(cell=>{
+  if(cell.id&&TIPS[cell.id])cell.setAttribute('data-tip',TIPS[cell.id]);
+});
+document.querySelectorAll('.oil-spread').forEach(sp=>{
+  const val=sp.querySelector('.osp-val');
+  if(val&&val.id&&TIPS[val.id])sp.setAttribute('data-tip',TIPS[val.id]);
+});
+
 const hadCache=loadCache();
 if(hadCache)setYhSt('live'); // show as live if cache available
 evalManual();updEv();setInterval(updEv,1000);schedP();
