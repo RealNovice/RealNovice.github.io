@@ -588,6 +588,18 @@ else if(isFlipped&&sy<UNFLIP_AT){isFlipped=false;flipper.classList.remove('flipp
 scrollHint.style.opacity=sy>30?'0':'1'}
 addEventListener('scroll',onScroll,{passive:true});onScroll();
 
+// Size front card to accommodate back card content
+(function syncCardHeight(){
+  const front=document.querySelector('.card-front');
+  const back=document.querySelector('.card-back');
+  if(!front||!back)return;
+  back.style.height='auto';back.style.position='static';
+  const bh=back.scrollHeight;
+  back.style.height='100%';back.style.position='absolute';
+  const fh=front.scrollHeight;
+  if(bh>fh)front.style.minHeight=bh+'px';
+})();
+
 // ═══════════════════════════════════════════════════════════════
 // CAROUSEL
 // ═══════════════════════════════════════════════════════════════
@@ -663,6 +675,93 @@ function evSt(k,v){for(const t of TH[k].t)if(t.f(v))return{status:t.s,label:t.l}
 function setM(id,fmt,st,lb){const d=document.getElementById(`d-${id}`),v=document.getElementById(`v-${id}`),s=document.getElementById(`s-${id}`);if(d)d.className=`md ${st}`;if(v){v.className=`mv ${st}`;v.textContent=fmt}if(s)s.textContent=lb}
 
 // ═══════════════════════════════════════════════════════════════
+// LOCAL CACHE — instant data on page load
+// ═══════════════════════════════════════════════════════════════
+const CACHE_KEY='sb_cache',CACHE_TTL=24*60*60*1000; // 24h max staleness
+function saveCache(){
+  const data={ts:Date.now(),prices:{},metrics:{},hl:{},yc:{}};
+  // Save all price cells
+  Object.values(YH_RAW).forEach(id=>{
+    const pE=document.getElementById(`p-${id}`),cE=document.getElementById(`c-${id}`);
+    if(pE&&pE.textContent!=='—')data.prices[id]={val:pE.textContent,chg:cE?cE.textContent:'',chgCls:cE?cE.className:'',price:prevPr[id]||null};
+  });
+  // Save oil mirrors
+  ['o-wti','o-brent','o-xle','o-hh'].forEach(id=>{
+    const pE=document.getElementById(`p-${id}`),cE=document.getElementById(`c-${id}`);
+    if(pE&&pE.textContent!=='—')data.prices[id]={val:pE.textContent,chg:cE?cE.textContent:'',chgCls:cE?cE.className:''};
+  });
+  // Save FRED metric cells
+  ['sahm','claims','yc','hy','mort','indpro','permits','umcs','cpi','bei','nfci',
+   'cstocks','spr','prod','gas','diesel','jet','wtispot','brentspot'].forEach(id=>{
+    const v=document.getElementById(`v-${id}`),s=document.getElementById(`s-${id}`),d=document.getElementById(`d-${id}`);
+    if(v&&v.textContent!=='—'&&v.textContent!=='ERR')data.metrics[id]={val:v.textContent,st:s?s.textContent:'',cls:d?d.className:''};
+  });
+  // Save Hyperliquid cells
+  ['xyzCL','xyzBRENT','kmUSOIL','cashWTI'].forEach(id=>{
+    const m=document.getElementById(`hl-m-${id}`),f=document.getElementById(`hl-f-${id}`),o=document.getElementById(`hl-o-${id}`);
+    if(m&&m.textContent!=='—')data.hl[id]={mark:m.textContent,fund:f?f.textContent:'',fundCls:f?f.className:'',oracle:o?o.textContent:''};
+  });
+  // Save yield curve
+  const ycSV=document.getElementById('ycSV'),y2C=document.getElementById('y2C'),y10C=document.getElementById('y10C');
+  if(ycSV&&ycSV.textContent!=='—')data.yc={spread:ycSV.textContent,spreadCls:ycSV.className,y2:y2C?y2C.textContent:'',y10:y10C?y10C.textContent:'',
+    sl:document.getElementById('ycSL')?document.getElementById('ycSL').textContent:''};
+  // Save spreads
+  const oilSp=document.getElementById('oilSpread'),crSp=document.getElementById('crackSpread');
+  data.oilSpread=oilSp&&oilSp.textContent!=='—'?{val:oilSp.textContent,cls:oilSp.className}:null;
+  data.crackSpread=crSp&&crSp.textContent!=='—'?{val:crSp.textContent,cls:crSp.className}:null;
+  try{localStorage.setItem(CACHE_KEY,JSON.stringify(data))}catch(e){}
+}
+
+function loadCache(){
+  try{
+    const raw=localStorage.getItem(CACHE_KEY);if(!raw)return false;
+    const data=JSON.parse(raw);
+    if(Date.now()-data.ts>CACHE_TTL)return false; // too stale
+    const age=Math.round((Date.now()-data.ts)/60000);
+    const ageLabel=age<1?'<1m ago':age<60?`${age}m ago`:`${Math.floor(age/60)}h ago`;
+    // Restore prices
+    Object.entries(data.prices||{}).forEach(([id,d])=>{
+      const pE=document.getElementById(`p-${id}`),cE=document.getElementById(`c-${id}`),tE=document.getElementById(`t-${id}`);
+      if(pE){pE.textContent=d.val;pE.className='pval'}
+      if(cE&&d.chg){cE.textContent=d.chg;cE.className=d.chgCls||'pchg'}
+      if(tE){tE.textContent=`cached ${ageLabel}`;tE.className='ptime'}
+      if(d.price)prevPr[id]=d.price;
+    });
+    // Restore FRED metrics
+    Object.entries(data.metrics||{}).forEach(([id,d])=>{
+      const v=document.getElementById(`v-${id}`),s=document.getElementById(`s-${id}`),dot=document.getElementById(`d-${id}`);
+      if(v){v.textContent=d.val;v.className=d.cls?d.cls.replace('md ','mv '):'mv normal'}
+      if(s)s.textContent=d.st;
+      if(dot)dot.className=d.cls||'md normal';
+    });
+    // Restore Hyperliquid
+    Object.entries(data.hl||{}).forEach(([id,d])=>{
+      const m=document.getElementById(`hl-m-${id}`),f=document.getElementById(`hl-f-${id}`),o=document.getElementById(`hl-o-${id}`);
+      if(m)m.textContent=d.mark;
+      if(f){f.textContent=d.fund;f.className=d.fundCls||'hl-funding neutral'}
+      if(o)o.textContent=d.oracle;
+    });
+    // Restore yield curve
+    if(data.yc&&data.yc.spread){
+      const ycSV=document.getElementById('ycSV'),ycSL=document.getElementById('ycSL');
+      const y2C=document.getElementById('y2C'),y10C=document.getElementById('y10C');
+      if(ycSV){ycSV.textContent=data.yc.spread;ycSV.className=data.yc.spreadCls||'yc-sv'}
+      if(ycSL)ycSL.textContent=data.yc.sl;
+      if(y2C)y2C.textContent=data.yc.y2;if(y10C)y10C.textContent=data.yc.y10;
+    }
+    // Restore spreads
+    if(data.oilSpread){const el=document.getElementById('oilSpread');if(el){el.textContent=data.oilSpread.val;el.className=data.oilSpread.cls}}
+    if(data.crackSpread){const el=document.getElementById('crackSpread');if(el){el.textContent=data.crackSpread.val;el.className=data.crackSpread.cls}}
+    // Restore oil prices for spread calcs
+    if(data.prices.wti&&data.prices.wti.price)oilPrices.wti=data.prices.wti.price;
+    if(data.prices.brent&&data.prices.brent.price)oilPrices.brent=data.prices.brent.price;
+    if(data.prices.rbob&&data.prices.rbob.price)oilPrices.rbob=data.prices.rbob.price;
+    if(data.prices.ho&&data.prices.ho.price)oilPrices.ho=data.prices.ho.price;
+    return true;
+  }catch(e){return false}
+}
+
+// ═══════════════════════════════════════════════════════════════
 // FRED
 // ═══════════════════════════════════════════════════════════════
 const FK='04d4649f95b21c5845e90225e70ea524';
@@ -718,6 +817,7 @@ async function pollYH(){
     else{fail++;const el=document.getElementById(`t-${id}`);if(el){el.textContent='stale';el.className='pstale'}}
   });
   setYhSt(fail===entries.length?'error':ok>0?'live':'stale');
+  if(ok>0)saveCache();
 }
 
 function updPr(id,price,prevClose){
@@ -792,6 +892,7 @@ async function fetchHL(){
     }catch(e){console.warn(`HL ${dex} fail`,e)}
   }
   document.getElementById('hlBadge').textContent='HYPERLIQUID ✓';
+  saveCache();
 }
 
 function setYhSt(st){const d=document.getElementById('yhDot'),l=document.getElementById('yhLabel');
@@ -831,6 +932,7 @@ async function fetchAll(){
   evalManual();updSum();fetchYC();
   document.getElementById('ts').textContent=new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
   btn.disabled=false;btn.textContent='Refresh';
+  saveCache();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -881,6 +983,9 @@ const dt=document.createElementNS('http://www.w3.org/2000/svg','circle');dt.setA
 // ═══════════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════════
+// Load cached data instantly, then fetch fresh data in background
+const hadCache=loadCache();
+if(hadCache)setYhSt('live'); // show as live if cache available
 evalManual();updEv();setInterval(updEv,1000);schedP();
 pollYH();setInterval(pollYH,15000);
 fetchHL();setInterval(fetchHL,15000);
