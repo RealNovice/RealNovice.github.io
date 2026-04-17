@@ -580,21 +580,15 @@
     <div class="tagline">Per Aspera Ad Astra</div>
     <p class="hub-tagline">I teach, do finance and other things.</p>
     <div class="hub-nav">
-      <a class="hub-btn" href="#finance" data-nav="sec-finance" onclick="hubNav(event,'sec-finance')">
+      <a class="hub-btn" href="#finance" data-nav="sec-finance">
         <span class="hub-btn-label">Finance</span>
       </a>
-      <a class="hub-btn" href="#passion" data-nav="sec-passion" onclick="hubNav(event,'sec-passion')">
+      <a class="hub-btn" href="#passion" data-nav="sec-passion">
         <span class="hub-btn-label">Professional Dilettante</span>
       </a>
-      <a class="hub-btn" href="#languages" data-nav="sec-languages" onclick="hubNav(event,'sec-languages')">
+      <a class="hub-btn" href="#languages" data-nav="sec-languages">
         <span class="hub-btn-label">Languages</span>
-       <span class="hub-btn-label">Politics</span>
       </a>
-      <a class="hub-btn" href="#politics" data-nav="sec-politics" onclick="hubNav(event,'sec-languages')">
-      </a>
-       <span class="hub-btn-label">Academic</span>
-      </a>
-      <a class="hub-btn" href="#academic" data-nav="sec-academic" onclick="hubNav(event,'sec-languages')">
     </div>
   </div>
 </div>
@@ -604,7 +598,7 @@
      ═══════════════════════════════════════════════════════ -->
 <div class="hub-content" id="hubContent">
   <div class="hub-topbar">
-    <button class="hub-back-btn" onclick="showHub()">&#8592; Home</button>
+    <button class="hub-back-btn" type="button">&#8592; Home</button>
     <div class="hub-topbar-title" id="hubTopTitle"></div>
   </div>
 
@@ -897,12 +891,12 @@
         <h3>Mushroom Certificate</h3>
       </div>
       <div class="hub-card">
-        <h3>Federal Hunting License</h3>
+        <h3>Jagdschein</h3>
       </div>
       <div class="hub-card">
         <h3>Vegetable Garden</h3>
       </div>
-         </div>
+    </div>
   </div>
 </div>
 
@@ -942,21 +936,7 @@
   </div>
 </div>
 </div><!-- /hub-content -->
-<div id="sec-languages" class="hub-section">
-  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Languages</h2></div>
-  <div class="hub-sec-body">
-    <div class="hub-cards">
-      <div class="hub-card">
-        <h3>State Examination, Political Sciences</h3>
-        <div class="hub-card-meta">Native tongue</div>
-      </div>
-      <div class="hub-card">
-        <h3>Work to subtitle German Parliament</h3>
-        </div>
-    </div>
-  </div>
-</div>
-</div><!-- /hub-content -->
+
 <footer>© Johannes Lima Spielhofen</footer>
 
 <script>
@@ -1080,12 +1060,15 @@ function hubNav(e, id) {
     content.style.display = 'block';
     window.scrollTo(0, 0);
 
-    // Force carousel height recalculation for finance section
+    // Force carousel height recalculation for finance section.
+    // Use setTimeout (works even if the tab is hidden, unlike rAF).
     if (id === 'sec-finance' && typeof goP === 'function') {
-      requestAnimationFrame(() => goP(curP));
+      setTimeout(() => goP(curP), 20);
     }
 
-    requestAnimationFrame(() => { content.classList.add('active'); });
+    // Add .active on next tick so the opacity transition fires.
+    // setTimeout is reliable even when the tab is hidden; rAF is not.
+    setTimeout(() => { content.classList.add('active'); }, 20);
 
     // Let Finance paint one frame, then fade the loader away
     if(showLoader){
@@ -1106,8 +1089,26 @@ function showHub() {
 
     home.style.display = 'flex';
     window.scrollTo(0, 0);
-    requestAnimationFrame(() => { home.classList.remove('hidden'); });
+    // Use setTimeout (not rAF) so this fires even when the tab is hidden.
+    setTimeout(() => { home.classList.remove('hidden'); }, 20);
   }, 350);
+}
+
+// Fallback wiring: if inline onclick is blocked (strict CSP) or never fires for
+// another reason, attach listeners programmatically via data-nav attributes.
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.hub-btn[data-nav]').forEach(btn=>{
+    btn.addEventListener('click',e=>{e.preventDefault();hubNav(e,btn.dataset.nav);});
+  });
+  const back=document.querySelector('.hub-back-btn');
+  if(back)back.addEventListener('click',e=>{e.preventDefault();showHub();});
+});
+// Also wire up immediately if DOM is already parsed
+if(document.readyState!=='loading'){
+  document.querySelectorAll('.hub-btn[data-nav]').forEach(btn=>{
+    if(btn.__navWired)return;btn.__navWired=true;
+    btn.addEventListener('click',e=>{e.preventDefault();hubNav(e,btn.dataset.nav);});
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════
