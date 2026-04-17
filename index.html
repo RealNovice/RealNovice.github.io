@@ -301,6 +301,19 @@
       letter-spacing:.02em;line-height:1.5;padding:7px 11px;border-radius:8px;
       max-width:320px;white-space:pre-wrap;box-shadow:0 6px 20px rgba(0,0,0,.22);
       transition:opacity .12s ease;opacity:0}
+    /* Candlestick loader overlay (shown when navigating to Finance) */
+    #candleLoader{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;
+      background:rgba(207,208,223,.55);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);
+      opacity:0;pointer-events:none;transition:opacity .5s ease}
+    #candleLoader.show{opacity:1;pointer-events:auto}
+    #candleLoader canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+    .cl-label{position:relative;z-index:2;font-family:var(--sans);font-size:.68rem;font-weight:600;letter-spacing:.22em;
+      text-transform:uppercase;color:rgba(29,29,31,.55);background:rgba(255,255,255,.55);border:1px solid var(--glass-border);
+      padding:9px 18px;border-radius:999px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      box-shadow:0 6px 20px rgba(0,0,0,.08)}
+    .cl-label::after{content:'';display:inline-block;margin-left:.5em;width:.55em;height:.55em;border:2px solid currentColor;
+      border-right-color:transparent;border-radius:50%;vertical-align:-1px;animation:cl-spin .8s linear infinite}
+    @keyframes cl-spin{to{transform:rotate(360deg)}}
 
     .bfooter{display:flex;justify-content:space-between;align-items:center;padding-top:.5rem}
     .bf-live{font-size:.62rem;color:var(--text-dim);letter-spacing:.06em;display:flex;align-items:center;gap:4px}
@@ -311,16 +324,14 @@
        HUB NAVIGATION (card back buttons)
        ═══════════════════════════════════════ */
     .hub-tagline{font-size:1.05rem;line-height:1.6;color:var(--text-sub);margin-bottom:.2rem}
-    .hub-nav{display:grid;grid-template-columns:repeat(2,1fr);gap:.55rem;margin-top:1.2rem;width:100%;max-width:460px}
-    .hub-btn{display:flex;align-items:center;gap:.65rem;padding:.7rem .9rem;
+    .hub-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:.55rem;margin-top:1.2rem;width:100%;max-width:520px}
+    .hub-btn{display:flex;align-items:center;justify-content:center;padding:.75rem 1.3rem;
       background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.42);border-radius:14px;
-      cursor:pointer;transition:all .25s ease;text-decoration:none;color:var(--text-main);font-family:var(--sans)}
+      cursor:pointer;transition:all .25s ease;text-decoration:none;color:var(--text-main);font-family:var(--sans);
+      flex:1 1 auto;min-width:130px}
     .hub-btn:hover{background:rgba(255,255,255,.45);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
     .hub-btn:active{transform:translateY(0);box-shadow:none}
-    .hub-btn-icon{font-size:1.3rem;flex-shrink:0;line-height:1}
-    .hub-btn-text{display:flex;flex-direction:column}
-    .hub-btn-label{font-size:.76rem;font-weight:600;letter-spacing:.03em;line-height:1.2}
-    .hub-btn-sub{font-size:.56rem;font-weight:400;color:var(--text-sub);letter-spacing:.02em;margin-top:1px}
+    .hub-btn-label{font-size:.76rem;font-weight:600;letter-spacing:.03em;line-height:1.2;white-space:nowrap}
 
     /* ═══════════════════════════════════════
        HUB SECTIONS
@@ -376,6 +387,8 @@
     .hub-card-icon{font-size:1.8rem;margin-bottom:.5rem;line-height:1}
     .hub-card h3{font-family:var(--serif);font-size:1.05rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:.25rem}
     .hub-card p{font-size:.76rem;line-height:1.5;color:var(--text-sub)}
+    .hub-card-meta{font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.01em;
+      color:var(--text-sub);opacity:.85;margin-top:.15rem}
     .hub-card.placeholder{border-style:dashed;opacity:.4}
     .hub-card.placeholder .hub-card-icon{color:var(--text-dim);font-family:var(--sans);font-size:1.6rem;font-weight:300}
     .hub-card.placeholder h3{color:var(--text-dim);font-weight:400}
@@ -553,6 +566,11 @@
 <!-- ═══════════════════════════════════════════════════════
      HUB HOME — landing page
      ═══════════════════════════════════════════════════════ -->
+<div id="candleLoader" aria-hidden="true">
+  <canvas id="candleCanvas"></canvas>
+  <div class="cl-label">Loading Finance</div>
+</div>
+
 <div class="hub-home" id="hubHome">
   <div class="photo-wrap">
     <img src="profile.jpg" alt="Johannes Lima Spielhofen">
@@ -563,20 +581,13 @@
     <p class="hub-tagline">I teach, do finance and other things.</p>
     <div class="hub-nav">
       <a class="hub-btn" onclick="hubNav(event,'sec-finance')">
-        <span class="hub-btn-icon">📊</span>
-        <span class="hub-btn-text"><span class="hub-btn-label">Finance</span><span class="hub-btn-sub">Stressboard & markets</span></span>
-      </a>
-      <a class="hub-btn" onclick="hubNav(event,'sec-code')">
-        <span class="hub-btn-icon">💻</span>
-        <span class="hub-btn-text"><span class="hub-btn-label">I Code</span><span class="hub-btn-sub">Projects & tools</span></span>
-      </a>
-      <a class="hub-btn" onclick="hubNav(event,'sec-dilettante')">
-        <span class="hub-btn-icon">🎓</span>
-        <span class="hub-btn-text"><span class="hub-btn-label">Professional Dilettante</span><span class="hub-btn-sub">Certificates & skills</span></span>
+        <span class="hub-btn-label">Finance</span>
       </a>
       <a class="hub-btn" onclick="hubNav(event,'sec-passion')">
-        <span class="hub-btn-icon">🧭</span>
-        <span class="hub-btn-text"><span class="hub-btn-label">Passion Projects</span><span class="hub-btn-sub">Hobbies & adventures</span></span>
+        <span class="hub-btn-label">Professional Dilettante</span>
+      </a>
+      <a class="hub-btn" onclick="hubNav(event,'sec-languages')">
+        <span class="hub-btn-label">Languages</span>
       </a>
     </div>
   </div>
@@ -595,7 +606,7 @@
      SECTION: FINANCE
      ═══════════════════════════════════════════════════════ -->
 <div id="sec-finance" class="hub-section">
-  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Finance</h2><span class="hub-sec-tag">Live Data</span></div>
+  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Finance</h2></div>
   <div class="hub-sec-intro"><p>I've designed this economic stressboard for a quick overview of global financial movements and important metrics. Several relevant economies are reflected, although the tool is not entirely comprehensive, as few would be. Hovering the various metrics, you will notice that their relevancy is explained to you in a simple fashion.</p></div>
 <div class="board-section">
 
@@ -856,55 +867,34 @@
 
 
 <!-- ═══════════════════════════════════════════════════════
-     SECTION: I CODE
-     ═══════════════════════════════════════════════════════ -->
-<div id="sec-code" class="hub-section">
-  <div class="hub-sec-hdr"><h2 class="hub-sec-title">I Code</h2><span class="hub-sec-tag">Projects</span></div>
-  <div class="hub-sec-intro"><p>Building things from scratch is how I learn best. From full-stack web tools to data pipelines, I enjoy turning ideas into working software.</p></div>
-  <div class="hub-sec-body">
-    <div class="hub-cards">
-      <div class="hub-card">
-        <div class="hub-card-icon">🌐</div>
-        <h3>This Website</h3>
-        <p>A single-file personal hub and live economic stressboard, built from scratch with vanilla HTML, CSS & JavaScript. No frameworks.</p>
-      </div>
-      <div class="hub-card placeholder">
-        <div class="hub-card-icon">+</div>
-        <h3>Coming Soon</h3>
-        <p></p>
-      </div>
-      <div class="hub-card placeholder">
-        <div class="hub-card-icon">+</div>
-        <h3>Coming Soon</h3>
-        <p></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ═══════════════════════════════════════════════════════
      SECTION: PROFESSIONAL DILETTANTE
      ═══════════════════════════════════════════════════════ -->
-<div id="sec-dilettante" class="hub-section">
-  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Professional Dilettante</h2><span class="hub-sec-tag">Certificates</span></div>
-  <div class="hub-sec-intro"><p>A curated collection of qualifications, certifications and the kind of credentials that prove you can sit through very long exams.</p></div>
+<div id="sec-passion" class="hub-section">
+  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Professional Dilettante</h2></div>
+  <div class="hub-sec-intro"><p>Things I am currently working on completing.</p></div>
   <div class="hub-sec-body">
     <div class="hub-cards">
       <div class="hub-card">
-        <div class="hub-card-icon">🗣️</div>
-        <h3>C2 English</h3>
-        <p>Cambridge Certificate of Proficiency in English. Native-level fluency, certified.</p>
+        <h3>Sheet Cheater</h3>
+        <div class="hub-card-meta">Piano learning app with integrated note-to-notation translator</div>
       </div>
-      <div class="hub-card placeholder">
-        <div class="hub-card-icon">+</div>
-        <h3>Coming Soon</h3>
-        <p></p>
+      <div class="hub-card">
+        <h3>This Website</h3>
       </div>
-      <div class="hub-card placeholder">
-        <div class="hub-card-icon">+</div>
-        <h3>Coming Soon</h3>
-        <p></p>
+      <div class="hub-card">
+        <h3>CFA Level 1</h3>
+      </div>
+      <div class="hub-card">
+        <h3>Motorbike License A</h3>
+      </div>
+      <div class="hub-card">
+        <h3>Mushroom Certificate</h3>
+      </div>
+      <div class="hub-card">
+        <h3>Jagdschein</h3>
+      </div>
+      <div class="hub-card">
+        <h3>Vegetable Garden</h3>
       </div>
     </div>
   </div>
@@ -912,32 +902,35 @@
 
 
 <!-- ═══════════════════════════════════════════════════════
-     SECTION: PASSION PROJECTS
+     SECTION: LANGUAGES
      ═══════════════════════════════════════════════════════ -->
-<div id="sec-passion" class="hub-section">
-  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Passion Projects</h2><span class="hub-sec-tag">Life</span></div>
-  <div class="hub-sec-intro"><p>Not everything has to be about work. These are the things I pursue because they fascinate me.</p></div>
+<div id="sec-languages" class="hub-section">
+  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Languages</h2></div>
   <div class="hub-sec-body">
     <div class="hub-cards">
       <div class="hub-card">
-        <div class="hub-card-icon">🍄</div>
-        <h3>Mushroom Certificate</h3>
-        <p>Certified mycological expertise. Foraging, identification and a deep appreciation for fungi.</p>
+        <h3>Portuguese</h3>
+        <div class="hub-card-meta">Native tongue</div>
       </div>
       <div class="hub-card">
-        <div class="hub-card-icon">🦌</div>
-        <h3>Jagdschein</h3>
-        <p>German hunting license. Wildlife management, marksmanship and conservation.</p>
+        <h3>German</h3>
+        <div class="hub-card-meta">Native tongue</div>
       </div>
-      <div class="hub-card placeholder">
-        <div class="hub-card-icon">+</div>
-        <h3>Coming Soon</h3>
-        <p></p>
+      <div class="hub-card">
+        <h3>English</h3>
+        <div class="hub-card-meta">Cambridge CPE (C2)</div>
       </div>
-      <div class="hub-card placeholder">
-        <div class="hub-card-icon">+</div>
-        <h3>Coming Soon</h3>
-        <p></p>
+      <div class="hub-card">
+        <h3>Japanese</h3>
+        <div class="hub-card-meta">Kyushu Daigaku (B2)</div>
+      </div>
+      <div class="hub-card">
+        <h3>French</h3>
+        <div class="hub-card-meta">Elementary · university education</div>
+      </div>
+      <div class="hub-card">
+        <h3>Spanish</h3>
+        <div class="hub-card-meta">Elementary</div>
       </div>
     </div>
   </div>
@@ -962,12 +955,95 @@ resize();initNodes();drawBg();addEventListener('resize',()=>{resize();initNodes(
 // ═══════════════════════════════════════════════════════════════
 // HUB NAVIGATION — show/hide sections
 // ═══════════════════════════════════════════════════════════════
-const SEC_TITLES={'sec-finance':'Finance','sec-code':'I Code','sec-dilettante':'Professional Dilettante','sec-passion':'Passion Projects'};
+const SEC_TITLES={'sec-finance':'Finance','sec-passion':'Professional Dilettante','sec-languages':'Languages'};
+
+// ═══════════════════════════════════════════════════════════════
+// CANDLESTICK LOADER — animated overlay during Finance transition
+// ═══════════════════════════════════════════════════════════════
+const candleLoader=(function(){
+  const overlay=document.getElementById('candleLoader');
+  const canvas=document.getElementById('candleCanvas');
+  if(!overlay||!canvas)return {start(){},stop(){}};
+  const ctx=canvas.getContext('2d');
+  let raf=0,running=false,candles=[],offset=0,lastClose=100;
+  const SP=26; // spacing between candles (px)
+  function resize(){
+    const dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+    canvas.width=Math.floor(innerWidth*dpr);
+    canvas.height=Math.floor(innerHeight*dpr);
+    canvas.style.width=innerWidth+'px';
+    canvas.style.height=innerHeight+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function mkCandle(){
+    // Random-walk close, with occasional larger moves for visual interest
+    const drift=(Math.random()-0.5)*4;
+    const spike=Math.random()<0.12?(Math.random()-0.5)*18:0;
+    const close=lastClose+drift+spike;
+    const open=lastClose;
+    const high=Math.max(open,close)+Math.random()*6;
+    const low=Math.min(open,close)-Math.random()*6;
+    lastClose=close;
+    return {open,close,high,low};
+  }
+  function seed(){
+    candles=[];lastClose=100+(Math.random()-0.5)*20;
+    const n=Math.ceil(innerWidth/SP)+6;
+    for(let i=0;i<n;i++)candles.push(mkCandle());
+    offset=0;
+  }
+  function draw(){
+    if(!running)return;
+    const W=innerWidth,H=innerHeight;
+    ctx.clearRect(0,0,W,H);
+    // Vertical scale: fit ±40 around the mid of current candles
+    const vals=candles.flatMap(c=>[c.high,c.low]);
+    const minV=Math.min(...vals),maxV=Math.max(...vals);
+    const midV=(minV+maxV)/2,rng=Math.max(20,(maxV-minV)*1.4);
+    const y=v=>H/2-((v-midV)/rng)*H*.55;
+    for(let i=0;i<candles.length;i++){
+      const c=candles[i];
+      const x=Math.round(i*SP+offset+SP/2)+0.5;
+      const isUp=c.close>=c.open;
+      const stroke=isUp?'rgba(42,140,61,.38)':'rgba(199,57,48,.38)';
+      const fill=isUp?'rgba(42,140,61,.28)':'rgba(199,57,48,.28)';
+      ctx.strokeStyle=stroke;ctx.fillStyle=fill;ctx.lineWidth=1.4;
+      // wick
+      ctx.beginPath();ctx.moveTo(x,y(c.high));ctx.lineTo(x,y(c.low));ctx.stroke();
+      // body
+      const yO=y(c.open),yC=y(c.close);
+      const top=Math.min(yO,yC),h=Math.max(1.5,Math.abs(yC-yO));
+      ctx.fillRect(x-7,top,14,h);
+      ctx.strokeRect(x-7,top,14,h);
+    }
+    offset-=0.8;
+    if(offset<=-SP){offset+=SP;candles.shift();candles.push(mkCandle());}
+    raf=requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',()=>{if(running){resize();}});
+  return {
+    start(){
+      if(running)return;
+      resize();seed();running=true;
+      overlay.classList.add('show');
+      draw();
+    },
+    fadeOut(){
+      overlay.classList.remove('show');
+      // Stop drawing once fade transition completes
+      setTimeout(()=>{running=false;cancelAnimationFrame(raf);ctx&&ctx.clearRect(0,0,canvas.width,canvas.height);},550);
+    }
+  };
+})();
 
 function hubNav(e, id) {
   if(e) e.preventDefault();
   const home = document.getElementById('hubHome');
   const content = document.getElementById('hubContent');
+  const showLoader = (id === 'sec-finance');
+
+  // Kick off the loader immediately so candles are already moving behind the fade
+  if(showLoader)candleLoader.start();
 
   // Fade out home
   home.classList.add('hidden');
@@ -990,6 +1066,11 @@ function hubNav(e, id) {
     }
 
     requestAnimationFrame(() => { content.classList.add('active'); });
+
+    // Let Finance paint one frame, then fade the loader away
+    if(showLoader){
+      setTimeout(()=>candleLoader.fadeOut(),650);
+    }
   }, 350);
 }
 
@@ -1563,86 +1644,29 @@ const TIPS={
   // Yield curve
   'ycSV':'10Y minus 2Y Treasury spread — negative = inverted, recession signal',
 };
-Object.entries(TIPS).forEach(([id,tip])=>{const el=document.getElementById(id);if(el)el.setAttribute('data-tip',tip)});
-// Also add tips to pcells by finding parent
-document.querySelectorAll('.pcell').forEach(cell=>{
-  const pval=cell.querySelector('.pval');
-  if(pval&&pval.id&&TIPS[pval.id])cell.setAttribute('data-tip',TIPS[pval.id]);
-});
-document.querySelectorAll('.mr').forEach(row=>{
-  const mv=row.querySelector('.mv')||row.querySelector('.mi');
-  if(mv&&mv.id&&TIPS[mv.id])row.setAttribute('data-tip',TIPS[mv.id]);
-});
-document.querySelectorAll('.hl-cell').forEach(cell=>{
-  if(cell.id&&TIPS[cell.id])cell.setAttribute('data-tip',TIPS[cell.id]);
-});
-document.querySelectorAll('.oil-spread').forEach(sp=>{
-  const val=sp.querySelector('.osp-val');
-  if(val&&val.id&&TIPS[val.id])sp.setAttribute('data-tip',TIPS[val.id]);
-});
-
-// ═══════════════════════════════════════════════════════════════
-// GLOBAL TOOLTIP SYSTEM (position:fixed, viewport-aware)
-// ═══════════════════════════════════════════════════════════════
-(function(){
-  const tip=document.createElement('div');tip.id='global-tip';document.body.appendChild(tip);
-  let hideTimer=null;
-  function show(target){
-    const txt=target.getAttribute('data-tip');
-    if(!txt)return;
-    clearTimeout(hideTimer);
-    tip.textContent=txt;
-    tip.style.display='block';tip.style.opacity='0';
-    requestAnimationFrame(()=>{
-      const r=target.getBoundingClientRect(),tr=tip.getBoundingClientRect();
-      let left=r.left+r.width/2-tr.width/2,top=r.top-tr.height-8;
-      if(left<8)left=8;
-      if(left+tr.width>innerWidth-8)left=innerWidth-tr.width-8;
-      if(top<8)top=r.bottom+8;
-      tip.style.left=left+'px';tip.style.top=top+'px';tip.style.opacity='1';
-    });
-  }
-  function hide(){tip.style.opacity='0';hideTimer=setTimeout(()=>{tip.style.display='none';},150);}
-  document.addEventListener('mouseover',e=>{const t=e.target.closest('[data-tip]');if(t)show(t);});
-  document.addEventListener('mouseout',e=>{const t=e.target.closest('[data-tip]');if(!t)return;
-    const rel=e.relatedTarget?.closest?.('[data-tip]');if(rel===t)return;hide();});
-  addEventListener('scroll',hide,{passive:true,capture:true});
-  addEventListener('resize',hide);
-})();
-
-// ═══════════════════════════════════════════════════════════════
-// EVENT BANNER TIPS & SUMMARY CATEGORY TIPS
-// ═══════════════════════════════════════════════════════════════
-const EVENT_TIPS={
-  'NFP RELEASE':'Non-Farm Payrolls — monthly US jobs report from the Bureau of Labor Statistics. Primary gauge of labor market health; drives Fed policy expectations.',
-  'CPI RELEASE':'Consumer Price Index — monthly US inflation measure. Core input to Fed interest-rate decisions and bond markets.',
-  'FOMC DECISION':'Federal Open Market Committee — the Fed\'s rate-setting meeting. Decides the federal funds rate and signals monetary-policy direction.'
+// ─── Relevant levels / ATH for price cells ────────────────────
+// Hardcoded reference levels for prices. Rough approximations — updated occasionally.
+const PRICE_LEVELS={
+  'p-spy':'ATH ~$624 (Feb 2025) · 52w range ~$500–625',
+  'p-dia':'ATH ~$455 (Jan 2025) · 52w range ~$370–455',
+  'p-vix':'Calm <20 · Elevated 20–30 · Panic ≥30 · ATH 82.69 (Mar 2020)',
+  'p-wti':'Normal ~$65–85 · Elevated ≥$80 · Spike ≥$100 · ATH $147 (Jul 2008)',
+  'p-brent':'Normal ~$70–90 · Elevated ≥$85 · Spike ≥$110 · ATH $147 (Jul 2008)',
+  'p-gold':'52w range ~$2,000–2,900 · ATH ~$2,950 (2025)',
+  'p-dxy':'Weak <95 · Normal 95–105 · Strong ≥105 · ATH 164 (1985)',
+  'p-xle':'52w range ~$80–100 · Cycle high ~$100',
+  'p-ita':'52w range ~$140–175 · ATH ~$175 (2025)',
+  'p-xlp':'52w range ~$72–85',
+  'p-moo':'52w range ~$70–85',
+  'p-rbob':'Normal ~$2.00–2.80/gal · Spike ≥$3.50',
+  'p-ho':'Normal ~$2.20–3.00/gal · Spike ≥$4.00',
+  'p-natgas':'Low <$2 · Normal $2–4 · Spike ≥$6',
+  'p-uso':'Tracks WTI near-month',
+  'p-bno':'Tracks Brent near-month',
+  'p-o-wti':'Normal ~$65–85 · Elevated ≥$80 · Spike ≥$100',
+  'p-o-brent':'Normal ~$70–90 · Elevated ≥$85 · Spike ≥$110',
+  'p-o-hh':'Low <$2 · Normal $2–4 · Spike ≥$6 (natural gas)',
 };
-function applyEvTip(){const ev=nextEv();if(!ev)return;const b=document.getElementById('evBanner');
-  if(b&&EVENT_TIPS[ev.name])b.setAttribute('data-tip',EVENT_TIPS[ev.name]);}
-function updateSummaryTips(){
-  const cats={concern:[],watch:[],normal:[]};
-  document.querySelectorAll('.mr').forEach(row=>{
-    const md=row.querySelector('.md'),mn=row.querySelector('.mn');
-    if(!md||!mn)return;
-    const name=(mn.firstChild?.textContent||'').trim()||mn.textContent.trim().split(/\s{2,}|\n/)[0];
-    if(md.classList.contains('concern'))cats.concern.push(name);
-    else if(md.classList.contains('watch'))cats.watch.push(name);
-    else if(md.classList.contains('normal'))cats.normal.push(name);
-  });
-  const set=(id,arr)=>{const el=document.getElementById(id);if(!el)return;
-    el.setAttribute('data-tip',arr.length?arr.join(' • '):'None');};
-  set('cC',cats.concern);set('cW',cats.watch);set('cN',cats.normal);
-}
-
-const hadCache=loadCache();
-if(hadCache)setYhSt('live'); // show as live if cache available
-evalManual();updEv();setInterval(updEv,1000);schedP();
-pollYH();setInterval(pollYH,15000);
-fetchHL();setInterval(fetchHL,15000);
-fetchAll();
-applyEvTip();updateSummaryTips();
-setInterval(()=>{applyEvTip();updateSummaryTips();},2000);
-</script>
-</body>
-</html>
+// ─── Derive threshold descriptions from TH config ─────────────
+// Each metric row id looks like d-xxx / v-xxx / i-xxx → TH key is "xxx" with hyphens stripped
+function thKey(e
