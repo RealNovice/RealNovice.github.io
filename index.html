@@ -580,13 +580,13 @@
     <div class="tagline">Per Aspera Ad Astra</div>
     <p class="hub-tagline">I teach, do finance and other things.</p>
     <div class="hub-nav">
-      <a class="hub-btn" onclick="hubNav(event,'sec-finance')">
+      <a class="hub-btn" href="#finance" data-nav="sec-finance" onclick="hubNav(event,'sec-finance')">
         <span class="hub-btn-label">Finance</span>
       </a>
-      <a class="hub-btn" onclick="hubNav(event,'sec-passion')">
+      <a class="hub-btn" href="#passion" data-nav="sec-passion" onclick="hubNav(event,'sec-passion')">
         <span class="hub-btn-label">Professional Dilettante</span>
       </a>
-      <a class="hub-btn" onclick="hubNav(event,'sec-languages')">
+      <a class="hub-btn" href="#languages" data-nav="sec-languages" onclick="hubNav(event,'sec-languages')">
         <span class="hub-btn-label">Languages</span>
       </a>
     </div>
@@ -1667,6 +1667,4 @@ const PRICE_LEVELS={
   'p-o-brent':'Normal ~$70–90 · Elevated ≥$85 · Spike ≥$110',
   'p-o-hh':'Low <$2 · Normal $2–4 · Spike ≥$6 (natural gas)',
 };
-// ─── Derive threshold descriptions from TH config ─────────────
-// Each metric row id looks like d-xxx / v-xxx / i-xxx → TH key is "xxx" with hyphens stripped
-function thKey(e
+// ─── Derive threshold descriptions from TH config ────
