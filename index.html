@@ -294,33 +294,252 @@
     .oil-spread .osp-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;color:var(--text-dim);text-transform:uppercase}
     .oil-spread .osp-val{font-size:1rem;font-weight:700;font-variant-numeric:tabular-nums}
     .oil-spread .osp-val.contango{color:var(--red)}.oil-spread .osp-val.backw{color:var(--green)}.oil-spread .osp-val.neutral{color:var(--text-dim)}
-    @media(max-width:800px){.oil-grid{grid-template-columns:1fr}.pgrid.c5{grid-template-columns:repeat(3,1fr)}}
-
-    /* Tooltips */
-    [data-tip]{position:relative;cursor:help}
-    [data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
-      background:rgba(29,29,31,.92);color:#fff;font-size:.65rem;font-weight:400;letter-spacing:.02em;line-height:1.4;
-      padding:6px 10px;border-radius:8px;white-space:normal;width:max-content;max-width:240px;z-index:100;
-      pointer-events:none;animation:tipIn .15s ease}
-    [data-tip]:hover::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);
-      border:4px solid transparent;border-top-color:rgba(29,29,31,.92);z-index:100;pointer-events:none;animation:tipIn .15s ease}
-    @keyframes tipIn{from{opacity:0;transform:translateX(-50%) translateY(4px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    /* Tooltips — JS-driven, viewport-aware */
+    [data-tip]{cursor:help}
+    #global-tip{position:fixed;display:none;z-index:9999;pointer-events:none;
+      background:rgba(29,29,31,.94);color:#fff;font-size:.68rem;font-weight:400;
+      letter-spacing:.02em;line-height:1.5;padding:7px 11px;border-radius:8px;
+      max-width:320px;white-space:pre-wrap;box-shadow:0 6px 20px rgba(0,0,0,.22);
+      transition:opacity .12s ease;opacity:0}
 
     .bfooter{display:flex;justify-content:space-between;align-items:center;padding-top:.5rem}
     .bf-live{font-size:.62rem;color:var(--text-dim);letter-spacing:.06em;display:flex;align-items:center;gap:4px}
     .bf-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pdot 1.5s infinite}
     .bf-ts{font-size:.62rem;color:var(--text-dim)}
 
-    @media(max-width:800px){.top2{grid-template-columns:1fr}}
+    /* ═══════════════════════════════════════
+       HUB NAVIGATION (card back buttons)
+       ═══════════════════════════════════════ */
+    .hub-tagline{font-size:1.05rem;line-height:1.6;color:var(--text-sub);margin-bottom:.2rem}
+    .hub-nav{display:grid;grid-template-columns:repeat(2,1fr);gap:.55rem;margin-top:1.2rem;width:100%;max-width:460px}
+    .hub-btn{display:flex;align-items:center;gap:.65rem;padding:.7rem .9rem;
+      background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.42);border-radius:14px;
+      cursor:pointer;transition:all .25s ease;text-decoration:none;color:var(--text-main);font-family:var(--sans)}
+    .hub-btn:hover{background:rgba(255,255,255,.45);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+    .hub-btn:active{transform:translateY(0);box-shadow:none}
+    .hub-btn-icon{font-size:1.3rem;flex-shrink:0;line-height:1}
+    .hub-btn-text{display:flex;flex-direction:column}
+    .hub-btn-label{font-size:.76rem;font-weight:600;letter-spacing:.03em;line-height:1.2}
+    .hub-btn-sub{font-size:.56rem;font-weight:400;color:var(--text-sub);letter-spacing:.02em;margin-top:1px}
+
+    /* ═══════════════════════════════════════
+       HUB SECTIONS
+       ═══════════════════════════════════════ */
+    /* ═══════════════════════════════════════
+       HUB HOME (landing page view)
+       ═══════════════════════════════════════ */
+    .hub-home{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      position:relative;z-index:1;transition:opacity .35s ease;padding:2rem 1rem}
+    .hub-home.hidden{opacity:0;pointer-events:none}
+    .hub-home .photo-wrap{position:relative;top:auto;left:auto;transform:none;margin-bottom:1.5rem}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    .hub-hero-card{width:min(560px,92vw);background:var(--glass);backdrop-filter:blur(80px) saturate(260%);
+      -webkit-backdrop-filter:blur(80px) saturate(260%);border:1px solid var(--glass-border);border-radius:40px;
+      box-shadow:0 30px 80px rgba(0,0,0,.10),0 10px 30px rgba(0,0,0,.07),
+        inset 0 1px 0 rgba(255,255,255,.72),inset 0 -1px 0 rgba(255,255,255,.32);
+      padding:2.5rem 3rem;display:flex;flex-direction:column;align-items:center;text-align:center}
+    .hub-hero-card .profile-name{margin-bottom:.4rem}
+    .hub-hero-card .tagline{margin-bottom:1.2rem}
+    .hub-hero-card .hub-tagline{margin-bottom:.2rem;text-align:center}
+
+    /* ═══════════════════════════════════════
+       HUB CONTENT (section view)
+       ═══════════════════════════════════════ */
+    .hub-content{display:none;position:relative;z-index:2;min-height:100vh;padding-top:3.2rem;
+      transition:opacity .35s ease;opacity:0}
+    .hub-content.active{display:block;opacity:1}
+    .hub-topbar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:.8rem;
+      padding:.55rem 1.5rem;background:rgba(207,208,223,.82);backdrop-filter:blur(24px) saturate(200%);
+      -webkit-backdrop-filter:blur(24px) saturate(200%);border-bottom:1px solid rgba(255,255,255,.35)}
+    .hub-back-btn{font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.06em;
+      background:rgba(255,255,255,.30);border:1px solid var(--glass-border);color:var(--text-sub);
+      padding:5px 14px;border-radius:10px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px}
+    .hub-back-btn:hover{background:rgba(255,255,255,.55);color:var(--text-main)}
+    .hub-topbar-title{font-family:var(--serif);font-size:.95rem;font-weight:700;color:var(--text-main);letter-spacing:-0.01em}
+
+    .hub-section{position:relative;z-index:2;scroll-margin-top:1rem;display:none}
+    .hub-section.active{display:block}
+    .hub-sec-hdr{max-width:1200px;width:94vw;margin:0 auto;padding:2.5rem 0 .4rem;display:flex;align-items:baseline;gap:.8rem}
+    .hub-sec-title{font-family:var(--serif);font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:700;letter-spacing:-0.03em;
+      background:linear-gradient(135deg,var(--text-main),rgba(29,29,31,.45));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hub-sec-tag{font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim)}
+    .hub-sec-intro{max-width:1200px;width:94vw;margin:0 auto;padding-bottom:.8rem}
+    .hub-sec-intro p{font-size:.92rem;line-height:1.7;color:var(--text-sub);max-width:600px}
+    .hub-sec-body{max-width:1200px;width:94vw;margin:0 auto;padding-bottom:2.5rem}
+
+    .hub-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem}
+    .hub-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);
+      backdrop-filter:blur(80px) saturate(260%);-webkit-backdrop-filter:blur(80px) saturate(260%);
+      box-shadow:0 8px 40px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.45);
+      padding:1.4rem;transition:transform .2s ease,box-shadow .2s ease}
+    .hub-card:hover{transform:translateY(-3px);box-shadow:0 12px 48px rgba(0,0,0,.1)}
+    .hub-card-icon{font-size:1.8rem;margin-bottom:.5rem;line-height:1}
+    .hub-card h3{font-family:var(--serif);font-size:1.05rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:.25rem}
+    .hub-card p{font-size:.76rem;line-height:1.5;color:var(--text-sub)}
+    .hub-card.placeholder{border-style:dashed;opacity:.4}
+    .hub-card.placeholder .hub-card-icon{color:var(--text-dim);font-family:var(--sans);font-size:1.6rem;font-weight:300}
+    .hub-card.placeholder h3{color:var(--text-dim);font-weight:400}
+    .hub-sec-divider{max-width:1200px;width:94vw;margin:0 auto;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(29,29,31,.08) 20%,rgba(29,29,31,.08) 80%,transparent)}
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE — tablet
+       ═══════════════════════════════════════ */
+    @media(max-width:800px){
+      .top2{grid-template-columns:1fr}
+      .oil-grid{grid-template-columns:1fr}
+      .pgrid.c4{grid-template-columns:repeat(2,1fr)}
+      .pgrid.c5{grid-template-columns:repeat(3,1fr)}
+    }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE — mobile
+       ═══════════════════════════════════════ */
     @media(max-width:600px){
       :root{--photo:190px}
-      .card-front{padding:calc(var(--photo)*.54 + 1rem) 2.2rem 2.8rem}
-      .card-back{padding:3rem 2.2rem}
-      .board-section{width:98vw}
-      .gp{padding:1rem;border-radius:20px}
-      .pgrid.c3,.pgrid.c4{grid-template-columns:repeat(2,1fr)}
+
+      /* Hero card */
+      .card-front{padding:calc(var(--photo)*.54 + 1rem) 1.6rem 2.2rem}
+      .card-back{padding:2.4rem 1.6rem 2rem}
+      .card-back h1{font-size:clamp(2rem,6vw,3rem)}
+      .card-back p{font-size:.95rem;line-height:1.6}
+      .card-scene{width:96vw}
+
+      /* Board container */
+      .board-section{width:99vw;padding:1rem 0 2rem}
+
+      /* Glass panels */
+      .gp{padding:.8rem .7rem;border-radius:18px}
+
+      /* Header row */
+      .hdr{gap:.3rem;margin-bottom:.4rem}
+      .hdr-title{font-size:.95rem}
+      .btn{font-size:.6rem;padding:4px 10px;border-radius:8px}
+
+      /* Summary bar */
+      .summary{font-size:.7rem;gap:.5rem;margin-bottom:.3rem}
+
+      /* Event banner */
+      .ev{padding:.35rem .6rem;border-radius:10px}
+      .ev-name{font-size:.6rem}
+      .ev-cd{font-size:.72rem}
+
+      /* Price grids */
+      .pgrid.c3{grid-template-columns:repeat(2,1fr)}
+      .pgrid.c4{grid-template-columns:repeat(2,1fr)}
+      .pgrid.c2{grid-template-columns:1fr}
+      .pgrid.c5{grid-template-columns:repeat(2,1fr)}
+      .pcell{padding:.4rem .5rem}
+      .pval{font-size:.9rem}
+      .psym{font-size:.56rem}
+      .pchg{font-size:.56rem}
+      .ptime{font-size:.52rem}
+      .sec-label{font-size:.6rem;margin-bottom:.3rem}
+
+      /* Yield curve */
       .yc-cg{grid-template-columns:1fr}
-      .car-panel{padding:.8rem}
+      .yc-h{flex-direction:column;gap:.4rem}
+      .yc-sb{text-align:left}
+      .yc-sv{font-size:1.1rem}
+      .yc-lbl{font-size:.6rem}
+
+      /* Oil section */
+      .oil-tab-hdr{flex-wrap:wrap;gap:.4rem;margin-bottom:.4rem}
+      .oil-tab-hdr h2{font-size:.95rem}
+      .oil-tab-hdr .oil-badge{font-size:.52rem;padding:2px 6px}
+      .oil-spread{padding:.3rem .5rem;border-radius:10px}
+      .oil-spread .osp-label{font-size:.56rem}
+      .oil-spread .osp-val{font-size:.85rem}
+
+      /* Hyperliquid cells */
+      .hl-cell{padding:.4rem .5rem}
+      .hl-sym{font-size:.52rem}
+      .hl-mark{font-size:.88rem}
+      .hl-funding{font-size:.52rem}
+      .hl-oracle{font-size:.48rem}
+
+      /* Physical benchmarks manual inputs */
+      .mi{font-size:.78rem!important;width:50px!important}
+
+      /* Carousel panels */
+      .car-panel{padding:.6rem .5rem}
+      .car-label{font-size:.68rem;letter-spacing:.1em;margin-bottom:.35rem}
+      .drag-hint{font-size:.55rem}
+
+      /* Metric rows in carousel / oil */
+      .cl{font-size:.58rem;padding-bottom:.15rem;margin-bottom:.2rem;margin-top:.55rem}
+      .mr{padding:3px 0;gap:.35rem}
+      .mn{font-size:.7rem}
+      .ms{font-size:.52rem}
+      .mv{font-size:.74rem;min-width:42px}
+      .mst{font-size:.56rem;min-width:60px}
+      .mi{font-size:.74rem;width:42px}
+      .mrt{gap:.25rem}
+
+      /* Footer bar */
+      .bfooter{flex-direction:column;gap:.3rem;align-items:flex-start}
+      .bf-live{font-size:.55rem;flex-wrap:wrap}
+      .bf-ts{font-size:.55rem}
+
+      /* Hub home */
+      .hub-home{padding:1.5rem .5rem}
+      .hub-home .photo-wrap{width:var(--photo);height:var(--photo);margin-bottom:1rem}
+      .hub-hero-card{padding:1.8rem 1.4rem;border-radius:28px;width:96vw}
+      .hub-hero-card .tagline{margin-bottom:.8rem}
+      .hub-topbar{padding:.45rem .8rem;gap:.5rem}
+      .hub-back-btn{font-size:.64rem;padding:4px 10px}
+      .hub-topbar-title{font-size:.82rem}
+      .hub-content{padding-top:2.8rem}
+
+      /* Hub nav buttons */
+      .hub-tagline{font-size:.9rem}
+      .hub-nav{gap:.4rem;margin-top:.8rem;max-width:100%}
+      .hub-btn{padding:.55rem .65rem;gap:.45rem;border-radius:12px}
+      .hub-btn-icon{font-size:1.05rem}
+      .hub-btn-label{font-size:.66rem}
+      .hub-btn-sub{font-size:.48rem}
+
+      /* Hub sections */
+      .hub-sec-hdr{padding:1.5rem 0 .3rem;width:98vw}
+      .hub-sec-title{font-size:clamp(1.3rem,4vw,1.8rem)}
+      .hub-sec-intro{width:98vw}
+      .hub-sec-intro p{font-size:.8rem}
+      .hub-sec-body{width:98vw;padding-bottom:1.2rem}
+      .hub-cards{grid-template-columns:repeat(2,1fr);gap:.55rem}
+      .hub-card{padding:1rem;border-radius:20px}
+      .hub-card-icon{font-size:1.4rem;margin-bottom:.35rem}
+      .hub-card h3{font-size:.88rem}
+      .hub-card p{font-size:.68rem}
+      .hub-sec-divider{width:98vw}
+
+      /* Footer (copyright) */
+      footer{font-size:.65rem;right:1rem;bottom:.8rem}
+    }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE — small phones
+       ═══════════════════════════════════════ */
+    @media(max-width:400px){
+      :root{--photo:160px}
+      .card-front{padding:calc(var(--photo)*.54 + .8rem) 1.2rem 1.8rem}
+      .card-back{padding:2rem 1.2rem 1.5rem}
+      .profile-name{font-size:clamp(1.6rem,5vw,2.4rem)}
+      .tagline{font-size:.72rem;letter-spacing:.14em}
+      .gp{padding:.6rem .5rem;border-radius:14px}
+      .pgrid.c3,.pgrid.c4,.pgrid.c5{grid-template-columns:1fr}
+      .pval{font-size:.82rem}
+      .hl-mark{font-size:.8rem}
+      .yc-sv{font-size:.95rem}
+      .oil-tab-hdr h2{font-size:.85rem}
+      .car-label{font-size:.6rem}
+      .mn{font-size:.65rem}
+      .mv{font-size:.68rem;min-width:38px}
+      .mst{font-size:.52rem;min-width:50px}
+      .ev{flex-direction:column;gap:.2rem;align-items:flex-start}
+      .hub-nav{grid-template-columns:1fr;gap:.35rem}
+      .hub-hero-card{padding:1.4rem 1rem;border-radius:22px}
+      .hub-cards{grid-template-columns:1fr}
+      .hub-card{padding:.8rem;border-radius:16px}
     }
   </style>
 </head>
@@ -332,42 +551,52 @@
 <div class="orb" style="width:380px;height:380px;left:22%;bottom:4%;opacity:.5;"></div>
 
 <!-- ═══════════════════════════════════════════════════════
-     HERO — original site
+     HUB HOME — landing page
      ═══════════════════════════════════════════════════════ -->
-<div class="scene-wrap">
-  <div class="scene-sticky">
-    <div class="photo-wrap">
-      <img src="profile.jpg" alt="Johannes Lima Spielhofen">
-    </div>
-    <div class="card-scene">
-      <div class="card-flipper" id="flipper">
-        <div class="card-face card-front">
-          <div class="profile-name">Johannes Lima Spielhofen</div>
-          <div class="tagline">Per Aspera Ad Astra</div>
-        </div>
-        <div class="card-face card-back">
-          <h1>Hi, I'm Johannes.</h1>
-          <p>I've designed this economic stressboard for a quick overview of global financial movements and important metrics. Several relevant economies are reflected, although the tool is not entirely comprehensive, as few would be. Hovering the various metrics, you will notice that their relevancy is explained to you in a simple fashion.</p>
-        </div>
-      </div>
+<div class="hub-home" id="hubHome">
+  <div class="photo-wrap">
+    <img src="profile.jpg" alt="Johannes Lima Spielhofen">
+  </div>
+  <div class="hub-hero-card">
+    <div class="profile-name">Johannes Lima Spielhofen</div>
+    <div class="tagline">Per Aspera Ad Astra</div>
+    <p class="hub-tagline">I teach, do finance and other things.</p>
+    <div class="hub-nav">
+      <a class="hub-btn" onclick="hubNav(event,'sec-finance')">
+        <span class="hub-btn-icon">📊</span>
+        <span class="hub-btn-text"><span class="hub-btn-label">Finance</span><span class="hub-btn-sub">Stressboard & markets</span></span>
+      </a>
+      <a class="hub-btn" onclick="hubNav(event,'sec-code')">
+        <span class="hub-btn-icon">💻</span>
+        <span class="hub-btn-text"><span class="hub-btn-label">I Code</span><span class="hub-btn-sub">Projects & tools</span></span>
+      </a>
+      <a class="hub-btn" onclick="hubNav(event,'sec-dilettante')">
+        <span class="hub-btn-icon">🎓</span>
+        <span class="hub-btn-text"><span class="hub-btn-label">Professional Dilettante</span><span class="hub-btn-sub">Certificates & skills</span></span>
+      </a>
+      <a class="hub-btn" onclick="hubNav(event,'sec-passion')">
+        <span class="hub-btn-icon">🧭</span>
+        <span class="hub-btn-text"><span class="hub-btn-label">Passion Projects</span><span class="hub-btn-sub">Hobbies & adventures</span></span>
+      </a>
     </div>
   </div>
 </div>
 
-<div class="scroll-hint" id="scrollHint">
-  <span>scroll</span>
-  <svg width="16" height="22" viewBox="0 0 16 22" fill="none">
-    <rect x="1" y="1" width="14" height="20" rx="7" stroke="rgba(29,29,31,0.35)" stroke-width="1.4"/>
-    <circle cx="8" cy="6" r="2" fill="rgba(29,29,31,0.35)">
-      <animate attributeName="cy" values="6;12;6" dur="1.6s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
-    </circle>
-  </svg>
-</div>
+<!-- ═══════════════════════════════════════════════════════
+     HUB CONTENT — shown after clicking a button
+     ═══════════════════════════════════════════════════════ -->
+<div class="hub-content" id="hubContent">
+  <div class="hub-topbar">
+    <button class="hub-back-btn" onclick="showHub()">&#8592; Home</button>
+    <div class="hub-topbar-title" id="hubTopTitle"></div>
+  </div>
 
 <!-- ═══════════════════════════════════════════════════════
-     STRESS BOARD — below the hero
+     SECTION: FINANCE
      ═══════════════════════════════════════════════════════ -->
+<div id="sec-finance" class="hub-section">
+  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Finance</h2><span class="hub-sec-tag">Live Data</span></div>
+  <div class="hub-sec-intro"><p>I've designed this economic stressboard for a quick overview of global financial movements and important metrics. Several relevant economies are reflected, although the tool is not entirely comprehensive, as few would be. Hovering the various metrics, you will notice that their relevancy is explained to you in a simple fashion.</p></div>
 <div class="board-section">
 
   <!-- Header -->
@@ -623,6 +852,97 @@
   </div>
 
 </div>
+</div><!-- /sec-finance -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION: I CODE
+     ═══════════════════════════════════════════════════════ -->
+<div id="sec-code" class="hub-section">
+  <div class="hub-sec-hdr"><h2 class="hub-sec-title">I Code</h2><span class="hub-sec-tag">Projects</span></div>
+  <div class="hub-sec-intro"><p>Building things from scratch is how I learn best. From full-stack web tools to data pipelines, I enjoy turning ideas into working software.</p></div>
+  <div class="hub-sec-body">
+    <div class="hub-cards">
+      <div class="hub-card">
+        <div class="hub-card-icon">🌐</div>
+        <h3>This Website</h3>
+        <p>A single-file personal hub and live economic stressboard, built from scratch with vanilla HTML, CSS & JavaScript. No frameworks.</p>
+      </div>
+      <div class="hub-card placeholder">
+        <div class="hub-card-icon">+</div>
+        <h3>Coming Soon</h3>
+        <p></p>
+      </div>
+      <div class="hub-card placeholder">
+        <div class="hub-card-icon">+</div>
+        <h3>Coming Soon</h3>
+        <p></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION: PROFESSIONAL DILETTANTE
+     ═══════════════════════════════════════════════════════ -->
+<div id="sec-dilettante" class="hub-section">
+  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Professional Dilettante</h2><span class="hub-sec-tag">Certificates</span></div>
+  <div class="hub-sec-intro"><p>A curated collection of qualifications, certifications and the kind of credentials that prove you can sit through very long exams.</p></div>
+  <div class="hub-sec-body">
+    <div class="hub-cards">
+      <div class="hub-card">
+        <div class="hub-card-icon">🗣️</div>
+        <h3>C2 English</h3>
+        <p>Cambridge Certificate of Proficiency in English. Native-level fluency, certified.</p>
+      </div>
+      <div class="hub-card placeholder">
+        <div class="hub-card-icon">+</div>
+        <h3>Coming Soon</h3>
+        <p></p>
+      </div>
+      <div class="hub-card placeholder">
+        <div class="hub-card-icon">+</div>
+        <h3>Coming Soon</h3>
+        <p></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION: PASSION PROJECTS
+     ═══════════════════════════════════════════════════════ -->
+<div id="sec-passion" class="hub-section">
+  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Passion Projects</h2><span class="hub-sec-tag">Life</span></div>
+  <div class="hub-sec-intro"><p>Not everything has to be about work. These are the things I pursue because they fascinate me.</p></div>
+  <div class="hub-sec-body">
+    <div class="hub-cards">
+      <div class="hub-card">
+        <div class="hub-card-icon">🍄</div>
+        <h3>Mushroom Certificate</h3>
+        <p>Certified mycological expertise. Foraging, identification and a deep appreciation for fungi.</p>
+      </div>
+      <div class="hub-card">
+        <div class="hub-card-icon">🦌</div>
+        <h3>Jagdschein</h3>
+        <p>German hunting license. Wildlife management, marksmanship and conservation.</p>
+      </div>
+      <div class="hub-card placeholder">
+        <div class="hub-card-icon">+</div>
+        <h3>Coming Soon</h3>
+        <p></p>
+      </div>
+      <div class="hub-card placeholder">
+        <div class="hub-card-icon">+</div>
+        <h3>Coming Soon</h3>
+        <p></p>
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- /hub-content -->
 
 <footer>© Johannes Lima Spielhofen</footer>
 
@@ -640,28 +960,54 @@ nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle
 resize();initNodes();drawBg();addEventListener('resize',()=>{resize();initNodes()});
 
 // ═══════════════════════════════════════════════════════════════
-// SCROLL FLIP (original site logic)
+// HUB NAVIGATION — show/hide sections
 // ═══════════════════════════════════════════════════════════════
-const flipper=document.getElementById('flipper'),scrollHint=document.getElementById('scrollHint');
-const FLIP_AT=innerHeight*.55,UNFLIP_AT=innerHeight*.25;
-let isFlipped=false;
-function onScroll(){const sy=scrollY;
-if(!isFlipped&&sy>FLIP_AT){isFlipped=true;flipper.classList.add('slid','flipped')}
-else if(isFlipped&&sy<UNFLIP_AT){isFlipped=false;flipper.classList.remove('flipped');setTimeout(()=>flipper.classList.remove('slid'),320)}
-scrollHint.style.opacity=sy>30?'0':'1'}
-addEventListener('scroll',onScroll,{passive:true});onScroll();
+const SEC_TITLES={'sec-finance':'Finance','sec-code':'I Code','sec-dilettante':'Professional Dilettante','sec-passion':'Passion Projects'};
 
-// Size front card to accommodate back card content
-(function syncCardHeight(){
-  const front=document.querySelector('.card-front');
-  const back=document.querySelector('.card-back');
-  if(!front||!back)return;
-  back.style.height='auto';back.style.position='static';
-  const bh=back.scrollHeight;
-  back.style.height='100%';back.style.position='absolute';
-  const fh=front.scrollHeight;
-  if(bh>fh)front.style.minHeight=bh+'px';
-})();
+function hubNav(e, id) {
+  if(e) e.preventDefault();
+  const home = document.getElementById('hubHome');
+  const content = document.getElementById('hubContent');
+
+  // Fade out home
+  home.classList.add('hidden');
+
+  setTimeout(() => {
+    home.style.display = 'none';
+
+    // Show hub-content, activate selected section
+    document.querySelectorAll('.hub-section').forEach(s => s.classList.remove('active'));
+    const sec = document.getElementById(id);
+    if (sec) sec.classList.add('active');
+
+    document.getElementById('hubTopTitle').textContent = SEC_TITLES[id] || '';
+    content.style.display = 'block';
+    window.scrollTo(0, 0);
+
+    // Force carousel height recalculation for finance section
+    if (id === 'sec-finance' && typeof goP === 'function') {
+      requestAnimationFrame(() => goP(curP));
+    }
+
+    requestAnimationFrame(() => { content.classList.add('active'); });
+  }, 350);
+}
+
+function showHub() {
+  const home = document.getElementById('hubHome');
+  const content = document.getElementById('hubContent');
+
+  content.classList.remove('active');
+
+  setTimeout(() => {
+    content.style.display = 'none';
+    document.querySelectorAll('.hub-section').forEach(s => s.classList.remove('active'));
+
+    home.style.display = 'flex';
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => { home.classList.remove('hidden'); });
+  }, 350);
+}
 
 // ═══════════════════════════════════════════════════════════════
 // CAROUSEL
@@ -1235,12 +1581,68 @@ document.querySelectorAll('.oil-spread').forEach(sp=>{
   if(val&&val.id&&TIPS[val.id])sp.setAttribute('data-tip',TIPS[val.id]);
 });
 
+// ═══════════════════════════════════════════════════════════════
+// GLOBAL TOOLTIP SYSTEM (position:fixed, viewport-aware)
+// ═══════════════════════════════════════════════════════════════
+(function(){
+  const tip=document.createElement('div');tip.id='global-tip';document.body.appendChild(tip);
+  let hideTimer=null;
+  function show(target){
+    const txt=target.getAttribute('data-tip');
+    if(!txt)return;
+    clearTimeout(hideTimer);
+    tip.textContent=txt;
+    tip.style.display='block';tip.style.opacity='0';
+    requestAnimationFrame(()=>{
+      const r=target.getBoundingClientRect(),tr=tip.getBoundingClientRect();
+      let left=r.left+r.width/2-tr.width/2,top=r.top-tr.height-8;
+      if(left<8)left=8;
+      if(left+tr.width>innerWidth-8)left=innerWidth-tr.width-8;
+      if(top<8)top=r.bottom+8;
+      tip.style.left=left+'px';tip.style.top=top+'px';tip.style.opacity='1';
+    });
+  }
+  function hide(){tip.style.opacity='0';hideTimer=setTimeout(()=>{tip.style.display='none';},150);}
+  document.addEventListener('mouseover',e=>{const t=e.target.closest('[data-tip]');if(t)show(t);});
+  document.addEventListener('mouseout',e=>{const t=e.target.closest('[data-tip]');if(!t)return;
+    const rel=e.relatedTarget?.closest?.('[data-tip]');if(rel===t)return;hide();});
+  addEventListener('scroll',hide,{passive:true,capture:true});
+  addEventListener('resize',hide);
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// EVENT BANNER TIPS & SUMMARY CATEGORY TIPS
+// ═══════════════════════════════════════════════════════════════
+const EVENT_TIPS={
+  'NFP RELEASE':'Non-Farm Payrolls — monthly US jobs report from the Bureau of Labor Statistics. Primary gauge of labor market health; drives Fed policy expectations.',
+  'CPI RELEASE':'Consumer Price Index — monthly US inflation measure. Core input to Fed interest-rate decisions and bond markets.',
+  'FOMC DECISION':'Federal Open Market Committee — the Fed\'s rate-setting meeting. Decides the federal funds rate and signals monetary-policy direction.'
+};
+function applyEvTip(){const ev=nextEv();if(!ev)return;const b=document.getElementById('evBanner');
+  if(b&&EVENT_TIPS[ev.name])b.setAttribute('data-tip',EVENT_TIPS[ev.name]);}
+function updateSummaryTips(){
+  const cats={concern:[],watch:[],normal:[]};
+  document.querySelectorAll('.mr').forEach(row=>{
+    const md=row.querySelector('.md'),mn=row.querySelector('.mn');
+    if(!md||!mn)return;
+    const name=(mn.firstChild?.textContent||'').trim()||mn.textContent.trim().split(/\s{2,}|\n/)[0];
+    if(md.classList.contains('concern'))cats.concern.push(name);
+    else if(md.classList.contains('watch'))cats.watch.push(name);
+    else if(md.classList.contains('normal'))cats.normal.push(name);
+  });
+  const set=(id,arr)=>{const el=document.getElementById(id);if(!el)return;
+    el.setAttribute('data-tip',arr.length?arr.join(' • '):'None');};
+  set('cC',cats.concern);set('cW',cats.watch);set('cN',cats.normal);
+}
+
 const hadCache=loadCache();
 if(hadCache)setYhSt('live'); // show as live if cache available
 evalManual();updEv();setInterval(updEv,1000);schedP();
 pollYH();setInterval(pollYH,15000);
 fetchHL();setInterval(fetchHL,15000);
 fetchAll();
+applyEvTip();updateSummaryTips();
+setInterval(()=>{applyEvTip();updateSummaryTips();},2000);
 </script>
 </body>
 </html>
