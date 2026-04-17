@@ -589,6 +589,9 @@
       <a class="hub-btn" href="#languages" data-nav="sec-languages">
         <span class="hub-btn-label">Languages</span>
       </a>
+      <a class="hub-btn" href="#politics" data-nav="sec-politics">
+        <span class="hub-btn-label">Politics</span>
+      </a>
     </div>
   </div>
 </div>
@@ -935,6 +938,29 @@
     </div>
   </div>
 </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION: POLITICS
+     ═══════════════════════════════════════════════════════ -->
+<div id="sec-politics" class="hub-section">
+  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Politics</h2></div>
+  <div class="hub-sec-body">
+    <div class="hub-cards">
+      <div class="hub-card">
+        <h3>State Examination</h3>
+      </div>
+      <div class="hub-card">
+        <h3>Political Science</h3>
+      </div>
+      <div class="hub-card">
+        <h3>German Parliament</h3>
+        <div class="hub-card-meta">Worked subtitling for the Bundestag</div>
+      </div>
+    </div>
+  </div>
+</div>
 </div><!-- /hub-content -->
 
 <footer>© Johannes Lima Spielhofen</footer>
@@ -955,7 +981,7 @@ resize();initNodes();drawBg();addEventListener('resize',()=>{resize();initNodes(
 // ═══════════════════════════════════════════════════════════════
 // HUB NAVIGATION — show/hide sections
 // ═══════════════════════════════════════════════════════════════
-const SEC_TITLES={'sec-finance':'Finance','sec-passion':'Professional Dilettante','sec-languages':'Languages'};
+const SEC_TITLES={'sec-finance':'Finance','sec-passion':'Professional Dilettante','sec-languages':'Languages','sec-politics':'Politics'};
 
 // ═══════════════════════════════════════════════════════════════
 // CANDLESTICK LOADER — animated overlay during Finance transition
@@ -1036,7 +1062,7 @@ const candleLoader=(function(){
   };
 })();
 
-function hubNav(e, id) {
+function hubNav(e, id, fromHistory) {
   if(e) e.preventDefault();
   const home = document.getElementById('hubHome');
   const content = document.getElementById('hubContent');
@@ -1075,9 +1101,15 @@ function hubNav(e, id) {
       setTimeout(()=>candleLoader.fadeOut(),650);
     }
   }, 350);
+
+  // Push to browser history so the native Back button returns to the hub home
+  if(!fromHistory){
+    const frag = id.replace(/^sec-/, '');
+    try{ history.pushState({hub:id}, '', '#'+frag); }catch(_){}
+  }
 }
 
-function showHub() {
+function showHub(fromHistory) {
   const home = document.getElementById('hubHome');
   const content = document.getElementById('hubContent');
 
@@ -1092,16 +1124,59 @@ function showHub() {
     // Use setTimeout (not rAF) so this fires even when the tab is hidden.
     setTimeout(() => { home.classList.remove('hidden'); }, 20);
   }, 350);
+
+  if(!fromHistory){
+    try{ history.pushState({hub:'home'}, '', location.pathname+location.search); }catch(_){}
+  }
 }
+
+// Browser back/forward → sync to hub state (instead of leaving the site)
+window.addEventListener('popstate', (e)=>{
+  const st = e.state;
+  if(st && st.hub && st.hub !== 'home' && document.getElementById(st.hub)){
+    hubNav(null, st.hub, true);
+  } else {
+    showHub(true);
+  }
+});
+
+// On first load, seed history state and optionally deep-link to a section via URL hash
+(function initNav(){
+  const hash = (location.hash||'').replace(/^#/,'');
+  const idFromHash = hash && (hash.startsWith('sec-')?hash:'sec-'+hash);
+  if(idFromHash && document.getElementById(idFromHash)){
+    // Jump directly to section (no animation) and seed history so Back returns home
+    try{ history.replaceState({hub:'home'}, '', location.pathname+location.search); }catch(_){}
+    try{ history.pushState({hub:idFromHash}, '', '#'+idFromHash.replace(/^sec-/,'')); }catch(_){}
+    const home=document.getElementById('hubHome'),content=document.getElementById('hubContent');
+    home.classList.add('hidden'); home.style.display='none';
+    document.getElementById(idFromHash).classList.add('active');
+    const t=document.getElementById('hubTopTitle'); if(t)t.textContent=SEC_TITLES[idFromHash]||'';
+    content.style.display='block'; content.classList.add('active');
+  } else {
+    try{ history.replaceState({hub:'home'}, '', location.pathname+location.search); }catch(_){}
+  }
+})();
 
 // Fallback wiring: if inline onclick is blocked (strict CSP) or never fires for
 // another reason, attach listeners programmatically via data-nav attributes.
 document.addEventListener('DOMContentLoaded',()=>{
   document.querySelectorAll('.hub-btn[data-nav]').forEach(btn=>{
+    if(btn.__navWired)return;btn.__navWired=true;
     btn.addEventListener('click',e=>{e.preventDefault();hubNav(e,btn.dataset.nav);});
   });
   const back=document.querySelector('.hub-back-btn');
-  if(back)back.addEventListener('click',e=>{e.preventDefault();showHub();});
+  if(back&&!back.__navWired){back.__navWired=true;
+    back.addEventListener('click',e=>{
+      e.preventDefault();
+      // If we pushed a section onto history, walk back so browser history stays in sync
+      if(history.state && history.state.hub && history.state.hub!=='home'){
+        history.back();
+      } else {
+        showHub();
+      }
+    });
+  }
 });
 // Also wire up immediately if DOM is already parsed
 if(document.readyState!=='loading'){
@@ -1109,6 +1184,17 @@ if(document.readyState!=='loading'){
     if(btn.__navWired)return;btn.__navWired=true;
     btn.addEventListener('click',e=>{e.preventDefault();hubNav(e,btn.dataset.nav);});
   });
+  const back=document.querySelector('.hub-back-btn');
+  if(back&&!back.__navWired){back.__navWired=true;
+    back.addEventListener('click',e=>{
+      e.preventDefault();
+      if(history.state && history.state.hub && history.state.hub!=='home'){
+        history.back();
+      } else {
+        showHub();
+      }
+    });
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
