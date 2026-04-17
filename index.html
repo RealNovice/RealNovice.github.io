@@ -1667,4 +1667,131 @@ const PRICE_LEVELS={
   'p-o-brent':'Normal ~$70–90 · Elevated ≥$85 · Spike ≥$110',
   'p-o-hh':'Low <$2 · Normal $2–4 · Spike ≥$6 (natural gas)',
 };
-// ─── Derive threshold descriptions from TH config ────
+// ─── Derive threshold descriptions from TH config ─────────────
+// Each metric row id looks like d-xxx / v-xxx / i-xxx → TH key is "xxx" with hyphens stripped
+function thKey(elId){if(!elId)return null;return elId.replace(/^[dvis]-/,'').replace(/-/g,'');}
+function describeThresholds(key){
+  const th=TH[key];if(!th||!th.t)return '';
+  const fmt=th.fmt||(v=>String(v));
+  const seen=new Set();
+  const parts=[];
+  for(const tier of th.t){
+    const src=tier.f.toString();
+    // Match "v>=0.5", "v<=−5", "v.p<0", "v>100" etc.
+    const m=src.match(/v(?:\.[a-z]+)?\s*(>=|<=|>|<|===|==)\s*(-?[\d.]+)/i);
+    const opSym={'>=':'≥','<=':'≤','>':'>','<':'<','===':'=','==':'='};
+    let text;
+    if(m){
+      let n=parseFloat(m[2]);
+      let fv;try{fv=fmt(src.includes('v.p')?{n,p:n,pct:n}:n);}catch{fv=String(n);}
+      // Strip leading + in fmt outputs
+      fv=String(fv).replace(/^\+/,'');
+      text=`${tier.l} ${opSym[m[1]]}${fv}`;
+    }else{
+      text=tier.l; // default/catchall tier
+    }
+    if(!seen.has(text)){seen.add(text);parts.push(text);}
+  }
+  return parts.join(' · ');
+}
+function augmentTipWithLevels(id, base){
+  if(!base)base='';
+  // Price cells: append hardcoded levels
+  if(PRICE_LEVELS[id])return base?base+'\nLevels: '+PRICE_LEVELS[id]:'Levels: '+PRICE_LEVELS[id];
+  // Metric rows: derive from TH
+  const k=thKey(id);const desc=k?describeThresholds(k):'';
+  if(desc)return base?base+'\nLevels: '+desc:'Levels: '+desc;
+  return base;
+}
+Object.entries(TIPS).forEach(([id,tip])=>{const el=document.getElementById(id);if(el)el.setAttribute('data-tip',augmentTipWithLevels(id,tip))});
+// Also add tips to pcells by finding parent
+document.querySelectorAll('.pcell').forEach(cell=>{
+  const pval=cell.querySelector('.pval');
+  const id=pval&&pval.id;
+  const base=id&&TIPS[id]?TIPS[id]:'';
+  const merged=augmentTipWithLevels(id,base);
+  if(merged)cell.setAttribute('data-tip',merged);
+});
+document.querySelectorAll('.mr').forEach(row=>{
+  const mv=row.querySelector('.mv')||row.querySelector('.mi');
+  const dot=row.querySelector('.md');
+  // Prefer the dot id for TH lookup — it's canonical (d-vixm, d-ism-mfg, …)
+  const lookupId=(dot&&dot.id)||(mv&&mv.id);
+  const base=(mv&&mv.id&&TIPS[mv.id])||'';
+  const merged=augmentTipWithLevels(lookupId,base);
+  if(merged)row.setAttribute('data-tip',merged);
+});
+document.querySelectorAll('.hl-cell').forEach(cell=>{
+  if(cell.id&&TIPS[cell.id])cell.setAttribute('data-tip',TIPS[cell.id]);
+});
+document.querySelectorAll('.oil-spread').forEach(sp=>{
+  const val=sp.querySelector('.osp-val');
+  if(val&&val.id&&TIPS[val.id])sp.setAttribute('data-tip',TIPS[val.id]);
+});
+
+// ═══════════════════════════════════════════════════════════════
+// GLOBAL TOOLTIP SYSTEM (position:fixed, viewport-aware)
+// ═══════════════════════════════════════════════════════════════
+(function(){
+  const tip=document.createElement('div');tip.id='global-tip';document.body.appendChild(tip);
+  let hideTimer=null;
+  function show(target){
+    const txt=target.getAttribute('data-tip');
+    if(!txt)return;
+    clearTimeout(hideTimer);
+    tip.textContent=txt;
+    tip.style.display='block';tip.style.opacity='0';
+    requestAnimationFrame(()=>{
+      const r=target.getBoundingClientRect(),tr=tip.getBoundingClientRect();
+      let left=r.left+r.width/2-tr.width/2,top=r.top-tr.height-8;
+      if(left<8)left=8;
+      if(left+tr.width>innerWidth-8)left=innerWidth-tr.width-8;
+      if(top<8)top=r.bottom+8;
+      tip.style.left=left+'px';tip.style.top=top+'px';tip.style.opacity='1';
+    });
+  }
+  function hide(){tip.style.opacity='0';hideTimer=setTimeout(()=>{tip.style.display='none';},150);}
+  document.addEventListener('mouseover',e=>{const t=e.target.closest('[data-tip]');if(t)show(t);});
+  document.addEventListener('mouseout',e=>{const t=e.target.closest('[data-tip]');if(!t)return;
+    const rel=e.relatedTarget?.closest?.('[data-tip]');if(rel===t)return;hide();});
+  addEventListener('scroll',hide,{passive:true,capture:true});
+  addEventListener('resize',hide);
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// EVENT BANNER TIPS & SUMMARY CATEGORY TIPS
+// ═══════════════════════════════════════════════════════════════
+const EVENT_TIPS={
+  'NFP RELEASE':'Non-Farm Payrolls — monthly US jobs report from the Bureau of Labor Statistics. Primary gauge of labor market health; drives Fed policy expectations.',
+  'CPI RELEASE':'Consumer Price Index — monthly US inflation measure. Core input to Fed interest-rate decisions and bond markets.',
+  'FOMC DECISION':'Federal Open Market Committee — the Fed\'s rate-setting meeting. Decides the federal funds rate and signals monetary-policy direction.'
+};
+function applyEvTip(){const ev=nextEv();if(!ev)return;const b=document.getElementById('evBanner');
+  if(b&&EVENT_TIPS[ev.name])b.setAttribute('data-tip',EVENT_TIPS[ev.name]);}
+function updateSummaryTips(){
+  // Counts + hover list must reflect the SAME scope — the Overview panel (#pan-0)
+  const cats={concern:[],watch:[],normal:[]};
+  document.querySelectorAll('#pan-0 .mr').forEach(row=>{
+    const md=row.querySelector('.md'),mn=row.querySelector('.mn');
+    if(!md||!mn)return;
+    const name=(mn.firstChild?.textContent||'').trim()||mn.textContent.trim().split(/\s{2,}|\n/)[0];
+    if(md.classList.contains('concern'))cats.concern.push(name);
+    else if(md.classList.contains('watch'))cats.watch.push(name);
+    else if(md.classList.contains('normal'))cats.normal.push(name);
+  });
+  const set=(id,arr)=>{const el=document.getElementById(id);if(!el)return;
+    el.setAttribute('data-tip',arr.length?arr.join(' • '):'None');};
+  set('cC',cats.concern);set('cW',cats.watch);set('cN',cats.normal);
+}
+
+const hadCache=loadCache();
+if(hadCache)setYhSt('live'); // show as live if cache available
+evalManual();updEv();setInterval(updEv,1000);schedP();
+pollYH();setInterval(pollYH,15000);
+fetchHL();setInterval(fetchHL,15000);
+fetchAll();
+applyEvTip();updateSummaryTips();
+setInterval(()=>{applyEvTip();updateSummaryTips();},2000);
+</script>
+</body>
+</html>
