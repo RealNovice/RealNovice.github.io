@@ -1568,25 +1568,26 @@ const YH_SYMBOLS = {
 };
 
 async function fetchYhChart(symbol){
-  const raw=`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=5d`;
-  // Walk the PROXIES list the stressboard defines further down in the script.
-  // Guarded access: PROXIES is declared with `const` below, so during very early
-  // script execution (pre-TDZ-exit) `typeof PROXIES` would throw ReferenceError.
-  let P;
-  try { P = PROXIES; } catch(_) { P = null; }
-  if(!P || !P.length) P = [r=>r]; // direct fetch fallback (will likely CORS-fail)
+  // Exact URL shape the stressboard already successfully uses — interval=1m&range=1d.
+  const raw=`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d`;
+  // Safe access to the PROXIES const (may be in TDZ very early in script eval).
+  let P; try { P = PROXIES; } catch(_) { P = null; }
+  if(!P || !P.length) P = [r=>r];
+  let lastErr='no proxy returned ok';
   for(let i=0;i<P.length;i++){
     try{
       const r=await fetch(P[i](raw),{signal:AbortSignal.timeout(8000)});
-      if(!r.ok) continue;
+      if(!r.ok){ lastErr=`HTTP ${r.status} @ proxy ${i}`; continue; }
       const j=await r.json();
       const m=j?.chart?.result?.[0]?.meta;
-      if(!m) continue;
+      if(!m){ lastErr=`no meta @ proxy ${i}`; continue; }
       const px=m.regularMarketPrice;
       const ccy=(m.currency||'').toUpperCase();
       if(typeof px==='number' && px>0) return {px, ccy, symbol};
-    }catch(_){ /* next proxy */ }
+      lastErr=`no price in meta @ proxy ${i}`;
+    }catch(e){ lastErr=`${e?.name||'err'} @ proxy ${i}`; }
   }
+  console.warn(`[holdings] YH ${symbol} failed:`, lastErr);
   return null;
 }
 
@@ -1648,11 +1649,20 @@ async function refreshHoldingsLive(){
   }));
 
   if(touched) renderHoldings();
+  const hit = HOLDINGS.filter(h=>h._liveSource).map(h=>h.ticker);
+  const miss= HOLDINGS.filter(h=>!h._liveSource && h.ticker!=='CASH').map(h=>h.ticker);
   const badge=document.getElementById('holdLiveBadge');
   if(badge){
-    const lbl = touched ? ('LIVE · '+[...sources].join('+')+(eurusd?' · FX':'')) : 'offline · cached';
+    const lbl = touched
+      ? `LIVE · ${[...sources].join('+')}${eurusd?' · FX':' · NO-FX'} · ${hit.length}/${HOLDINGS.length-1} · click to retry`
+      : 'offline · click to retry';
     badge.textContent = lbl;
+    badge.style.cursor='pointer';
+    if(!badge.__wired){ badge.__wired=true;
+      badge.addEventListener('click',()=>{ badge.textContent='refreshing…'; refreshHoldingsLive().catch(()=>{}); });
+    }
   }
+  console.info('[holdings] live refresh — hit:', hit, 'miss:', miss, 'eurusd:', eurusd);
   // Clear source flags so the next refresh re-evaluates every holding
   HOLDINGS.forEach(h=>{ h._liveSource=null; });
 }
