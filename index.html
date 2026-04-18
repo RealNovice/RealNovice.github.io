@@ -378,22 +378,125 @@
     .hub-sec-intro p{font-size:.92rem;line-height:1.7;color:var(--text-sub);max-width:600px}
     .hub-sec-body{max-width:1200px;width:94vw;margin:0 auto;padding-bottom:2.5rem}
 
-    .hub-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem}
+    .hub-cards{display:flex;flex-direction:column;gap:1rem;max-width:820px;margin:0 auto}
     .hub-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);
       backdrop-filter:blur(80px) saturate(260%);-webkit-backdrop-filter:blur(80px) saturate(260%);
       box-shadow:0 8px 40px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.45);
-      padding:1.4rem;transition:transform .2s ease,box-shadow .2s ease}
+      padding:1.8rem 2.2rem;transition:transform .2s ease,box-shadow .2s ease}
     .hub-card:hover{transform:translateY(-3px);box-shadow:0 12px 48px rgba(0,0,0,.1)}
     .hub-card-icon{font-size:1.8rem;margin-bottom:.5rem;line-height:1}
-    .hub-card h3{font-family:var(--serif);font-size:1.05rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:.25rem}
-    .hub-card p{font-size:.76rem;line-height:1.5;color:var(--text-sub)}
-    .hub-card-meta{font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.01em;
-      color:var(--text-sub);opacity:.85;margin-top:.15rem}
+    .hub-card h3{font-family:var(--serif);font-size:1.45rem;font-weight:700;letter-spacing:-0.015em;margin-bottom:.1rem}
+    .hub-card-meta{font-family:var(--sans);font-size:.82rem;font-weight:500;letter-spacing:.04em;
+      text-transform:uppercase;color:var(--text-dim);margin-bottom:.55rem}
+    .hub-card p{font-size:.95rem;line-height:1.6;color:var(--text-sub);margin-top:.15rem}
+    .hub-card p + p{margin-top:.5rem}
     .hub-card.placeholder{border-style:dashed;opacity:.4}
     .hub-card.placeholder .hub-card-icon{color:var(--text-dim);font-family:var(--sans);font-size:1.6rem;font-weight:300}
     .hub-card.placeholder h3{color:var(--text-dim);font-weight:400}
     .hub-sec-divider{max-width:1200px;width:94vw;margin:0 auto;height:1px;
       background:linear-gradient(90deg,transparent,rgba(29,29,31,.08) 20%,rgba(29,29,31,.08) 80%,transparent)}
+
+    /* ═══════════════════════════════════════
+       FINANCE SUB-NAV (Stressboard / Holdings)
+       ═══════════════════════════════════════ */
+    .fin-subnav{max-width:1200px;width:94vw;margin:.2rem auto 1rem;display:flex;gap:.4rem;
+      background:rgba(255,255,255,.22);border:1px solid var(--glass-border);border-radius:14px;padding:.3rem;
+      backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);width:fit-content}
+    .fin-pill{font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.08em;
+      text-transform:uppercase;background:transparent;border:none;color:var(--text-sub);
+      padding:.55rem 1.1rem;border-radius:10px;cursor:pointer;transition:all .2s ease}
+    .fin-pill:hover{color:var(--text-main)}
+    .fin-pill.active{background:rgba(255,255,255,.55);color:var(--text-main);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+    .fin-view{display:none}
+    .fin-view.active{display:block}
+
+    /* Holdings view */
+    .hold-wrap{max-width:960px;width:94vw;margin:0 auto;padding-bottom:3rem}
+    .hold-intro{font-size:.9rem;line-height:1.6;color:var(--text-sub);margin-bottom:1.4rem;max-width:640px}
+    .hold-live{display:inline-block;margin-left:.4rem;padding:2px 8px;border-radius:6px;
+      background:rgba(46,125,79,.12);border:1px solid rgba(46,125,79,.28);
+      font-family:var(--sans);font-size:.58rem;font-weight:700;letter-spacing:.12em;
+      text-transform:uppercase;color:#2e7d4f;vertical-align:middle}
+    .hold-sum{display:flex;gap:.6rem;margin-bottom:1.2rem;flex-wrap:wrap}
+    .hold-chip{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;
+      padding:.55rem .9rem;font-size:.7rem;letter-spacing:.06em;color:var(--text-sub);
+      backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px)}
+    .hold-chip strong{color:var(--text-main);font-weight:700;font-size:.82rem;margin-left:.4rem}
+    .hold-bars{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);
+      backdrop-filter:blur(80px) saturate(260%);-webkit-backdrop-filter:blur(80px) saturate(260%);
+      padding:1.4rem 1.6rem;margin-bottom:1.4rem}
+    .hold-bars-hdr{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--text-dim);margin-bottom:.9rem;display:flex;justify-content:space-between}
+    .hold-bar{display:grid;grid-template-columns:80px 1fr 56px;align-items:center;gap:.8rem;padding:.35rem 0;
+      border-bottom:1px solid rgba(29,29,31,.04)}
+    .hold-bar:last-child{border-bottom:none}
+    .hold-bar-tick{font-family:var(--sans);font-size:.78rem;font-weight:700;letter-spacing:.02em;color:var(--text-main)}
+    .hold-bar-track{position:relative;height:10px;background:rgba(29,29,31,.04);border-radius:5px;overflow:hidden}
+    .hold-bar-fill{position:absolute;inset:0;right:auto;border-radius:5px;transition:width .6s ease}
+    .hold-bar-fill.eq{background:linear-gradient(90deg,#4a9e6a,#7ec296)}
+    .hold-bar-fill.cr{background:linear-gradient(90deg,#d4a017,#e8b94e)}
+    .hold-bar-fill.fi{background:linear-gradient(90deg,#6b8cae,#9bb4ce)}
+    .hold-bar-fill.cs{background:linear-gradient(90deg,#8a8a95,#b0b0b8)}
+    .hold-bar-fill.cm{background:linear-gradient(90deg,#b8904a,#c8c8d0)}
+    .hold-bar-pct{font-family:var(--sans);font-size:.78rem;font-weight:700;font-variant-numeric:tabular-nums;
+      text-align:right;color:var(--text-main)}
+    .hold-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);
+      backdrop-filter:blur(80px) saturate(260%);-webkit-backdrop-filter:blur(80px) saturate(260%);
+      box-shadow:0 8px 40px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.45);
+      padding:1.3rem 1.6rem;margin-bottom:.9rem}
+    .hold-card-hdr{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.35rem;flex-wrap:wrap}
+    .hold-card-t{display:flex;align-items:baseline;gap:.7rem}
+    .hold-card-tick{font-family:var(--sans);font-size:1.05rem;font-weight:700;letter-spacing:.03em;color:var(--text-main)}
+    .hold-card-name{font-family:var(--serif);font-size:1rem;color:var(--text-sub);font-style:italic}
+    .hold-card-tag{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--text-dim);background:rgba(255,255,255,.35);border:1px solid var(--glass-border);
+      border-radius:6px;padding:2px 8px}
+    .hold-card-pct{font-family:var(--sans);font-size:.95rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--text-main)}
+    .hold-card-r{display:flex;align-items:baseline;gap:.8rem}
+    .hold-card-gain{font-family:var(--sans);font-size:.78rem;font-weight:700;letter-spacing:.02em;
+      font-variant-numeric:tabular-nums;padding:2px 8px;border-radius:6px;
+      background:rgba(255,255,255,.4);border:1px solid var(--glass-border)}
+    .hold-card-thesis{font-size:.88rem;line-height:1.6;color:var(--text-sub)}
+
+    /* Pie chart */
+    .hold-chart-wrap{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);
+      backdrop-filter:blur(80px) saturate(260%);-webkit-backdrop-filter:blur(80px) saturate(260%);
+      box-shadow:0 8px 40px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.45);
+      padding:1.8rem 1.8rem;margin-bottom:1.6rem;
+      display:grid;grid-template-columns:280px 1fr;gap:2.2rem;align-items:center}
+    .hold-pie-box{position:relative;width:260px;height:260px;margin:0 auto}
+    .hold-pie{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 6px 20px rgba(0,0,0,.08))}
+    .hold-pie-slice{transition:transform .35s ease,filter .35s ease;transform-origin:center;cursor:default}
+    .hold-pie-slice:hover{transform:scale(1.04);filter:brightness(1.08) drop-shadow(0 4px 12px rgba(0,0,0,.15))}
+    .hold-pie-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+    .hold-pie-center-lbl{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim)}
+    .hold-pie-center-val{font-family:var(--serif);font-size:1.75rem;font-weight:500;color:var(--text-main);letter-spacing:-.01em;margin-top:.1rem;font-variant-numeric:tabular-nums}
+    .hold-pie-center-sub{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-top:.25rem}
+    .hold-legend{display:flex;flex-direction:column;gap:.55rem}
+    .hold-legend-item{display:grid;grid-template-columns:14px 1fr auto;gap:.7rem;align-items:center;
+      padding:.4rem .6rem;border-radius:10px;transition:background .2s ease}
+    .hold-legend-item:hover{background:rgba(255,255,255,.3)}
+    .hold-legend-sw{width:12px;height:12px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+    .hold-legend-name{font-size:.82rem;color:var(--text-main);font-weight:500;
+      display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap}
+    .hold-legend-sub{font-size:.68rem;color:var(--text-dim);font-weight:400;letter-spacing:.04em}
+    .hold-legend-pct{font-family:var(--sans);font-size:.85rem;font-weight:700;
+      font-variant-numeric:tabular-nums;color:var(--text-main)}
+
+    @media(max-width:600px){
+      .fin-pill{font-size:.62rem;padding:.45rem .8rem}
+      .hold-bar{grid-template-columns:64px 1fr 48px;gap:.5rem}
+      .hold-bar-tick{font-size:.7rem}
+      .hold-bar-pct{font-size:.7rem}
+      .hold-card{padding:1rem 1.1rem}
+      .hold-card-tick{font-size:.95rem}
+      .hold-card-name{font-size:.88rem}
+      .hold-card-thesis{font-size:.78rem}
+      .hold-intro{font-size:.8rem}
+      .hold-chart-wrap{grid-template-columns:1fr;gap:1.4rem;padding:1.4rem 1.2rem}
+      .hold-pie-box{width:210px;height:210px}
+      .hold-pie-center-val{font-size:1.5rem}
+    }
 
     /* ═══════════════════════════════════════
        RESPONSIVE — tablet
@@ -518,11 +621,12 @@
       .hub-sec-intro{width:98vw}
       .hub-sec-intro p{font-size:.8rem}
       .hub-sec-body{width:98vw;padding-bottom:1.2rem}
-      .hub-cards{grid-template-columns:repeat(2,1fr);gap:.55rem}
-      .hub-card{padding:1rem;border-radius:20px}
+      .hub-cards{gap:.7rem}
+      .hub-card{padding:1.1rem 1.2rem;border-radius:20px}
       .hub-card-icon{font-size:1.4rem;margin-bottom:.35rem}
-      .hub-card h3{font-size:.88rem}
-      .hub-card p{font-size:.68rem}
+      .hub-card h3{font-size:1.1rem}
+      .hub-card-meta{font-size:.68rem;margin-bottom:.4rem}
+      .hub-card p{font-size:.82rem;line-height:1.55}
       .hub-sec-divider{width:98vw}
 
       /* Footer (copyright) */
@@ -551,8 +655,7 @@
       .ev{flex-direction:column;gap:.2rem;align-items:flex-start}
       .hub-nav{grid-template-columns:1fr;gap:.35rem}
       .hub-hero-card{padding:1.4rem 1rem;border-radius:22px}
-      .hub-cards{grid-template-columns:1fr}
-      .hub-card{padding:.8rem;border-radius:16px}
+      .hub-card{padding:.9rem 1rem;border-radius:16px}
     }
   </style>
 </head>
@@ -611,6 +714,13 @@
 <div id="sec-finance" class="hub-section">
   <div class="hub-sec-hdr"><h2 class="hub-sec-title">Finance</h2></div>
   <div class="hub-sec-intro"><p>I've designed this economic stressboard for a quick overview of global financial movements and important metrics. Several relevant economies are reflected, although the tool is not entirely comprehensive, as few would be. Hovering the various metrics, you will notice that their relevancy is explained to you in a simple fashion.</p></div>
+
+  <div class="fin-subnav" role="tablist">
+    <button class="fin-pill active" data-view="fin-stressboard" role="tab">Stressboard</button>
+    <button class="fin-pill" data-view="fin-holdings" role="tab">Current Holdings</button>
+  </div>
+
+  <div id="fin-stressboard" class="fin-view active">
 <div class="board-section">
 
   <!-- Header -->
@@ -866,6 +976,27 @@
   </div>
 
 </div>
+  </div><!-- /fin-stressboard -->
+
+  <div id="fin-holdings" class="fin-view">
+    <div class="hold-wrap">
+      <div class="hold-intro">Portfolio composition by market weight (EUR book). <span id="holdLiveBadge" class="hold-live">loading…</span></div>
+
+      <div class="hold-chart-wrap">
+        <div class="hold-pie-box">
+          <svg class="hold-pie" id="holdPie" viewBox="-110 -110 220 220"></svg>
+          <div class="hold-pie-center">
+            <div class="hold-pie-center-lbl">Book P/L</div>
+            <div class="hold-pie-center-val" id="holdPieCount">—</div>
+            <div class="hold-pie-center-sub" id="holdPieSub">unrealised</div>
+          </div>
+        </div>
+        <div class="hold-legend" id="holdLegend"></div>
+      </div>
+
+      <div class="hold-cards" id="holdCards"></div>
+    </div>
+  </div><!-- /fin-holdings -->
 </div><!-- /sec-finance -->
 
 
@@ -879,26 +1010,38 @@
     <div class="hub-cards">
       <div class="hub-card">
         <h3>Sheet Cheater</h3>
-        <div class="hub-card-meta">Piano learning app with integrated note-to-notation translator</div>
+        <div class="hub-card-meta">Piano learning app · note-to-notation translator</div>
+        <p>A browser-based tool that listens in real time and converts what you play at the piano into standard sheet-music notation. Built to make self-taught sight-reading practice immediate and forgiving.</p>
       </div>
       <div class="hub-card">
         <h3>This Website</h3>
+        <div class="hub-card-meta">Single-file personal hub</div>
+        <p>A lightweight landing page with an embedded economic stress dashboard that pulls live data from Yahoo Finance, the St. Louis Fed (FRED) and Hyperliquid. Everything — UI, data layer, animations — lives in one HTML file.</p>
       </div>
       <div class="hub-card">
         <h3>CFA Level 1</h3>
+        <div class="hub-card-meta">Chartered Financial Analyst · candidate</div>
+        <p>Working through the first of the three CFA exams — ethics, quantitative methods, economics, financial statement analysis, corporate issuers, equities, fixed income, derivatives, alternatives and portfolio management.</p>
       </div>
       <div class="hub-card">
         <h3>Motorbike License A</h3>
+        <div class="hub-card-meta">European Class A · unrestricted</div>
+        <p>Full, unrestricted motorcycle license for any displacement.</p>
       </div>
       <div class="hub-card">
         <h3>Pilzsachverständiger</h3>
-        <div class="hub-card-meta">DGfM expert mushroom specialist</div>
+        <div class="hub-card-meta">DGfM-certified mushroom expert</div>
+        <p>Qualification from the Deutsche Gesellschaft für Mykologie that certifies the holder to identify foraged mushrooms for safe human consumption under German food law.</p>
       </div>
       <div class="hub-card">
         <h3>Jagdschein</h3>
+        <div class="hub-card-meta">German hunting license · "Grünes Abitur"</div>
+        <p>Germany's famously demanding hunting exam, covering wildlife biology, game law, forestry, firearms, ballistics and field practice. A prerequisite for handling rifled weapons in the country.</p>
       </div>
       <div class="hub-card">
         <h3>Vegetable Garden</h3>
+        <div class="hub-card-meta">Year-round edible self-sufficiency</div>
+        <p>A rotating planting calendar aiming for continuous home-grown produce across all four seasons.</p>
       </div>
     </div>
   </div>
@@ -914,27 +1057,33 @@
     <div class="hub-cards">
       <div class="hub-card">
         <h3>Portuguese</h3>
-        <div class="hub-card-meta">Native tongue</div>
+        <div class="hub-card-meta">Native</div>
+        <p>Mother tongue.</p>
       </div>
       <div class="hub-card">
         <h3>German</h3>
-        <div class="hub-card-meta">Native tongue</div>
+        <div class="hub-card-meta">Native</div>
+        <p>Mother tongue.</p>
       </div>
       <div class="hub-card">
         <h3>English</h3>
-        <div class="hub-card-meta">Cambridge CPE (C2)</div>
+        <div class="hub-card-meta">Cambridge CPE · C2</div>
+        <p>Certificate of Proficiency in English from Cambridge University — the highest level in the Common European Framework of Reference.</p>
       </div>
       <div class="hub-card">
-        <h3>Japanese</h3>
-        <div class="hub-card-meta">Kyushu Daigaku (B2)</div>
+        <h3>Japanese · 日本語</h3>
+        <div class="hub-card-meta">Kyushu Daigaku · B2</div>
+        <p>Upper-intermediate certification from Kyushu University (九州大学) following a year of on-campus study in Fukuoka.</p>
       </div>
       <div class="hub-card">
         <h3>French</h3>
-        <div class="hub-card-meta">Elementary · university education</div>
+        <div class="hub-card-meta">Elementary · university coursework</div>
+        <p>Conversational basics; studied at university level.</p>
       </div>
       <div class="hub-card">
         <h3>Spanish</h3>
         <div class="hub-card-meta">Elementary</div>
+        <p>Conversational basics.</p>
       </div>
     </div>
   </div>
@@ -949,11 +1098,21 @@
   <div class="hub-sec-body">
     <div class="hub-cards">
       <div class="hub-card">
-        <h3>State Examination, Political Science</h3>
+        <h3>State Examination</h3>
+        <div class="hub-card-meta">Staatsexamen</div>
+        <p>Passed the German State Examination — the standardised national qualifying exam required to enter the profession.</p>
       </div>
-         <div class="hub-card">
-        <h3>Worked subtitling for German Parliament</h3>
-           </div>
+      <div class="hub-card">
+        <h3>Political Science</h3>
+        <div class="hub-card-meta">University studies</div>
+        <p>University-level coursework in political theory, comparative politics and institutional analysis.</p>
+      </div>
+      <div class="hub-card">
+        <h3>German Parliament</h3>
+        <div class="hub-card-meta">Bundestag · live subtitling</div>
+        <p>Worked as a live subtitler for sessions of the Deutscher Bundestag, producing real-time captioning for parliamentary debates.</p>
+      </div>
+    </div>
   </div>
 </div>
 </div><!-- /hub-content -->
@@ -1191,6 +1350,338 @@ if(document.readyState!=='loading'){
     });
   }
 }
+
+// ═══════════════════════════════════════════════════════════════
+// FINANCE — HOLDINGS VIEW
+// ═══════════════════════════════════════════════════════════════
+
+/* Portfolio book. shares + avgBuy are your real entry points; `last` is the
+   latest mark used to compute weight (% of portfolio) and gain (% since entry).
+   Absolute monetary values are never shown — only the two percentages. Update
+   `last` whenever you want a fresh snapshot.                                   */
+const HOLDINGS = [
+  {ticker:'HYPE',  name:'Hyperliquid',                 type:'cr', shares:2000,  avgBuy:2.00,   last:2.00,   ccy:'EUR',
+    thesis:'Day-one TGE allocation. High-conviction bet on the Hyperliquid L1 and its perp-DEX capturing on-chain derivatives share.'},
+  {ticker:'AMZN',  name:'Amazon',                      type:'eq', shares:50,    avgBuy:199.00, last:199.00, ccy:'EUR',
+    thesis:'Core mega-cap position. Bought the late-2024 drawdown — AWS margin recovery and retail operating leverage as the thesis.'},
+  {ticker:'CRCL',  name:'Circle Internet Group',       type:'eq', shares:91.3,  avgBuy:109.51, last:109.51, ccy:'EUR',
+    thesis:'Stablecoin-rail pure play. Added on the post-IPO re-rating — USDC float + interest income is a structural yield on the cycle.'},
+  {ticker:'PLTR',  name:'Palantir',                    type:'eq', shares:33.77, avgBuy:22.31,  last:22.31,  ccy:'EUR',
+    thesis:'Held from well before the AIP inflection. Commercial segment growth and defence contracts justify continuing to ride.'},
+  {ticker:'VWRL',  name:'Vanguard FTSE All-World Dist.',type:'fd',shares:56.75, avgBuy:123.00, last:123.00, ccy:'EUR',
+    thesis:'Global-equity core holding. Distributing share-class — the dividend stream is the point as much as the beta exposure.'},
+  {ticker:'CSPX',  name:'iShares Core S&P 500 UCITS',  type:'fd', shares:6.44,  avgBuy:527.81, last:527.81, ccy:'EUR',
+    thesis:'Accumulating US large-cap sleeve. Adds S&P concentration on top of the global tracker without extra tax drag.'},
+  {ticker:'EIMI',  name:'iShares Core MSCI EM IMI',    type:'fd', shares:68,    avgBuy:31.44,  last:31.44,  ccy:'EUR',
+    thesis:'Emerging-markets satellite. Cheap valuations vs. developed markets; small-caps included for a broader EM capture.'},
+  {ticker:'XAU',   name:'Gold',                        type:'cm', shares:1,     avgBuy:3800,   last:3800,   ccy:'USD',
+    thesis:'Physical fine-gold bullion. Monetary hedge held outside the banking rails — held for tail-risk coverage rather than yield.'},
+  {ticker:'XAG',   name:'Silver',                      type:'cm', shares:7,     avgBuy:66,     last:66,     ccy:'USD',
+    thesis:'Physical silver bullion. Industrial-metal kicker alongside gold; more volatile, more cyclical upside if the monetary-debasement story plays out.'},
+  {ticker:'CASH',  name:'Cash',                        type:'cs', shares:8000,  avgBuy:1.00,   last:1.00,   ccy:'EUR',
+    thesis:''}
+];
+
+const HOLD_TYPES = {
+  eq:{label:'Equity',          grad:['#4a9e6a','#7ec296']},
+  fd:{label:'Fund',            grad:['#6b5ba3','#9888c4']},
+  cr:{label:'Crypto',          grad:['#d4a017','#e8b94e']},
+  fi:{label:'Fixed Income',    grad:['#6b8cae','#9bb4ce']},
+  cm:{label:'Precious Metals', grad:['#b8904a','#c8c8d0']},
+  cs:{label:'Cash',            grad:['#8a8a95','#b0b0b8']}
+};
+
+/* Assign a distinct colour per position, derived from the type gradient so the
+   wheel reads as grouped by asset class but still distinguishes each slice. */
+function holdPalette(){
+  const byType={};
+  HOLDINGS.forEach(h=>{(byType[h.type]=byType[h.type]||[]).push(h);});
+  const colourFor=new Map();
+  Object.keys(byType).forEach(t=>{
+    const items=byType[t]; const [a,b]=HOLD_TYPES[t].grad;
+    items.forEach((h,i)=>{
+      const f=items.length===1?0:(i/(items.length-1));
+      colourFor.set(h,lerpHex(a,b,f));
+    });
+  });
+  return colourFor;
+}
+function lerpHex(a,b,t){
+  const pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16);
+  const ar=(pa>>16)&255, ag=(pa>>8)&255, ab=pa&255;
+  const br=(pb>>16)&255, bg=(pb>>8)&255, bb=pb&255;
+  const r=Math.round(ar+(br-ar)*t), g=Math.round(ag+(bg-ag)*t), bl=Math.round(ab+(bb-ab)*t);
+  return '#'+[r,g,bl].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+
+function renderHoldings(){
+  const pie=document.getElementById('holdPie');
+  const legend=document.getElementById('holdLegend');
+  const cards=document.getElementById('holdCards');
+  const countEl=document.getElementById('holdPieCount');
+  const subEl=document.getElementById('holdPieSub');
+  if(!pie||!legend||!cards)return;
+
+  // Compute market values in a common currency (EUR) for correct weighting.
+  // Each holding declares its native `ccy`; USD→EUR uses the cached rate from
+  // the last successful fetch (fallback: rough 0.92 if nothing cached).
+  const fxSnap = (window.__lastEurUsd && window.__lastEurUsd>0) ? window.__lastEurUsd : null;
+  const toEur = (px, ccy) => {
+    if(!ccy || ccy==='EUR') return px;
+    if(ccy==='USD') return fxSnap ? px/fxSnap : px*0.92;
+    return px;
+  };
+  const rows=HOLDINGS.map(h=>{
+    const shares=+h.shares||0, buy=+h.avgBuy||0, last=+h.last||buy;
+    const ccy=h.ccy||'EUR';
+    const valueEur=shares*toEur(last,ccy);
+    const costEur =shares*toEur(buy,ccy);
+    // Gain % is native-currency — avgBuy and last are in the same ccy.
+    const gainPct=buy>0?((last-buy)/buy)*100:0;
+    return {...h, _value:valueEur, _cost:costEur, _gain:gainPct};
+  });
+  const totalValue=rows.reduce((s,r)=>s+r._value,0)||1;
+  const totalCost =rows.reduce((s,r)=>s+r._cost,0)||1;
+  const totalGain =((totalValue-totalCost)/totalCost)*100;
+
+  const colours=holdPalette();
+  const R=90, SW=30;
+  const C=2*Math.PI*R;
+
+  // Pie slices (SVG donut using strokeDasharray trick)
+  let offset=0;
+  const svgParts=rows.map(r=>{
+    const frac=r._value/totalValue;
+    const len=C*frac;
+    const col=colours.get(HOLDINGS.find(h=>h.ticker===r.ticker));
+    const pct=(frac*100).toFixed(1);
+    const seg=`<circle class="hold-pie-slice" r="${R}" cx="0" cy="0" fill="none" stroke="${col}" stroke-width="${SW}" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-offset}"><title>${r.ticker} · ${r.name} — ${pct}% of portfolio · ${r._gain>=0?'+':''}${r._gain.toFixed(1)}%</title></circle>`;
+    offset+=len;
+    return seg;
+  }).join('');
+  pie.innerHTML=svgParts;
+
+  // Centre: total unrealised return
+  const tgSign=totalGain>=0?'+':'';
+  const tgCol =totalGain>=0?'#2e7d4f':'#b23a3a';
+  countEl.textContent=`${tgSign}${totalGain.toFixed(1)}%`;
+  countEl.style.color=tgCol;
+  subEl.textContent='unrealised · book';
+
+  // Legend
+  legend.innerHTML=rows.map(r=>{
+    const col=colours.get(HOLDINGS.find(h=>h.ticker===r.ticker));
+    const pct=(r._value/totalValue*100).toFixed(1);
+    const tag=HOLD_TYPES[r.type]?HOLD_TYPES[r.type].label:'';
+    const gSign=r._gain>=0?'+':'';
+    const gCol=r.type==='cs'?'var(--text-dim)':(r._gain>=0?'#2e7d4f':'#b23a3a');
+    const gainStr=r.type==='cs'?'':`<span class="hold-legend-sub" style="color:${gCol};font-weight:700">${gSign}${r._gain.toFixed(1)}%</span>`;
+    return `<div class="hold-legend-item">
+      <span class="hold-legend-sw" style="background:${col}"></span>
+      <span class="hold-legend-name"><strong>${r.ticker}</strong>${r.name}<span class="hold-legend-sub">· ${tag}</span>${gainStr}</span>
+      <span class="hold-legend-pct">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  // Reasoning cards with gain badge
+  cards.innerHTML=rows.map(r=>{
+    const pct=(r._value/totalValue*100).toFixed(1);
+    const tag=HOLD_TYPES[r.type]?HOLD_TYPES[r.type].label:'';
+    const gSign=r._gain>=0?'+':'';
+    const gCol=r._gain>=0?'#2e7d4f':'#b23a3a';
+    const gainBadge=r.type==='cs'?'':`<span class="hold-card-gain" style="color:${gCol}">${gSign}${r._gain.toFixed(1)}%</span>`;
+    return `<div class="hold-card">
+      <div class="hold-card-hdr">
+        <div class="hold-card-t">
+          <span class="hold-card-tick">${r.ticker}</span>
+          <span class="hold-card-name">${r.name}</span>
+          <span class="hold-card-tag">${tag}</span>
+        </div>
+        <div class="hold-card-r">
+          ${gainBadge}
+          <span class="hold-card-pct">${pct}%</span>
+        </div>
+      </div>
+      ${r.thesis?`<div class="hold-card-thesis">${r.thesis}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+/* Live price fetch from Hyperliquid — covers HYPE + equity/bullion perps.
+   Hyperliquid quotes in USD; book is EUR, so we also pull EURUSD to convert.
+   Any symbol not found on HL keeps its placeholder `last` from HOLDINGS.      */
+const HL_ALIASES = {
+  HYPE:['HYPE'],
+  AMZN:['AMZN','kAMZN','uAMZN'],
+  CRCL:['CRCL','kCRCL','uCRCL'],
+  PLTR:['PLTR','kPLTR','uPLTR'],
+  XAU :['PAXG','XAU','GOLD','kXAU','uXAU'],
+  XAG :['XAG','SILVER','kXAG','uXAG']
+};
+
+async function fetchHLQueries(){
+  const queries=[
+    {type:'metaAndAssetCtxs'},
+    {type:'spotMetaAndAssetCtxs'},
+    {type:'metaAndAssetCtxs',dex:'xyz'},
+    {type:'metaAndAssetCtxs',dex:'km'},
+    {type:'metaAndAssetCtxs',dex:'cash'}
+  ];
+  const prices=new Map();
+  await Promise.all(queries.map(async q=>{
+    try{
+      const r=await fetch('https://api.hyperliquid.xyz/info',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(q),signal:AbortSignal.timeout(8000)
+      });
+      if(!r.ok)return;
+      const data=await r.json();
+      if(!Array.isArray(data)||data.length<2)return;
+      const [meta,ctxs]=data;
+      const uni=meta.universe||[];
+      uni.forEach((asset,i)=>{
+        const nm=(asset.name||asset.coin||'').toUpperCase();
+        const c=ctxs[i];if(!c)return;
+        const px=parseFloat(c.markPx||c.midPx||c.oraclePx);
+        if(!isNaN(px)&&px>0&&!prices.has(nm))prices.set(nm,px);
+      });
+    }catch(_){ /* ignore one failure, others may still land */ }
+  }));
+  return prices;
+}
+
+/* Yahoo fallback — routes through the same CORS-proxy chain the stressboard
+   already uses (PROXIES[]), so every symbol that's quoted on Yahoo is reachable.
+   EUR-denominated listings preferred so no FX wobble on the ETFs.          */
+const YH_SYMBOLS = {
+  // European UCITS ETFs — prefer EUR listings (Amsterdam / Milano / Xetra)
+  VWRL:['VWRL.AS','VWRL.MI','VWRL.L'],
+  CSPX:['CSPX.AS','CSPX.MI','CSPX.DE','CSPX.L'],
+  EIMI:['EIMI.AS','EIMI.MI','EIMI.DE','EIMI.L'],
+  // US equities
+  AMZN:['AMZN'],
+  CRCL:['CRCL'],
+  PLTR:['PLTR'],
+  // Precious metals — front-month futures on Yahoo (USD/oz)
+  XAU:['GC=F'],
+  XAG:['SI=F']
+};
+
+async function fetchYhChart(symbol){
+  const raw=`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=5d`;
+  // Walk the PROXIES list the stressboard defines further down in the script.
+  // Guarded access: PROXIES is declared with `const` below, so during very early
+  // script execution (pre-TDZ-exit) `typeof PROXIES` would throw ReferenceError.
+  let P;
+  try { P = PROXIES; } catch(_) { P = null; }
+  if(!P || !P.length) P = [r=>r]; // direct fetch fallback (will likely CORS-fail)
+  for(let i=0;i<P.length;i++){
+    try{
+      const r=await fetch(P[i](raw),{signal:AbortSignal.timeout(8000)});
+      if(!r.ok) continue;
+      const j=await r.json();
+      const m=j?.chart?.result?.[0]?.meta;
+      if(!m) continue;
+      const px=m.regularMarketPrice;
+      const ccy=(m.currency||'').toUpperCase();
+      if(typeof px==='number' && px>0) return {px, ccy, symbol};
+    }catch(_){ /* next proxy */ }
+  }
+  return null;
+}
+
+async function fetchEurUsdViaProxy(){
+  const r=await fetchYhChart('EURUSD=X');
+  return r?r.px:null;
+}
+
+/* Convert a value quoted in `fromCcy` to `toCcy` using the USD/EUR rate we
+   just fetched. Handles USD, EUR, GBP (pound sterling) and GBp/GBX (pence). */
+function convertCcy(px, fromCcy, toCcy, eurusd){
+  if(!fromCcy) return px;
+  if(fromCcy===toCcy) return px;
+  // Normalise pence → pounds first
+  if(fromCcy==='GBP') { fromCcy='USD'; px=px*1.27; }
+  else if(fromCcy==='GBX'||fromCcy==='GBP'||fromCcy==='GBp') { fromCcy='USD'; px=(px/100)*1.27; }
+  if(!eurusd||eurusd<=0) return px; // no FX → return native
+  // eurusd = USD per 1 EUR
+  if(fromCcy==='USD' && toCcy==='EUR') return px/eurusd;
+  if(fromCcy==='EUR' && toCcy==='USD') return px*eurusd;
+  return px;
+}
+
+async function refreshHoldingsLive(){
+  const [prices, eurusd] = await Promise.all([fetchHLQueries(), fetchEurUsdViaProxy()]);
+  if(eurusd && eurusd>0) window.__lastEurUsd = eurusd;
+  let touched=false, sources=new Set();
+
+  // First pass: Hyperliquid (HYPE native; stock-perps/PAXG if listed)
+  HOLDINGS.forEach(h=>{
+    const aliases=HL_ALIASES[h.ticker];
+    if(!aliases)return;
+    for(const a of aliases){
+      if(prices.has(a)){
+        const usdPx=prices.get(a);
+        const target=h.ccy||'EUR';
+        h.last = +(convertCcy(usdPx,'USD',target,eurusd)).toFixed(4);
+        h._liveSource = `HL:${a}`;
+        touched=true; sources.add('HL');
+        break;
+      }
+    }
+  });
+
+  // Second pass: Yahoo for everything with a YH_SYMBOL that HL didn't already fill
+  await Promise.all(HOLDINGS.map(async h=>{
+    if(h._liveSource) return; // already filled by HL this cycle
+    const syms=YH_SYMBOLS[h.ticker];
+    if(!syms)return;
+    for(const s of syms){
+      const r=await fetchYhChart(s);
+      if(!r) continue;
+      const target=h.ccy||'EUR';
+      h.last = +(convertCcy(r.px, r.ccy||'USD', target, eurusd)).toFixed(4);
+      h._liveSource=`YH:${s}(${r.ccy||'?'})`;
+      touched=true; sources.add('YH');
+      return;
+    }
+  }));
+
+  if(touched) renderHoldings();
+  const badge=document.getElementById('holdLiveBadge');
+  if(badge){
+    const lbl = touched ? ('LIVE · '+[...sources].join('+')+(eurusd?' · FX':'')) : 'offline · cached';
+    badge.textContent = lbl;
+  }
+  // Clear source flags so the next refresh re-evaluates every holding
+  HOLDINGS.forEach(h=>{ h._liveSource=null; });
+}
+
+/* Sub-nav pill switching */
+function switchFinView(id){
+  document.querySelectorAll('.fin-pill').forEach(p=>p.classList.toggle('active',p.dataset.view===id));
+  document.querySelectorAll('.fin-view').forEach(v=>v.classList.toggle('active',v.id===id));
+  if(id==='fin-holdings'){
+    renderHoldings();
+    refreshHoldingsLive().catch(()=>{});
+  }
+}
+
+(function wireFinSubnav(){
+  const pills=document.querySelectorAll('.fin-pill');
+  if(!pills.length){ document.addEventListener('DOMContentLoaded',wireFinSubnav,{once:true}); return; }
+  pills.forEach(p=>{
+    if(p.__wired)return;p.__wired=true;
+    p.addEventListener('click',()=>switchFinView(p.dataset.view));
+  });
+  // Pre-render the book at cost so the view isn't empty.
+  try{ renderHoldings(); }catch(_){}
+  // Defer the live fetch to the next macrotask — by then every `const` in this
+  // <script> (notably PROXIES) is past its temporal-dead-zone and reachable.
+  setTimeout(()=>{ refreshHoldingsLive().catch(e=>console.warn('holdings live fetch failed',e)); }, 0);
+  // Refresh every 60 s while the tab is open so prices stay fresh.
+  setInterval(()=>{ refreshHoldingsLive().catch(()=>{}); }, 60000);
+})();
 
 // ═══════════════════════════════════════════════════════════════
 // CAROUSEL
