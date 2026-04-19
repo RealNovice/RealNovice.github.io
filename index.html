@@ -393,8 +393,99 @@
     .hub-card.placeholder{border-style:dashed;opacity:.4}
     .hub-card.placeholder .hub-card-icon{color:var(--text-dim);font-family:var(--sans);font-size:1.6rem;font-weight:300}
     .hub-card.placeholder h3{color:var(--text-dim);font-weight:400}
+
+    /* Cards with a verifiable certificate get a subtle "view certificate" hint
+       and a pointer cursor; clicking or hovering opens the lightbox.          */
+    .hub-card[data-cert]{position:relative;cursor:pointer}
+    .hub-card[data-cert]::after{
+      content:'view certificate';
+      position:absolute;top:1rem;right:1.4rem;
+      font-family:var(--sans);font-size:.58rem;font-weight:700;letter-spacing:.14em;
+      text-transform:uppercase;color:var(--text-main);
+      padding:2px 8px;border-radius:6px;background:rgba(255,255,255,.55);
+      border:1px solid var(--glass-border);opacity:0;transition:opacity .25s ease;
+      pointer-events:none}
+    .hub-card[data-cert]:hover::after{opacity:1}
+
+    /* Fullscreen certificate lightbox */
+    .cert-modal{position:fixed;inset:0;background:rgba(20,20,24,.85);
+      backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
+      display:flex;align-items:center;justify-content:center;z-index:10000;
+      opacity:0;pointer-events:none;transition:opacity .25s ease;padding:2rem}
+    .cert-modal.active{opacity:1;pointer-events:auto}
+    .cert-modal-inner{position:relative;max-width:min(900px,92vw);max-height:92vh}
+    .cert-modal img{display:block;max-width:100%;max-height:92vh;width:auto;height:auto;
+      border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.12);
+      background:#fff}
+    .cert-modal-close{position:absolute;top:-2.4rem;right:-.2rem;
+      background:transparent;border:none;color:rgba(255,255,255,.85);
+      font-family:var(--sans);font-size:2rem;font-weight:300;line-height:1;
+      cursor:pointer;padding:.2rem .6rem;transition:color .2s ease}
+    .cert-modal-close:hover{color:#fff}
+    .cert-modal-caption{position:absolute;bottom:-2.2rem;left:0;right:0;
+      text-align:center;color:rgba(255,255,255,.75);
+      font-family:var(--sans);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+    @media(max-width:600px){
+      .cert-modal{padding:1rem}
+      .cert-modal-close{top:-2.2rem;font-size:1.8rem}
+      .hub-card[data-cert]::after{font-size:.52rem;top:.7rem;right:.9rem}
+    }
+
     .hub-sec-divider{max-width:1200px;width:94vw;margin:0 auto;height:1px;
       background:linear-gradient(90deg,transparent,rgba(29,29,31,.08) 20%,rgba(29,29,31,.08) 80%,transparent)}
+
+    /* ═══════════════════════════════════════
+       VITA
+       ═══════════════════════════════════════ */
+    .vita-hero{max-width:820px;margin:0 auto 2rem;padding:1.8rem 2.2rem;
+      background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);
+      backdrop-filter:blur(80px) saturate(260%);-webkit-backdrop-filter:blur(80px) saturate(260%);
+      box-shadow:0 8px 40px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.45)}
+    .vita-hero p{font-family:var(--serif);font-size:1.02rem;line-height:1.7;
+      color:var(--text-sub);font-style:italic;letter-spacing:.005em}
+    .vita-group{max-width:820px;margin:0 auto 1.8rem}
+    .vita-group-hdr{font-family:var(--sans);font-size:.68rem;font-weight:700;
+      letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);
+      margin:0 0 .9rem 1.4rem}
+    .vita-entry{display:grid;grid-template-columns:170px 1fr;gap:1.8rem;
+      padding:1.4rem 2.2rem;background:var(--glass);border:1px solid var(--glass-border);
+      border-radius:var(--radius);
+      backdrop-filter:blur(80px) saturate(260%);-webkit-backdrop-filter:blur(80px) saturate(260%);
+      box-shadow:0 8px 40px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.45);
+      margin-bottom:.9rem;transition:transform .2s ease,box-shadow .2s ease}
+    .vita-entry:hover{transform:translateY(-2px);box-shadow:0 12px 48px rgba(0,0,0,.1)}
+    .vita-entry-date{font-family:var(--sans);font-size:.72rem;font-weight:600;
+      letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);
+      padding-top:.25rem;white-space:nowrap}
+    .vita-entry h4{font-family:var(--serif);font-size:1.2rem;font-weight:700;
+      letter-spacing:-.015em;margin:0 0 .1rem}
+    .vita-entry-inst{font-family:var(--sans);font-size:.78rem;font-weight:500;
+      letter-spacing:.04em;color:var(--text-dim);margin-bottom:.4rem}
+    .vita-entry p{font-size:.9rem;line-height:1.6;color:var(--text-sub);margin:.3rem 0 0}
+    .vita-skills{padding:1.4rem 2rem;background:var(--glass);border:1px solid var(--glass-border);
+      border-radius:var(--radius);
+      backdrop-filter:blur(80px) saturate(260%);-webkit-backdrop-filter:blur(80px) saturate(260%);
+      box-shadow:0 8px 40px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.45);
+      display:grid;grid-template-columns:repeat(2,1fr);gap:.25rem .8rem}
+    .vita-skill{display:flex;justify-content:space-between;align-items:baseline;
+      padding:.55rem .3rem;border-bottom:1px solid rgba(29,29,31,.06)}
+    .vita-skill:last-child,.vita-skill:nth-last-child(2):nth-child(odd){border-bottom:none}
+    .vita-skill-name{font-family:var(--sans);font-size:.88rem;font-weight:500;color:var(--text-main)}
+    .vita-skill-level{font-family:var(--sans);font-size:.7rem;font-weight:700;
+      letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim)}
+    .vita-skill-sub{grid-column:1/-1;font-family:var(--sans);font-size:.6rem;font-weight:700;
+      letter-spacing:.22em;text-transform:uppercase;color:var(--text-dim);
+      padding:1rem .3rem .35rem;border-bottom:1px solid rgba(29,29,31,.1);margin-bottom:.15rem}
+    .vita-skill-sub:first-child{padding-top:.1rem}
+    @media(max-width:720px){
+      .vita-hero{padding:1.2rem 1.4rem}
+      .vita-hero p{font-size:.92rem}
+      .vita-entry{grid-template-columns:1fr;gap:.4rem;padding:1.1rem 1.3rem}
+      .vita-entry-date{font-size:.64rem}
+      .vita-entry h4{font-size:1.05rem}
+      .vita-skills{grid-template-columns:1fr;padding:1rem 1.2rem}
+      .vita-group-hdr{margin-left:.4rem}
+    }
 
     /* ═══════════════════════════════════════
        FINANCE SUB-NAV (Stressboard / Holdings)
@@ -692,8 +783,8 @@
       <a class="hub-btn" href="#languages" data-nav="sec-languages">
         <span class="hub-btn-label">Languages</span>
       </a>
-      <a class="hub-btn" href="#politics" data-nav="sec-politics">
-        <span class="hub-btn-label">Politics</span>
+      <a class="hub-btn" href="#vita" data-nav="sec-vita">
+        <span class="hub-btn-label">Vita</span>
       </a>
     </div>
   </div>
@@ -1065,7 +1156,7 @@
         <div class="hub-card-meta">Native</div>
         <p>Mother tongue.</p>
       </div>
-      <div class="hub-card">
+      <div class="hub-card" data-cert="certificates/cpe.jpg" data-cert-caption="Cambridge English — Certificate of Proficiency · Grade B · C2">
         <h3>English</h3>
         <div class="hub-card-meta">Cambridge CPE · C2</div>
         <p>Certificate of Proficiency in English from Cambridge University — the highest level in the Common European Framework of Reference.</p>
@@ -1091,33 +1182,103 @@
 
 
 <!-- ═══════════════════════════════════════════════════════
-     SECTION: POLITICS
+     SECTION: VITA
      ═══════════════════════════════════════════════════════ -->
-<div id="sec-politics" class="hub-section">
-  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Politics</h2></div>
+<div id="sec-vita" class="hub-section">
+  <div class="hub-sec-hdr"><h2 class="hub-sec-title">Vita</h2></div>
   <div class="hub-sec-body">
-    <div class="hub-cards">
-      <div class="hub-card">
-        <h3>State Examination</h3>
-        <div class="hub-card-meta">Staatsexamen</div>
-        <p>Passed the German State Examination — the standardised national qualifying exam required to enter the profession.</p>
-      </div>
-      <div class="hub-card">
-        <h3>Political Science</h3>
-        <div class="hub-card-meta">University studies</div>
-        <p>University-level coursework in political theory, comparative politics and institutional analysis.</p>
-      </div>
-      <div class="hub-card">
-        <h3>German Parliament</h3>
-        <div class="hub-card-meta">Bundestag · live subtitling</div>
-        <p>Worked as a live subtitler for sessions of the Deutscher Bundestag, producing real-time captioning for parliamentary debates.</p>
+
+    <div class="vita-hero">
+      <p>Alongside a full teaching workload, I have been an active participant in global equity and cryptocurrency markets since 2017 &mdash; running a concentrated, self-directed book and spending much of my off-time on structured research across monetary policy, market microstructure and on-chain data. Away from the screen I read widely in fiction and non-fiction, listen to music across every decade, train several times a week, row, tend a small vegetable garden, and am enjoying a reinvigorated love for the outdoors.</p>
+    </div>
+
+    <div class="vita-group">
+      <div class="vita-group-hdr">Markets &amp; independent research</div>
+      <div class="vita-entry">
+        <div class="vita-entry-date">2017 – present</div>
+        <div>
+          <h4>Self-directed investor &middot; equities &amp; digital assets</h4>
+          <div class="vita-entry-inst">Personal book</div>
+          <p>Eight years of hands-on experience across US and European equities, broad-market ETFs, precious metals and the digital-asset complex &mdash; managing a concentrated, long-biased portfolio with deliberate position sizing and risk management. Daily research diet spans central-bank policy, earnings transcripts, on-chain data and derivatives flow; comfortable reading financial statements, working with standard valuation frameworks, and navigating the plumbing of both traditional and crypto market structure.</p>
+        </div>
       </div>
     </div>
+
+    <div class="vita-group">
+      <div class="vita-group-hdr">Professional experience</div>
+      <div class="vita-entry">
+        <div class="vita-entry-date">Sept 2023 – Aug 2025</div>
+        <div>
+          <h4>High-school teacher</h4>
+          <div class="vita-entry-inst">Bavarian State Government &middot; Gymnasium</div>
+          <p>Taught English, Economics and Political Science across the full Gymnasium curriculum to pupils aged 11 to 20, from lower secondary through to the Abitur. Designed lesson material and examinations from scratch, held form-teacher responsibility for a class of my own, and managed regular parent &amp; colleague communication in a bilingual working environment.</p>
+        </div>
+      </div>
+      <div class="vita-entry">
+        <div class="vita-entry-date">Feb 2021 – Aug 2023</div>
+        <div>
+          <h4>Translator &amp; subtitler</h4>
+          <div class="vita-entry-inst">TV1 GmbH &middot; self-employed</div>
+          <p>Produced German subtitles for live and archival sessions of the Deutscher Bundestag under strict broadcast turnarounds. Translated and subtitled feature film and episodic television for clients including Netflix and Sony &mdash; work demanding precise control of register across legal, political and creative contexts.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="vita-group">
+      <div class="vita-group-hdr">Educational background</div>
+      <div class="vita-entry">
+        <div class="vita-entry-date">Oct 2016 – Sept 2022</div>
+        <div>
+          <h4>English &amp; Economics</h4>
+          <div class="vita-entry-inst">Ludwig-Maximilians-Universität München</div>
+          <p>Teacher-training programme for Bavarian Gymnasium &mdash; literature, linguistics and applied translation paired with micro- and macroeconomics, econometrics and economic education. Included a full academic year abroad at Kyushu University (九州大学) in Fukuoka, Japan.</p>
+        </div>
+      </div>
+      <div class="vita-entry">
+        <div class="vita-entry-date">Oct 2022 – Oct 2023</div>
+        <div>
+          <h4>Political Science</h4>
+          <div class="vita-entry-inst">Ludwig-Maximilians-Universität München</div>
+          <p>Added as a third teaching subject, focused on political theory, comparative politics and the institutional architecture of the European Union.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="vita-group">
+      <div class="vita-group-hdr">Skills &amp; languages</div>
+      <div class="vita-skills">
+        <div class="vita-skill-sub">Markets &amp; analysis</div>
+        <div class="vita-skill"><span class="vita-skill-name">Equity &amp; crypto markets</span><span class="vita-skill-level">8 yrs</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Financial-statement analysis</span><span class="vita-skill-level">Fluent</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Macro &amp; on-chain research</span><span class="vita-skill-level">Proficient</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Portfolio construction</span><span class="vita-skill-level">Proficient</span></div>
+        <div class="vita-skill-sub">Communication &amp; pedagogy</div>
+        <div class="vita-skill"><span class="vita-skill-name">Teaching &amp; presentation</span><span class="vita-skill-level">Experienced</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Writing &amp; editing</span><span class="vita-skill-level">Experienced</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Translation &amp; subtitling</span><span class="vita-skill-level">Professional</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Social &amp; soft skills</span><span class="vita-skill-level">Strong</span></div>
+        <div class="vita-skill-sub">Languages</div>
+        <div class="vita-skill"><span class="vita-skill-name">German</span><span class="vita-skill-level">Native</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">English</span><span class="vita-skill-level">C2 &middot; Cambridge</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Japanese</span><span class="vita-skill-level">B2 &middot; Kyushu Univ.</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Portuguese</span><span class="vita-skill-level">B1</span></div>
+      </div>
+    </div>
+
   </div>
 </div>
 </div><!-- /hub-content -->
 
 <footer>© Johannes Lima Spielhofen</footer>
+
+<!-- Certificate lightbox — populated by [data-cert] handlers in the script block -->
+<div id="certModal" class="cert-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="cert-modal-inner">
+    <button id="certModalClose" class="cert-modal-close" aria-label="Close">×</button>
+    <img id="certModalImg" alt="" />
+    <div id="certModalCaption" class="cert-modal-caption"></div>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════════════════════════
@@ -1135,7 +1296,7 @@ resize();initNodes();drawBg();addEventListener('resize',()=>{resize();initNodes(
 // ═══════════════════════════════════════════════════════════════
 // HUB NAVIGATION — show/hide sections
 // ═══════════════════════════════════════════════════════════════
-const SEC_TITLES={'sec-finance':'Finance','sec-passion':'Professional Dilettante','sec-languages':'Languages','sec-politics':'Politics'};
+const SEC_TITLES={'sec-finance':'Finance','sec-passion':'Professional Dilettante','sec-languages':'Languages','sec-vita':'Vita'};
 
 // ═══════════════════════════════════════════════════════════════
 // CANDLESTICK LOADER — animated overlay during Finance transition
@@ -1733,6 +1894,57 @@ function switchFinView(id){
   setTimeout(()=>{ refreshHoldingsLive().catch(e=>console.warn('holdings live fetch failed',e)); }, 0);
   // Refresh every 60 s while the tab is open so prices stay fresh.
   setInterval(()=>{ refreshHoldingsLive().catch(()=>{}); }, 60000);
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// CERTIFICATE LIGHTBOX
+// Hover (with 300 ms delay to ignore accidental flybys) or click on any
+// element carrying data-cert to open a fullscreen preview of the image.
+// ═══════════════════════════════════════════════════════════════
+(function initCertModal(){
+  const modal   = document.getElementById('certModal');
+  const img     = document.getElementById('certModalImg');
+  const caption = document.getElementById('certModalCaption');
+  const closeBtn= document.getElementById('certModalClose');
+  if(!modal || !img) return;
+
+  let hoverTimer=null;
+  function open(src, cap){
+    img.src = src;
+    caption.textContent = cap || '';
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+  function hide(){
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+
+  function wire(el){
+    if(el.__certWired) return; el.__certWired=true;
+    el.addEventListener('mouseenter', ()=>{
+      clearTimeout(hoverTimer);
+      hoverTimer=setTimeout(()=>open(el.dataset.cert, el.dataset.certCaption), 300);
+    });
+    el.addEventListener('mouseleave', ()=>clearTimeout(hoverTimer));
+    el.addEventListener('click', ()=>{
+      clearTimeout(hoverTimer);
+      open(el.dataset.cert, el.dataset.certCaption);
+    });
+    el.addEventListener('keydown', e=>{
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(el.dataset.cert, el.dataset.certCaption); }
+    });
+    el.setAttribute('tabindex','0');
+    el.setAttribute('role','button');
+    el.setAttribute('aria-label',(el.dataset.certCaption||'View certificate'));
+  }
+  document.querySelectorAll('[data-cert]').forEach(wire);
+
+  closeBtn.addEventListener('click', hide);
+  modal.addEventListener('click', e=>{ if(e.target===modal) hide(); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && modal.classList.contains('active')) hide(); });
 })();
 
 // ═══════════════════════════════════════════════════════════════
