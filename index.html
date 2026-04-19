@@ -1355,6 +1355,26 @@ if(document.readyState!=='loading'){
 // FINANCE — HOLDINGS VIEW
 // ═══════════════════════════════════════════════════════════════
 
+/* Persisted price cache — survives reloads so the Holdings view always opens
+   with the last-known real numbers instead of 0% while we wait for fetches.  */
+const HOLD_CACHE_KEY = 'stressboard-holdings-v2';
+function loadHoldCache(){
+  try{
+    const raw=localStorage.getItem(HOLD_CACHE_KEY); if(!raw)return null;
+    const j=JSON.parse(raw);
+    // Expire entries older than 7 days to avoid stale-forever data.
+    if(!j||!j.ts||Date.now()-j.ts>7*24*3600*1000) return null;
+    return j;
+  }catch(_){ return null; }
+}
+function saveHoldCache(eurusd){
+  try{
+    const prices={};
+    HOLDINGS.forEach(h=>{ prices[h.ticker]={last:h.last, src:h._liveSource||null}; });
+    localStorage.setItem(HOLD_CACHE_KEY, JSON.stringify({ts:Date.now(), eurusd, prices}));
+  }catch(_){}
+}
+
 /* Portfolio book. shares + avgBuy are your real entry points; `last` is the
    latest mark used to compute weight (% of portfolio) and gain (% since entry).
    Absolute monetary values are never shown — only the two percentages. Update
@@ -1612,8 +1632,15 @@ function convertCcy(px, fromCcy, toCcy, eurusd){
 }
 
 async function refreshHoldingsLive(){
-  const [prices, eurusd] = await Promise.all([fetchHLQueries(), fetchEurUsdViaProxy()]);
-  if(eurusd && eurusd>0) window.__lastEurUsd = eurusd;
+  // HL is direct (no proxy), so we can always fire it in parallel.
+  // For EURUSD reuse a freshly-cached rate if it's under 30 min old — saves one proxy slot.
+  const fxFresh = window.__lastEurUsd && window.__lastEurUsdTs && (Date.now()-window.__lastEurUsdTs<30*60*1000);
+  const [prices, eurusdFetched] = await Promise.all([
+    fetchHLQueries(),
+    fxFresh ? Promise.resolve(window.__lastEurUsd) : fetchEurUsdViaProxy()
+  ]);
+  const eurusd = eurusdFetched || window.__lastEurUsd || null;
+  if(eurusd && eurusd>0){ window.__lastEurUsd = eurusd; window.__lastEurUsdTs = Date.now(); }
   let touched=false, sources=new Set();
 
   // First pass: Hyperliquid (HYPE native; stock-perps/PAXG if listed)
@@ -1632,11 +1659,13 @@ async function refreshHoldingsLive(){
     }
   });
 
-  // Second pass: Yahoo for everything with a YH_SYMBOL that HL didn't already fill
-  await Promise.all(HOLDINGS.map(async h=>{
-    if(h._liveSource) return; // already filled by HL this cycle
+  // Second pass: Yahoo for everything HL didn't fill.
+  // SEQUENTIAL with 250 ms stagger — the stressboard is pounding the same proxies,
+  // firing in parallel here trips rate limits and silently drops 6 of 9 fetches.
+  const yhTargets = HOLDINGS.filter(h=>!h._liveSource && YH_SYMBOLS[h.ticker]);
+  for(const h of yhTargets){
     const syms=YH_SYMBOLS[h.ticker];
-    if(!syms)return;
+    let got=false;
     for(const s of syms){
       const r=await fetchYhChart(s);
       if(!r) continue;
@@ -1644,13 +1673,18 @@ async function refreshHoldingsLive(){
       h.last = +(convertCcy(r.px, r.ccy||'USD', target, eurusd)).toFixed(4);
       h._liveSource=`YH:${s}(${r.ccy||'?'})`;
       touched=true; sources.add('YH');
-      return;
+      got=true; break;
     }
-  }));
+    // Re-render after each success so numbers fill in progressively rather than in a lump.
+    if(got) renderHoldings();
+    await new Promise(r=>setTimeout(r,250));
+  }
 
   if(touched) renderHoldings();
   const hit = HOLDINGS.filter(h=>h._liveSource).map(h=>h.ticker);
   const miss= HOLDINGS.filter(h=>!h._liveSource && h.ticker!=='CASH').map(h=>h.ticker);
+  // Persist whatever we got — even a partial win is better than cold-starting at cost basis next reload.
+  saveHoldCache(eurusd);
   const badge=document.getElementById('holdLiveBadge');
   if(badge){
     const lbl = touched
@@ -1684,7 +1718,15 @@ function switchFinView(id){
     if(p.__wired)return;p.__wired=true;
     p.addEventListener('click',()=>switchFinView(p.dataset.view));
   });
-  // Pre-render the book at cost so the view isn't empty.
+  // Hydrate from last-session cache so the view opens with real numbers.
+  const cache=loadHoldCache();
+  if(cache){
+    if(cache.eurusd) window.__lastEurUsd=cache.eurusd;
+    HOLDINGS.forEach(h=>{
+      const c=cache.prices&&cache.prices[h.ticker];
+      if(c&&typeof c.last==='number'&&c.last>0) h.last=c.last;
+    });
+  }
   try{ renderHoldings(); }catch(_){}
   // Defer the live fetch to the next macrotask — by then every `const` in this
   // <script> (notably PROXIES) is past its temporal-dead-zone and reachable.
