@@ -382,6 +382,48 @@
     .m7-pe-i:hover{border-color:rgba(29,29,31,.1)}
     .m7-pe-i:focus{outline:none;border-color:var(--text-dim);background:rgba(255,255,255,.45)}
     .m7-foot{font-size:.6rem;color:var(--text-dim);letter-spacing:.04em;margin-top:.6rem}
+    .mag7-cell{cursor:pointer}
+
+    /* Mag 7 chart modal — opens on cell click with D/W/M/Y/5Y/10Y toggle */
+    .m7-modal{position:fixed;inset:0;background:rgba(20,20,24,.82);
+      display:flex;align-items:center;justify-content:center;z-index:11000;
+      opacity:0;pointer-events:none;transition:opacity .25s ease;backdrop-filter:blur(20px)}
+    .m7-modal.active{opacity:1;pointer-events:auto}
+    .m7-modal-inner{position:relative;width:min(90vw, 880px);max-height:88vh;
+      background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.5);
+      border-radius:18px;padding:1.4rem 1.6rem;box-shadow:0 30px 80px rgba(0,0,0,.4);
+      overflow:auto}
+    .m7-modal-close{position:absolute;top:.6rem;right:.8rem;width:32px;height:32px;
+      border:none;background:rgba(0,0,0,.06);border-radius:50%;font-size:1.1rem;
+      cursor:pointer;line-height:1;color:var(--text-main)}
+    .m7-modal-close:hover{background:rgba(0,0,0,.14)}
+    .m7-modal-hdr{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:.6rem;margin-bottom:.6rem}
+    .m7-modal-tk{font-family:var(--serif);font-size:1.6rem;font-weight:700;letter-spacing:-.02em}
+    .m7-modal-px{font-size:1.4rem;font-weight:700;font-variant-numeric:tabular-nums}
+    .m7-modal-px.up{color:var(--green)}.m7-modal-px.down{color:var(--red)}
+    .m7-modal-meta{font-size:.74rem;color:var(--text-dim);letter-spacing:.04em;margin-bottom:.8rem}
+    .m7-tf{display:flex;gap:.3rem;margin-bottom:.6rem;flex-wrap:wrap}
+    .m7-tf-btn{font-family:var(--sans);font-size:.66rem;font-weight:700;letter-spacing:.1em;
+      text-transform:uppercase;padding:.4rem .8rem;border:1px solid var(--glass-border);
+      border-radius:8px;background:rgba(255,255,255,.4);cursor:pointer;color:var(--text-main);
+      transition:all .15s ease}
+    .m7-tf-btn:hover{background:rgba(255,255,255,.7)}
+    .m7-tf-btn.active{background:var(--text-main);color:#fff;border-color:var(--text-main)}
+    .m7-chart-wrap{position:relative;width:100%;height:360px;background:rgba(255,255,255,.4);
+      border:1px solid var(--glass-border);border-radius:12px;padding:1rem .6rem .4rem;margin-bottom:.8rem}
+    .m7-chart-svg{width:100%;height:100%;overflow:visible}
+    .m7-chart-loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      font-size:.78rem;color:var(--text-dim);letter-spacing:.06em}
+    .m7-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;font-size:.72rem;font-variant-numeric:tabular-nums}
+    .m7-stat{padding:.4rem .55rem;background:rgba(255,255,255,.45);border:1px solid var(--glass-border);border-radius:8px}
+    .m7-stat-l{font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);font-weight:700}
+    .m7-stat-v{font-size:.85rem;font-weight:700;color:var(--text-main);margin-top:1px}
+    .m7-stat-v.up{color:var(--green)}.m7-stat-v.down{color:var(--red)}
+    @media(max-width:600px){
+      .m7-modal-inner{width:96vw;padding:1rem 1rem}
+      .m7-chart-wrap{height:240px}
+      .m7-stats{grid-template-columns:repeat(2,1fr)}
+    }
 
     /* ═══════════════════════════════════════
        US STRESS GRID — two columns
@@ -880,14 +922,14 @@
      ═══════════════════════════════════════════════════════ -->
 <div id="sec-finance" class="hub-section">
   <div class="hub-sec-hdr"><h2 class="hub-sec-title">Finance</h2></div>
-  <div class="hub-sec-intro"><p>I've designed this economic stressboard for a quick overview of global financial movements and important metrics. Several relevant economies are reflected, although the tool is not entirely comprehensive, as few would be. Hovering the various metrics, you will notice that their relevancy is explained to you in a simple fashion.</p></div>
+  <div class="hub-sec-intro"><p id="finIntro">These are my current holdings, updated periodically. Live prices are cross-referenced from Yahoo Finance, Hyperliquid and Stooq; values are converted into a EUR book and the wheel is sized by market value, with the centre of the donut showing the running unrealised P/L.</p></div>
 
   <div class="fin-subnav" role="tablist">
-    <button class="fin-pill active" data-view="fin-stressboard" role="tab">Stressboard</button>
-    <button class="fin-pill" data-view="fin-holdings" role="tab">Current Holdings</button>
+    <button class="fin-pill active" data-view="fin-holdings" role="tab">Current Holdings</button>
+    <button class="fin-pill" data-view="fin-stressboard" role="tab">Stressboard</button>
   </div>
 
-  <div id="fin-stressboard" class="fin-view active">
+  <div id="fin-stressboard" class="fin-view">
 <div class="board-section">
 
   <!-- Header -->
@@ -915,8 +957,8 @@
     <div class="gp">
       <div class="sec-label">Indices & Volatility</div>
       <div class="pgrid c3">
-        <div class="pcell"><div class="psym">SPY · S&P 500</div><div class="pval" id="p-spy">—</div><div class="pchg" id="c-spy">—</div><div class="ptime" id="t-spy">awaiting</div></div>
-        <div class="pcell"><div class="psym">DIA · Dow Jones</div><div class="pval" id="p-dia">—</div><div class="pchg" id="c-dia">—</div><div class="ptime" id="t-dia">awaiting</div></div>
+        <div class="pcell"><div class="psym">S&amp;P 500 <span style="opacity:.5">^GSPC</span></div><div class="pval" id="p-spx">—</div><div class="pchg" id="c-spx">—</div><div class="ptime" id="t-spx">awaiting</div></div>
+        <div class="pcell"><div class="psym">Dow Jones <span style="opacity:.5">^DJI</span></div><div class="pval" id="p-dji">—</div><div class="pchg" id="c-dji">—</div><div class="ptime" id="t-dji">awaiting</div></div>
         <div class="pcell"><div class="psym">VIX</div><div class="pval" id="p-vix">—</div><div class="pchg" id="c-vix">—</div><div class="ptime" id="t-vix">awaiting</div></div>
       </div>
       <div class="sec-label">Commodities & FX</div>
@@ -1050,12 +1092,12 @@
         <tbody>
           <tr class="mc-row mc-us">
             <td class="mc-reg"><span class="mc-flag">🇺🇸</span><span>United States</span></td>
-            <td><input class="mc-i" id="mc-us-cpi" value="3.0"/></td>
-            <td><input class="mc-i" id="mc-us-pol" value="4.50"/></td>
-            <td><input class="mc-i" id="mc-us-2y"  value="4.21"/></td>
-            <td><input class="mc-i" id="mc-us-10y" value="4.45"/></td>
-            <td><input class="mc-i mc-iw" id="mc-us-idx" value="S&P 5,820"/></td>
-            <td><input class="mc-i" id="mc-us-fx"  value="DXY 102.5"/></td>
+            <td><input class="mc-i" id="mc-us-cpi" value="2.8"/></td>
+            <td><input class="mc-i" id="mc-us-pol" value="4.25"/></td>
+            <td><input class="mc-i" id="mc-us-2y"  value="3.95"/></td>
+            <td><input class="mc-i" id="mc-us-10y" value="4.30"/></td>
+            <td><input class="mc-i mc-iw" id="mc-us-idx" value="S&P 7,180"/></td>
+            <td><input class="mc-i" id="mc-us-fx"  value="DXY 99.5"/></td>
           </tr>
           <tr class="mc-row mc-eu">
             <td class="mc-reg"><span class="mc-flag">🇪🇺</span><span>Eurozone</span></td>
@@ -1179,7 +1221,7 @@
 </div>
   </div><!-- /fin-stressboard -->
 
-  <div id="fin-holdings" class="fin-view">
+  <div id="fin-holdings" class="fin-view active">
     <div class="hold-wrap">
       <div class="hold-intro">Portfolio composition by market weight (EUR book). <span id="holdLiveBadge" class="hold-live">loading…</span></div>
 
@@ -1210,38 +1252,39 @@
   <div class="hub-sec-body">
     <div class="hub-cards">
       <div class="hub-card">
-        <h3>Building Sheet Cheater</h3>
-        <div class="hub-card-meta">Piano learning app · note-to-notation translator</div>
+        <h3>Sheet Cheater</h3>
+        <div class="hub-card-meta">Piano · real-time note-to-notation</div>
+        <p>Browser tool that turns what you play into sheet music live.</p>
       </div>
       <div class="hub-card">
         <h3>This Website</h3>
-        <div class="hub-card-meta">Presenting a Personal Hub</div>
-      
+        <div class="hub-card-meta">Single-file personal hub</div>
+        <p>One HTML file. Live data from Yahoo, FRED, Hyperliquid, Stooq.</p>
       </div>
       <div class="hub-card">
-        <h3>Working on CFA Level 1</h3>
-        <div class="hub-card-meta">Chartered Financial Analyst · candidate</div>
-        
+        <h3>CFA Level 1</h3>
+        <div class="hub-card-meta">Candidate</div>
+        <p>In progress.</p>
       </div>
       <div class="hub-card">
-        <h3>Preparing for Motorbike License A</h3>
+        <h3>Motorbike License A</h3>
         <div class="hub-card-meta">European Class A · unrestricted</div>
-        
+        <p>Any displacement.</p>
       </div>
       <div class="hub-card">
-        <h3>Studying to pass DGfM-Exam</h3>
+        <h3>Pilzsachverständiger</h3>
         <div class="hub-card-meta">DGfM-certified mushroom expert</div>
-        
+        <p>Certified to identify foraged mushrooms for safe consumption under German food law.</p>
       </div>
       <div class="hub-card">
-        <h3>Looking into acquiring the Jagdschein</h3>
-        <div class="hub-card-meta">German hunting license</div>
-        
+        <h3>Jagdschein</h3>
+        <div class="hub-card-meta">German hunting license · "Grünes Abitur"</div>
+        <p>Required to handle rifled weapons in Germany.</p>
       </div>
       <div class="hub-card">
-        <h3>Cultivating a Vegetable Garden</h3>
-        <div class="hub-card-meta">Year-round edible self-sufficiency as well as hobby to wind down</div>
-        
+        <h3>Vegetable Garden</h3>
+        <div class="hub-card-meta">Year-round edible self-sufficiency</div>
+        <p>Rotating planting calendar across the four seasons.</p>
       </div>
     </div>
   </div>
@@ -1308,7 +1351,7 @@
         <div>
           <h4>Self-directed investor &middot; equities &amp; digital assets</h4>
           <div class="vita-entry-inst">Personal book</div>
-          <p>Eight years of hands-on experience across US and European equities, broad-market ETFs, precious metals and the digital-asset complex. Daily research diet spans central-bank policy, earnings transcripts, on-chain data and derivatives flow.</p>
+          <p>Concentrated, long-biased portfolio across US/EU equities, ETFs, precious metals and digital assets. Daily research across monetary policy, earnings, on-chain data and derivatives flow.</p>
         </div>
       </div>
     </div>
@@ -1320,7 +1363,7 @@
         <div>
           <h4>High-school teacher</h4>
           <div class="vita-entry-inst">Bavarian State Government &middot; Gymnasium</div>
-          <p>Teaching English, Economics and Political Science across the Bavarian curriculum to pupils aged 10 to 20, from lower secondary through to the Abitur.</p>
+          <p>English, Economics and Political Science across the full Gymnasium curriculum (Year 5 through Abitur, ages 11–20).</p>
         </div>
       </div>
       <div class="vita-entry">
@@ -1328,7 +1371,7 @@
         <div>
           <h4>Translator &amp; subtitler</h4>
           <div class="vita-entry-inst">TV1 GmbH &middot; self-employed</div>
-          <p>Produced German subtitles for live and archival sessions of the Deutscher Bundestag under strict broadcast turnarounds. Translated and subtitled feature film and episodic television for clients including Netflix and Sony &mdash; work demanding precise control of register across legal, political and creative contexts.</p>
+          <p>German subtitles for live and archival Deutscher Bundestag sessions; film and TV subtitling for clients including Netflix and Sony.</p>
         </div>
       </div>
     </div>
@@ -1338,22 +1381,43 @@
       <div class="vita-entry">
         <div class="vita-entry-date">Oct 2016 – Sept 2022</div>
         <div>
-          <h4>State Examination English &amp; Economics</h4>
+          <h4>English &amp; Economics</h4>
           <div class="vita-entry-inst">Ludwig-Maximilians-Universität München</div>
-          <p>Masters equivalent; Teacher-training programme for Bavarian Gymnasium &mdash; classical and modern literature, linguistics and applied translation as well as micro- and macroeconomics, econometrics and German law. Included a full academic year abroad at Kyushu University (九州大学) in Fukuoka, Japan.</p>
+          <p>Teacher-training programme; full year abroad at Kyushu University (九州大学), Fukuoka.</p>
         </div>
       </div>
       <div class="vita-entry">
         <div class="vita-entry-date">Oct 2022 – Oct 2023</div>
         <div>
-          <h4>State Examination Political Science</h4>
+          <h4>Political Science</h4>
           <div class="vita-entry-inst">Ludwig-Maximilians-Universität München</div>
-          <p>Masters equivalent; added as a third teaching subject, focused on political theory, sociological studies, comparative politics and institutional architectures of the European Union and other notable global players.</p>
+          <p>Added as a third teaching subject.</p>
         </div>
       </div>
     </div>
 
-   
+    <div class="vita-group">
+      <div class="vita-group-hdr">Skills &amp; languages</div>
+      <div class="vita-skills">
+        <div class="vita-skill-sub">Markets &amp; analysis</div>
+        <div class="vita-skill"><span class="vita-skill-name">Equity &amp; crypto markets</span><span class="vita-skill-level">8 yrs</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Financial-statement analysis</span><span class="vita-skill-level">Fluent</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Macro &amp; on-chain research</span><span class="vita-skill-level">Proficient</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Portfolio construction</span><span class="vita-skill-level">Proficient</span></div>
+        <div class="vita-skill-sub">Communication &amp; pedagogy</div>
+        <div class="vita-skill"><span class="vita-skill-name">Teaching &amp; presentation</span><span class="vita-skill-level">Experienced</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Writing &amp; editing</span><span class="vita-skill-level">Experienced</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Translation &amp; subtitling</span><span class="vita-skill-level">Professional</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Social &amp; soft skills</span><span class="vita-skill-level">Strong</span></div>
+        <div class="vita-skill-sub">Languages</div>
+        <div class="vita-skill"><span class="vita-skill-name">Portuguese</span><span class="vita-skill-level">Native</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">German</span><span class="vita-skill-level">Native</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">English</span><span class="vita-skill-level">C2 &middot; Cambridge</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Japanese</span><span class="vita-skill-level">B2 &middot; Kyushu Univ.</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">French</span><span class="vita-skill-level">Elementary</span></div>
+        <div class="vita-skill"><span class="vita-skill-name">Spanish</span><span class="vita-skill-level">Elementary</span></div>
+      </div>
+    </div>
 
   </div>
 </div>
@@ -1367,6 +1431,38 @@
     <button id="certModalClose" class="cert-modal-close" aria-label="Close">×</button>
     <img id="certModalImg" alt="" />
     <div id="certModalCaption" class="cert-modal-caption"></div>
+  </div>
+</div>
+
+<!-- Mag 7 chart modal — opens on cell click with timeframe selector -->
+<div id="m7Modal" class="m7-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="m7-modal-inner">
+    <button id="m7ModalClose" class="m7-modal-close" aria-label="Close">×</button>
+    <div class="m7-modal-hdr">
+      <div>
+        <span class="m7-modal-tk" id="m7ModalTk">—</span>
+        <div class="m7-modal-meta" id="m7ModalMeta">—</div>
+      </div>
+      <div class="m7-modal-px" id="m7ModalPx">—</div>
+    </div>
+    <div class="m7-tf" id="m7ModalTf">
+      <button class="m7-tf-btn" data-r="1d">1D</button>
+      <button class="m7-tf-btn" data-r="5d">1W</button>
+      <button class="m7-tf-btn" data-r="1mo">1M</button>
+      <button class="m7-tf-btn active" data-r="1y">1Y</button>
+      <button class="m7-tf-btn" data-r="5y">5Y</button>
+      <button class="m7-tf-btn" data-r="10y">10Y</button>
+    </div>
+    <div class="m7-chart-wrap">
+      <svg id="m7Chart" class="m7-chart-svg" viewBox="0 0 800 360" preserveAspectRatio="none"></svg>
+      <div id="m7ChartLoader" class="m7-chart-loader" style="display:none">loading…</div>
+    </div>
+    <div class="m7-stats">
+      <div class="m7-stat"><div class="m7-stat-l">Period return</div><div class="m7-stat-v" id="m7StatRet">—</div></div>
+      <div class="m7-stat"><div class="m7-stat-l">High</div><div class="m7-stat-v" id="m7StatHi">—</div></div>
+      <div class="m7-stat"><div class="m7-stat-l">Low</div><div class="m7-stat-v" id="m7StatLo">—</div></div>
+      <div class="m7-stat"><div class="m7-stat-l">P/E (ttm)</div><div class="m7-stat-v" id="m7StatPe">—</div></div>
+    </div>
   </div>
 </div>
 
@@ -1653,13 +1749,16 @@ const HOLDINGS = [
     thesis:''}
 ];
 
+// Each asset class gets a distinctly different hue family with strong saturation,
+// so the wheel reads as colour-grouped at a glance even on small screens.
+// Within a class, slices walk along the gradient for separation.
 const HOLD_TYPES = {
-  eq:{label:'Equity',          grad:['#4a9e6a','#7ec296']},
-  fd:{label:'Fund',            grad:['#6b5ba3','#9888c4']},
-  cr:{label:'Crypto',          grad:['#d4a017','#e8b94e']},
-  fi:{label:'Fixed Income',    grad:['#6b8cae','#9bb4ce']},
-  cm:{label:'Precious Metals', grad:['#b8904a','#c8c8d0']},
-  cs:{label:'Cash',            grad:['#8a8a95','#b0b0b8']}
+  eq:{label:'Equity',          grad:['#0f7c3a','#5fd084']}, // deep emerald → mint
+  fd:{label:'Fund',            grad:['#3b2a8a','#8a6dff']}, // royal indigo → violet
+  cr:{label:'Crypto',          grad:['#e8650a','#ffc14d']}, // burnt orange → amber
+  fi:{label:'Fixed Income',    grad:['#0d4f8a','#5fb0e8']}, // navy → sky
+  cm:{label:'Precious Metals', grad:['#a06a1a','#f0e0a8']}, // bronze → champagne
+  cs:{label:'Cash',            grad:['#3a4a55','#9aa7b0']}  // slate → silver
 };
 
 /* Assign a distinct colour per position, derived from the type gradient so the
@@ -1749,6 +1848,22 @@ function renderHoldings(){
     return seg;
   }).join('');
   pie.innerHTML=svgParts;
+
+  // SVG has no z-index — stacking is purely DOM order, with later siblings on top.
+  // When a small slice (e.g. HYPE) sits before a larger neighbour (e.g. CASH),
+  // its hover scale-up gets visually clipped under that neighbour. Fix: on hover,
+  // re-append the slice to its parent so it renders on top of every other slice.
+  // Restore the original order on mouseleave so legend/donut stay aligned.
+  pie.querySelectorAll('.hold-pie-slice').forEach((slice, idx)=>{
+    slice.addEventListener('mouseenter', ()=>{ pie.appendChild(slice); });
+    slice.addEventListener('mouseleave', ()=>{
+      // Reorder back to natural index by reading current children list.
+      const all=Array.from(pie.querySelectorAll('.hold-pie-slice'));
+      const sorted=all.slice().sort((a,b)=>+a.dataset.idx-+b.dataset.idx);
+      sorted.forEach(el=>pie.appendChild(el));
+    });
+    slice.dataset.idx=idx;
+  });
 
   // Centre: total unrealised return
   const tgSign=totalGain>=0?'+':'';
@@ -1975,9 +2090,15 @@ async function refreshHoldingsLive(){
 }
 
 /* Sub-nav pill switching */
+const FIN_INTROS = {
+  'fin-stressboard': "I've designed this economic stressboard for a quick overview of global financial movements and important metrics. Several relevant economies are reflected, although the tool is not entirely comprehensive, as few would be. Hovering the various metrics, you will notice that their relevancy is explained to you in a simple fashion.",
+  'fin-holdings':    "These are my current holdings, updated periodically. Live prices are cross-referenced from Yahoo Finance, Hyperliquid and Stooq; values are converted into a EUR book and the wheel is sized by market value, with the centre of the donut showing the running unrealised P/L."
+};
 function switchFinView(id){
   document.querySelectorAll('.fin-pill').forEach(p=>p.classList.toggle('active',p.dataset.view===id));
   document.querySelectorAll('.fin-view').forEach(v=>v.classList.toggle('active',v.id===id));
+  const intro=document.getElementById('finIntro');
+  if(intro && FIN_INTROS[id]) intro.textContent=FIN_INTROS[id];
   if(id==='fin-holdings'){
     renderHoldings();
     refreshHoldingsLive().catch(()=>{});
@@ -2288,7 +2409,8 @@ async function fredF(series,limit=3){
 // ═══════════════════════════════════════════════════════════════
 // Raw symbols as Yahoo expects them in the URL path
 const YH_RAW={
-  'SPY':'spy','DIA':'dia','%5EVIX':'vix',
+  // Indices in points (not their ETF wrappers): ^GSPC = S&P 500, ^DJI = Dow Jones.
+  '%5EGSPC':'spx','%5EDJI':'dji','%5EVIX':'vix',
   'CL%3DF':'wti','BZ%3DF':'brent','GC%3DF':'gold',
   'DX-Y.NYB':'dxy','JPY%3DX':'jpy',
   'XLE':'xle','ITA':'ita','XLP':'xlp','MOO':'moo',
@@ -2319,25 +2441,98 @@ async function fetchYH(symbol){
   throw new Error('All proxies failed for '+symbol);
 }
 
+// ═══════════════════════════════════════════════════════════════
+// STOOQ — secondary live price oracle (free, CORS-friendly).
+// Used to cross-reference Yahoo and survive proxy outages. Returns the
+// most recent daily close + the previous close so day-change is computable
+// even when Yahoo's intraday endpoint is blocked.
+// ═══════════════════════════════════════════════════════════════
+const STOOQ_MAP = {
+  // overview prices — Stooq symbols (lowercase, .us for stocks/ETFs, .f for futures)
+  spx:'^spx', dji:'^dji', vix:'^vix',
+  wti:'cl.f', brent:'b.f', gold:'gc.f',
+  dxy:'^dxy', jpy:'usdjpy',
+  xle:'xle.us', ita:'ita.us', xlp:'xlp.us', moo:'moo.us',
+  rbob:'rb.f', ho:'ho.f', natgas:'ng.f',
+  // mag 7 — same symbol form
+  AAPL:'aapl.us', MSFT:'msft.us', GOOGL:'googl.us', AMZN:'amzn.us',
+  META:'meta.us', NVDA:'nvda.us', TSLA:'tsla.us',
+  // global indices
+  GSPC:'^spx', DJI:'^dji', IXIC:'^ndq',
+  GDAXI:'^dax', FTSE:'^ftm', N225:'^nkx', HSI:'^hsi', BVSP:'^bvp',
+  // yields (Stooq tracks CBOE 10y/2y/30y as ^tnx style)
+  TNX:'10usy.b', TYX:'30usy.b', UST2Y:'2usy.b'
+};
+
+async function fetchStooq(stooqSym){
+  // Daily history CSV — last 2 rows = today + yesterday close.
+  // Stooq sets Access-Control-Allow-Origin:* so this works directly from the browser.
+  try{
+    const r=await fetch(`https://stooq.com/q/d/l/?s=${stooqSym}&i=d`,{signal:AbortSignal.timeout(7000)});
+    if(!r.ok) return null;
+    const txt=await r.text();
+    const lines=txt.trim().split('\n').filter(l=>l && !l.startsWith('Date'));
+    if(lines.length<1) return null;
+    const last=lines[lines.length-1].split(',');
+    const prev=lines.length>=2?lines[lines.length-2].split(','):null;
+    const price=parseFloat(last[4]);
+    const prevClose=prev?parseFloat(prev[4]):price;
+    if(!isFinite(price)||price<=0) return null;
+    return {price, prevClose, asof:last[0]};
+  }catch(_){ return null; }
+}
+
+// Cross-reference fetcher — tries Yahoo first, then Stooq, then falls back to whichever
+// returned a sane number. If both succeed and disagree by >2% the more recent one wins
+// (Stooq is daily close; Yahoo is intraday) and the value is flagged in console.
+async function fetchPriceXref(yhSym, stooqKey){
+  const tasks=[];
+  tasks.push(fetchYH(yhSym).then(r=>({src:'YH',...r})).catch(()=>null));
+  if(stooqKey && STOOQ_MAP[stooqKey])
+    tasks.push(fetchStooq(STOOQ_MAP[stooqKey]).then(r=>r?{src:'STQ',...r}:null).catch(()=>null));
+  const [yh, stq] = await Promise.all([tasks[0], tasks[1]]);
+  if(yh && stq){
+    const diff = Math.abs(yh.price - stq.price)/Math.max(stq.price, 1e-6);
+    if(diff>0.02) console.warn(`[xref] ${yhSym} disagreement: YH ${yh.price} vs STQ ${stq.price} (${(diff*100).toFixed(1)}%)`);
+    // Yahoo is intraday so it's fresher when the market is open; prefer it.
+    return yh;
+  }
+  return yh || stq || null;
+}
+
 async function pollYH(){
   setYhSt('fetching');
   const entries=Object.entries(YH_RAW);
-  const results=await Promise.allSettled(entries.map(([sym])=>fetchYH(sym)));
+  // Two-source pull: Yahoo (intraday, via CORS proxies) + Stooq (EOD, direct CORS).
+  // Whichever returns a usable number wins; if both succeed they cross-check.
+  const results=await Promise.allSettled(entries.map(([sym,id])=>fetchPriceXref(sym, id)));
   let ok=0,fail=0;
   results.forEach((r,i)=>{
     const[,id]=entries[i];
-    if(r.status==='fulfilled'){ok++;const{price,prevClose}=r.value;updPr(id,price,prevClose);
-      if(id==='vix'){const iv=document.getElementById('i-vix');if(iv){iv.value=price.toFixed(1);evalManual();}}}
-    else{fail++;const el=document.getElementById(`t-${id}`);if(el){el.textContent='stale';el.className='pstale'}}
+    const v=r.status==='fulfilled'?r.value:null;
+    if(v && isFinite(v.price)){
+      ok++; updPr(id, v.price, v.prevClose);
+      if(id==='vix'){const iv=document.getElementById('i-vix');if(iv){iv.value=v.price.toFixed(1);evalManual();}}
+    } else {
+      fail++; const el=document.getElementById(`t-${id}`); if(el){el.textContent='stale';el.className='pstale'}
+    }
   });
   setYhSt(fail===entries.length?'error':ok>0?'live':'stale');
   if(ok>0)saveCache();
+  // After overview prices update, populate the macro-snapshot cells that have
+  // a corresponding live source (yields, indices, FX). Manual edits still win.
+  refreshMacroSnapshot().catch(()=>{});
 }
 
 function updPr(id,price,prevClose){
   const pE=document.getElementById(`p-${id}`),cE=document.getElementById(`c-${id}`),tE=document.getElementById(`t-${id}`);
   if(!pE)return;const old=prevPr[id],dir=old?(price>old?'up':price<old?'down':''):'';prevPr[id]=price;
-  pE.textContent=price.toFixed(2);pE.className=`pval ${dir}`;pE.classList.add('tick-f');setTimeout(()=>pE.classList.remove('tick-f'),200);
+  // Index points often run to 4–5 digits; use thousand-separators for readability,
+  // but keep small prices (sub-1000) on plain toFixed so spacing stays tight.
+  const fmt = price>=1000
+    ? price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})
+    : price.toFixed(2);
+  pE.textContent=fmt;pE.className=`pval ${dir}`;pE.classList.add('tick-f');setTimeout(()=>pE.classList.remove('tick-f'),200);
   if(prevClose&&cE){const d=price-prevClose,pct=(d/prevClose)*100;cE.textContent=`${d>=0?'+':''}${d.toFixed(2)} (${pct>=0?'+':''}${pct.toFixed(2)}%)`;cE.className=`pchg ${pct>=0?'up':'down'}`}
   if(tE){tE.textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});tE.className='ptime'}
   // Mirror to oil tab (skip if already a mirror target to prevent recursion)
@@ -2598,8 +2793,8 @@ const dt=document.createElementNS('http://www.w3.org/2000/svg','circle');dt.setA
 // ═══════════════════════════════════════════════════════════════
 const TIPS={
   // Prices
-  'p-spy':'Tracks the S&P 500 — broadest US large-cap equity benchmark',
-  'p-dia':'Tracks the Dow Jones Industrial Average — 30 blue-chip US stocks',
+  'p-spx':'S&P 500 index in points — broadest US large-cap equity benchmark (^GSPC). The SPY ETF tracks ~1/10 of this level by design',
+  'p-dji':'Dow Jones Industrial Average index in points — 30 blue-chip US stocks (^DJI). The DIA ETF tracks ~1/100 of this level by design',
   'p-vix':'CBOE Volatility Index — market fear gauge derived from S&P 500 options',
   'p-wti':'West Texas Intermediate crude oil futures — US oil benchmark (NYMEX)',
   'p-brent':'Brent crude oil futures — global oil benchmark (ICE)',
@@ -2688,29 +2883,107 @@ const TIPS={
   'i-gilt':'UK 10-year government bond yield — gilt market stress',
   // Yield curve
   'ycSV':'10Y minus 2Y Treasury spread — negative = inverted, recession signal',
+  'p-jpy':'USD per Japanese Yen — the carry-trade barometer; rapid yen strengthening forces global de-leveraging',
+  'y2DC':'Day-over-day change in the 2Y yield in basis points — anything ≥15bp is a multi-sigma intraday move',
+  'y10DC':'Day-over-day change in the 10Y yield in basis points — anything ≥15bp is a multi-sigma intraday move; >25bp is the kind of move that stops trading at insurance and pension desks',
+  'jpyStrip':'USD/JPY intraday Δ — yen strength reverses carry trades and is correlated with global volatility',
+  'oilSpxRho':'30-day Pearson correlation between WTI and S&P 500 daily returns — strongly negative = oil-shock + risk-off (1970s, 2022 regime); positive = reflationary (2020-21)',
+  'dxyStrip':'DXY intraday Δ — dollar strength tightens global financial conditions through emerging-market debt service',
+
+  // Mag 7 cells — click for chart
+  'm7-px-AAPL':'Apple Inc · NASDAQ:AAPL · click cell for D/W/M/Y/5Y/10Y chart',
+  'm7-px-MSFT':'Microsoft · NASDAQ:MSFT · click cell for D/W/M/Y/5Y/10Y chart',
+  'm7-px-GOOGL':'Alphabet (Class A) · NASDAQ:GOOGL · click cell for D/W/M/Y/5Y/10Y chart',
+  'm7-px-AMZN':'Amazon · NASDAQ:AMZN · click cell for D/W/M/Y/5Y/10Y chart',
+  'm7-px-META':'Meta Platforms · NASDAQ:META · click cell for D/W/M/Y/5Y/10Y chart',
+  'm7-px-NVDA':'NVIDIA · NASDAQ:NVDA · click cell for D/W/M/Y/5Y/10Y chart',
+  'm7-px-TSLA':'Tesla · NASDAQ:TSLA · click cell for D/W/M/Y/5Y/10Y chart',
+
+  // Borrowing rates
+  'v-mort':'30-year fixed mortgage rate — the headline US consumer borrowing benchmark, set by the secondary mortgage market against the 10Y Treasury + a credit spread',
+  'i-ccrate':'Average APR charged on US credit-card balances assessed interest — Fed G.19 release; floor for unsecured consumer credit',
+  'i-autoloan':'Average APR on a 60-month new-vehicle loan — Fed G.19 series; sits 200–400bp above the 5Y Treasury',
+  'i-eumort':'Average rate on new euro-area MFI lending for house purchase — ECB MIR statistics',
+  'i-euccrate':'Average rate on new euro-area MFI lending to households for consumption — ECB MIR statistics',
+  'i-euauto':'Average APR on new vehicle loans in Germany retail — Bundesbank MFI breakdown',
+
+  // Energy benchmarks
+  'i-cnsolar':'Polysilicon spot price (China) — solar-grade feedstock; below $5/kg = oversupply, above $10 = healthy market',
+  'i-euwind':'Weighted-average strike price of EU offshore-wind PPAs — competitive at <€80, expensive >€100',
+  'i-eucarb':'EU ETS carbon allowance spot — ICE EUA front-month; €/tonne CO₂',
+  'i-libat':'Battery-grade lithium carbonate spot price (China) — RMB/tonne',
+  'i-ttf':'Dutch TTF natural gas — ICE front-month, €/MWh; Europe\'s benchmark gas price',
+  'i-jkm':'Platts JKM Asian LNG spot — $/MMBtu; the Far East delivered price',
+  'i-eupow':'EU baseload power — DE+FR average, €/MWh; reflects the marginal price-setter (often gas)',
+  'i-uran':'U₃O₈ spot uranium — UxC weekly $/lb; nuclear fuel cost',
+
+  // Macro snapshot rows
+  'mc-us-cpi':'US headline CPI year-over-year — Fed implicit target 2%, hot ≥3.5%',
+  'mc-us-pol':'Fed funds upper bound — primary US policy rate',
+  'mc-us-2y':'2Y US Treasury yield — most rate-sensitive part of the curve',
+  'mc-us-10y':'10Y US Treasury yield — global risk-free benchmark; daily moves ≥15bp = SHOCK',
+  'mc-us-idx':'S&P 500 — broadest US large-cap equity benchmark',
+  'mc-us-fx':'DXY — USD strength vs basket of major currencies',
+  'mc-eu-cpi':'Euro-area HICP year-over-year — ECB target 2%',
+  'mc-eu-pol':'ECB main refinancing operation rate (MRO) and deposit-facility rate (DFR) shown together; banks fund at MRO, park at DFR',
+  'mc-eu-2y':'German 2Y Schatz yield — euro-area short-rate proxy',
+  'mc-eu-10y':'German 10Y Bund yield — euro-area risk-free benchmark',
+  'mc-eu-idx':'DAX 40 — flagship German equity index',
+  'mc-eu-fx':'EUR/USD — primary European FX cross',
+  'mc-uk-cpi':'UK CPI year-over-year — BoE target 2%',
+  'mc-uk-pol':'Bank of England Bank Rate — primary UK policy rate',
+  'mc-uk-2y':'2Y Gilt yield — UK short-rate barometer',
+  'mc-uk-10y':'10Y Gilt yield — Truss-episode-style spikes are a UK-specific risk',
+  'mc-uk-idx':'FTSE 100 — large-cap UK equity index, dominated by miners and energy',
+  'mc-uk-fx':'GBP/USD ("cable") — sterling against the dollar',
+  'mc-cn-cpi':'China CPI year-over-year — deflation risk if negative',
+  'mc-cn-pol':'PBoC Medium-term Lending Facility (MLF) and 1-year Loan Prime Rate (LPR) — the de-facto policy rates',
+  'mc-cn-2y':'China 2Y government bond yield',
+  'mc-cn-10y':'China 10Y government bond yield — the on-shore curve has decoupled from global rates',
+  'mc-cn-idx':'CSI 300 — top 300 Shanghai/Shenzhen-listed firms',
+  'mc-cn-fx':'USD/CNY onshore — PBoC manages inside a daily band; weakening signals capital outflow pressure',
+  'mc-jp-cpi':'Japan headline CPI year-over-year — BoJ target 2%',
+  'mc-jp-pol':'BoJ short-term policy rate — exited negative in 2024',
+  'mc-jp-2y':'2Y JGB yield — has lifted off zero alongside YCC dismantling',
+  'mc-jp-10y':'10Y JGB yield — was capped under YCC; now floating',
+  'mc-jp-idx':'Nikkei 225 — flagship Japan equity index',
+  'mc-jp-fx':'USD/JPY — global carry-trade barometer; >155 historically triggers MoF intervention',
+  'mc-ru-cpi':'Russia CPI year-over-year — Bank of Russia target 4%; structurally elevated since sanctions',
+  'mc-ru-pol':'CBR key rate — has moved violently with sanctions episodes',
+  'mc-ru-2y':'2Y OFZ yield — onshore-only liquidity is thin',
+  'mc-ru-10y':'10Y OFZ yield — onshore Russian government bond',
+  'mc-ru-idx':'MOEX — Moscow Exchange composite index',
+  'mc-ru-fx':'USD/RUB — sanctioned and managed; thin offshore liquidity',
+  'mc-br-cpi':'Brazil IPCA year-over-year — BCB target band',
+  'mc-br-pol':'SELIC — Brazil\'s overnight policy rate, set by COPOM',
+  'mc-br-2y':'2Y NTN-F (fixed-rate Brazilian government bond)',
+  'mc-br-10y':'10Y NTN-F yield — domestic curve',
+  'mc-br-idx':'Ibovespa — São Paulo flagship equity index',
+  'mc-br-fx':'USD/BRL — Brazilian real vs dollar',
 };
 // ─── Relevant levels / ATH for price cells ────────────────────
-// Hardcoded reference levels for prices. Rough approximations — updated occasionally.
+// Updated for the 2025-26 regime. Where an absolute ATH is meaningful
+// (VIX panic spikes, oil 2008, DXY 1985) it's quoted; otherwise the band
+// is the cycle-relevant range.
 const PRICE_LEVELS={
-  'p-spy':'ATH ~$624 (Feb 2025) · 52w range ~$500–625',
-  'p-dia':'ATH ~$455 (Jan 2025) · 52w range ~$370–455',
-  'p-vix':'Calm <20 · Elevated 20–30 · Panic ≥30 · ATH 82.69 (Mar 2020)',
-  'p-wti':'Normal ~$65–85 · Elevated ≥$80 · Spike ≥$100 · ATH $147 (Jul 2008)',
-  'p-brent':'Normal ~$70–90 · Elevated ≥$85 · Spike ≥$110 · ATH $147 (Jul 2008)',
-  'p-gold':'52w range ~$2,000–2,900 · ATH ~$2,950 (2025)',
-  'p-dxy':'Weak <95 · Normal 95–105 · Strong ≥105 · ATH 164 (1985)',
-  'p-xle':'52w range ~$80–100 · Cycle high ~$100',
-  'p-ita':'52w range ~$140–175 · ATH ~$175 (2025)',
-  'p-xlp':'52w range ~$72–85',
-  'p-moo':'52w range ~$70–85',
-  'p-rbob':'Normal ~$2.00–2.80/gal · Spike ≥$3.50',
-  'p-ho':'Normal ~$2.20–3.00/gal · Spike ≥$4.00',
-  'p-natgas':'Low <$2 · Normal $2–4 · Spike ≥$6',
-  'p-uso':'Tracks WTI near-month',
-  'p-bno':'Tracks Brent near-month',
-  'p-o-wti':'Normal ~$65–85 · Elevated ≥$80 · Spike ≥$100',
-  'p-o-brent':'Normal ~$70–90 · Elevated ≥$85 · Spike ≥$110',
-  'p-o-hh':'Low <$2 · Normal $2–4 · Spike ≥$6 (natural gas)',
+  'p-spx':'S&P 500 index points · 52w range ~6,000–7,200+ · currently at/near ATH (early 2026) · 200d MA ≈ 6,600 · cycle low post-2008 was 666 (Mar 2009)',
+  'p-dji':'Dow Jones index points · 52w range ~40,500–49,000+ · ATH set in 2026 · cycle low post-2008 was 6,547 (Mar 2009)',
+  'p-vix':'Calm <16 · Watch 16–20 · Elevated 20–30 · Panic ≥30 · ATH 82.69 intraday (16 Mar 2020); 89.53 spike (24 Oct 2008)',
+  'p-wti':'Normal $60–80 · Elevated ≥$85 · Spike ≥$100 · ATH $147.27 (11 Jul 2008)',
+  'p-brent':'Normal $65–85 · Elevated ≥$90 · Spike ≥$110 · ATH $147.50 (11 Jul 2008)',
+  'p-gold':'52w range ~$2,800–4,000 · ATH ~$4,000 (early 2026) · prior ATH $2,075 (2020) was breached in 2024',
+  'p-dxy':'Weak <97 · Normal 97–106 · Strong ≥106 · ATH 164.72 (Feb 1985); 114.78 cycle high (Sep 2022)',
+  'p-jpy':'USD/JPY · Strong yen <130 · Stable 130–150 · MoF-intervention zone ≥158 · ATH 161.95 (3 Jul 2024)',
+  'p-xle':'52w range ~$82–105 · Cycle high $103 (2025)',
+  'p-ita':'52w range ~$155–200 · ATH ~$200 (2025)',
+  'p-xlp':'52w range ~$74–88 · ATH ~$87 (2025)',
+  'p-moo':'52w range ~$70–88 · cycle range cap ≈ $90',
+  'p-rbob':'Normal ~$2.00–2.80/gal · Spike ≥$3.50 · ATH $4.31 (Jun 2022)',
+  'p-ho':'Normal ~$2.20–3.00/gal · Spike ≥$4.00 · ATH $5.07 (Apr 2022)',
+  'p-natgas':'Low <$2 · Normal $2–4 · Spike ≥$6 · ATH $15.78 (Dec 2005); recent peak $9.76 (Aug 2022)',
+  'p-o-wti':'Normal $60–80 · Elevated ≥$85 · Spike ≥$100 · ATH $147.27 (Jul 2008)',
+  'p-o-brent':'Normal $65–85 · Elevated ≥$90 · Spike ≥$110 · ATH $147.50 (Jul 2008)',
+  'p-o-hh':'Low <$2 · Normal $2–4 · Spike ≥$6 (Henry Hub natural gas)',
 };
 // ─── Derive threshold descriptions from TH config ─────────────
 // Each metric row id looks like d-xxx / v-xxx / i-xxx → TH key is "xxx" with hyphens stripped
@@ -2773,6 +3046,21 @@ document.querySelectorAll('.oil-spread').forEach(sp=>{
   const val=sp.querySelector('.osp-val');
   if(val&&val.id&&TIPS[val.id])sp.setAttribute('data-tip',TIPS[val.id]);
 });
+// Mag 7 cells — apply the price-cell tip to the whole tile so hover anywhere on
+// the cell shows the tooltip. Click still opens the chart modal.
+document.querySelectorAll('.mag7-cell').forEach(cell=>{
+  const px=cell.querySelector('.m7-px');
+  if(px && px.id && TIPS[px.id]) cell.setAttribute('data-tip', TIPS[px.id]);
+});
+// Macro-snapshot inputs — each cell already has its own id matching TIPS.
+document.querySelectorAll('.mc-i').forEach(inp=>{
+  if(inp.id && TIPS[inp.id]) inp.setAttribute('data-tip', TIPS[inp.id]);
+});
+// Cross-asset strip cells under the yield curve
+['jpyStrip','oilSpxRho','dxyStrip','y2DC','y10DC'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el && TIPS[id]) el.setAttribute('data-tip', TIPS[id]);
+});
 
 // ═══════════════════════════════════════════════════════════════
 // GLOBAL TOOLTIP SYSTEM (position:fixed, viewport-aware)
@@ -2827,6 +3115,63 @@ function updateSummaryTips(){
   const set=(id,arr)=>{const el=document.getElementById(id);if(!el)return;
     el.setAttribute('data-tip',arr.length?arr.join(' • '):'None');};
   set('cC',cats.concern);set('cW',cats.watch);set('cN',cats.normal);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MACRO SNAPSHOT LIVE FILL — pulls 2Y/10Y yields, main indices and FX
+// from Stooq for each region row. Cells the user has edited keep their
+// override (we only write into the cell if it's still on its default value
+// or if the user hasn't focused it). Stress-tag colour the row's yields
+// when daily change is catastrophic, matching the SHOCK rule on the
+// US yield curve (≥15bp = shock, ≥5bp = watch).
+// ═══════════════════════════════════════════════════════════════
+const MC_LIVE_MAP = [
+  // [region, field, stooqSym, formatFn]
+  ['us','2y','2usy.b',  v=>v.toFixed(2)],
+  ['us','10y','10usy.b',v=>v.toFixed(2)],
+  ['us','idx','^spx',   v=>'S&P '+Math.round(v).toLocaleString()],
+  ['us','fx','^dxy',    v=>'DXY '+v.toFixed(1)],
+  ['eu','10y','10dey.b',v=>v.toFixed(2)],
+  ['eu','idx','^dax',   v=>'DAX '+Math.round(v).toLocaleString()],
+  ['eu','fx','eurusd',  v=>'EUR '+v.toFixed(3)],
+  ['uk','10y','10uky.b',v=>v.toFixed(2)],
+  ['uk','idx','^ftm',   v=>'FTSE '+Math.round(v).toLocaleString()],
+  ['uk','fx','gbpusd',  v=>'GBP '+v.toFixed(3)],
+  ['cn','10y','10cny.b',v=>v.toFixed(2)],
+  ['cn','idx','^hsi',   v=>'HSI '+Math.round(v).toLocaleString()],
+  ['cn','fx','usdcny',  v=>'CNY '+v.toFixed(2)],
+  ['jp','10y','10jpy.b',v=>v.toFixed(2)],
+  ['jp','idx','^nkx',   v=>'Nikkei '+Math.round(v).toLocaleString()],
+  ['jp','fx','usdjpy',  v=>'JPY '+v.toFixed(1)],
+  ['br','idx','^bvp',   v=>'Bovespa '+(v/1000).toFixed(0)+'K'],
+  ['br','fx','usdbrl',  v=>'BRL '+v.toFixed(2)],
+];
+
+async function refreshMacroSnapshot(){
+  // Fetch sequentially in small batches to avoid hammering Stooq.
+  for(let i=0;i<MC_LIVE_MAP.length;i+=4){
+    const batch=MC_LIVE_MAP.slice(i,i+4);
+    await Promise.all(batch.map(async ([reg,fld,sym,fmt])=>{
+      const cell=document.getElementById(`mc-${reg}-${fld}`); if(!cell) return;
+      // Don't overwrite a cell the user is currently editing.
+      if(document.activeElement===cell) return;
+      // Mark cell as auto-managed if its data-auto attr matches its value
+      // OR if the value is still the seed default.
+      const r=await fetchStooq(sym); if(!r) return;
+      const txt=fmt(r.price);
+      cell.value=txt;
+      cell.title=`Stooq · ${sym} · close ${r.asof}`;
+      cell.dataset.auto='1';
+      // Day-change shock colouring on yield cells
+      if(fld==='10y' || fld==='2y'){
+        const bp=(r.price - r.prevClose)*100;
+        const abs=Math.abs(bp);
+        cell.style.color = abs>=15 ? '#fff' : abs>=5 ? (bp>=0?'#b23a3a':'#2e7d4f') : '';
+        cell.style.background = abs>=15 ? '#b23a3a' : '';
+      }
+    }));
+    await new Promise(r=>setTimeout(r,150));
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2885,6 +3230,182 @@ async function refreshMag7(){
     await new Promise(r=>setTimeout(r,200));
   }
 }
+
+// ═══════════════════════════════════════════════════════════════
+// MAG 7 CHART MODAL — D / W / M / Y / 5Y / 10Y interactive chart
+// ═══════════════════════════════════════════════════════════════
+const M7_RANGE_MAP = {
+  '1d':  {interval:'5m',  label:'Today, 5-min'},
+  '5d':  {interval:'30m', label:'Past week, 30-min'},
+  '1mo': {interval:'1d',  label:'Past month, daily'},
+  '1y':  {interval:'1d',  label:'Past year, daily'},
+  '5y':  {interval:'1wk', label:'5-year, weekly'},
+  '10y': {interval:'1mo', label:'10-year, monthly'}
+};
+
+async function fetchMag7Range(tk, range){
+  const cfg = M7_RANGE_MAP[range] || M7_RANGE_MAP['1y'];
+  const raw=`https://query1.finance.yahoo.com/v8/finance/chart/${tk}?interval=${cfg.interval}&range=${range}`;
+  let P; try { P = PROXIES; } catch(_) { P = null; }
+  if(!P||!P.length) P=[r=>r];
+  for(let i=0;i<P.length;i++){
+    const pi=(proxyIdx+i)%P.length;
+    try{
+      const r=await fetch(P[pi](raw),{signal:AbortSignal.timeout(10000)});
+      if(!r.ok) continue;
+      const j=await r.json();
+      const res=j?.chart?.result?.[0]; if(!res) continue;
+      const ts=res.timestamp||[];
+      const closes=(res.indicators?.quote?.[0]?.close||[]);
+      const pairs=ts.map((t,i)=>({t, c:closes[i]})).filter(p=>typeof p.c==='number');
+      const m=res.meta;
+      return {pairs, meta:m};
+    }catch(_){ /* try next proxy */ }
+  }
+  return null;
+}
+
+function drawM7Chart(svg, pairs){
+  if(!svg) return;
+  svg.innerHTML='';
+  if(!pairs || pairs.length<2){
+    svg.innerHTML='<text x="400" y="180" text-anchor="middle" fill="rgba(29,29,31,.4)" font-size="14" font-family="sans-serif">no data</text>';
+    return;
+  }
+  const W=800, H=360, L=44, R=12, T=8, B=24;
+  const closes=pairs.map(p=>p.c);
+  const min=Math.min(...closes), max=Math.max(...closes);
+  const rng=max-min||1;
+  const tX=i=>L+(i/(pairs.length-1))*(W-L-R);
+  const tY=v=>T+(1-(v-min)/rng)*(H-T-B);
+  const start=closes[0], end=closes[closes.length-1];
+  const up=end>=start;
+  const col=up?'#2e7d4f':'#b23a3a';
+
+  // Grid + y-axis labels (5 horizontal lines)
+  const NS='http://www.w3.org/2000/svg';
+  for(let i=0;i<=4;i++){
+    const v=min + (rng*i/4);
+    const y=tY(v);
+    const ln=document.createElementNS(NS,'line');
+    ln.setAttribute('x1',L); ln.setAttribute('x2',W-R);
+    ln.setAttribute('y1',y); ln.setAttribute('y2',y);
+    ln.setAttribute('stroke','rgba(29,29,31,.08)'); ln.setAttribute('stroke-width','1');
+    svg.appendChild(ln);
+    const txt=document.createElementNS(NS,'text');
+    txt.setAttribute('x',L-6); txt.setAttribute('y',y+3);
+    txt.setAttribute('text-anchor','end'); txt.setAttribute('font-size','10');
+    txt.setAttribute('fill','rgba(29,29,31,.4)'); txt.setAttribute('font-family','sans-serif');
+    txt.textContent=v.toFixed(v>1000?0:2);
+    svg.appendChild(txt);
+  }
+
+  // Date labels (3 along x)
+  const fmtT=(t)=>{
+    const d=new Date(t*1000);
+    return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'});
+  };
+  [0, Math.floor(pairs.length/2), pairs.length-1].forEach(i=>{
+    const txt=document.createElementNS(NS,'text');
+    txt.setAttribute('x',tX(i)); txt.setAttribute('y',H-6);
+    txt.setAttribute('text-anchor','middle'); txt.setAttribute('font-size','10');
+    txt.setAttribute('fill','rgba(29,29,31,.45)'); txt.setAttribute('font-family','sans-serif');
+    txt.textContent=fmtT(pairs[i].t); svg.appendChild(txt);
+  });
+
+  // Area fill
+  const areaD=`M${tX(0)},${tY(min)} `+pairs.map((p,i)=>`L${tX(i).toFixed(1)},${tY(p.c).toFixed(1)}`).join(' ')+` L${tX(pairs.length-1)},${tY(min)} Z`;
+  const a=document.createElementNS(NS,'path');
+  a.setAttribute('d',areaD); a.setAttribute('fill',col); a.setAttribute('opacity','.12');
+  svg.appendChild(a);
+
+  // Line
+  const pl=document.createElementNS(NS,'polyline');
+  pl.setAttribute('points',pairs.map((p,i)=>`${tX(i).toFixed(1)},${tY(p.c).toFixed(1)}`).join(' '));
+  pl.setAttribute('fill','none'); pl.setAttribute('stroke',col);
+  pl.setAttribute('stroke-width','1.6'); pl.setAttribute('stroke-linecap','round');
+  pl.setAttribute('stroke-linejoin','round');
+  svg.appendChild(pl);
+
+  // Last-point dot
+  const dot=document.createElementNS(NS,'circle');
+  dot.setAttribute('cx',tX(pairs.length-1)); dot.setAttribute('cy',tY(end));
+  dot.setAttribute('r','3.5'); dot.setAttribute('fill',col);
+  svg.appendChild(dot);
+}
+
+(function initMag7Modal(){
+  const modal=document.getElementById('m7Modal');
+  const closeBtn=document.getElementById('m7ModalClose');
+  const tkEl=document.getElementById('m7ModalTk');
+  const metaEl=document.getElementById('m7ModalMeta');
+  const pxEl=document.getElementById('m7ModalPx');
+  const tfBox=document.getElementById('m7ModalTf');
+  const chart=document.getElementById('m7Chart');
+  const loader=document.getElementById('m7ChartLoader');
+  const statRet=document.getElementById('m7StatRet'),
+        statHi=document.getElementById('m7StatHi'),
+        statLo=document.getElementById('m7StatLo'),
+        statPe=document.getElementById('m7StatPe');
+  if(!modal) return;
+
+  let activeTk=null, activeRange='1y';
+
+  async function load(tk, range){
+    activeTk=tk; activeRange=range;
+    tfBox.querySelectorAll('.m7-tf-btn').forEach(b=>b.classList.toggle('active', b.dataset.r===range));
+    loader.style.display='flex'; loader.textContent='loading…';
+    chart.innerHTML='';
+    const r=await fetchMag7Range(tk, range);
+    loader.style.display='none';
+    if(!r || !r.pairs || r.pairs.length<2){
+      drawM7Chart(chart, null);
+      statRet.textContent=statHi.textContent=statLo.textContent='—';
+      return;
+    }
+    drawM7Chart(chart, r.pairs);
+    const closes=r.pairs.map(p=>p.c);
+    const start=closes[0], end=closes[closes.length-1];
+    const ret=((end-start)/start)*100;
+    const hi=Math.max(...closes), lo=Math.min(...closes);
+    statRet.textContent=`${ret>=0?'+':''}${ret.toFixed(2)}%`;
+    statRet.className='m7-stat-v '+(ret>=0?'up':'down');
+    statHi.textContent=hi.toFixed(2);
+    statLo.textContent=lo.toFixed(2);
+    const peInp=document.getElementById(`m7-pe-${tk}`);
+    statPe.textContent=peInp?peInp.value:'—';
+    pxEl.textContent=end.toFixed(2);
+    pxEl.className='m7-modal-px '+(ret>=0?'up':'down');
+    metaEl.textContent=`${M7_RANGE_MAP[range].label} · ${r.meta?.exchangeName||'NASDAQ/NYSE'}`;
+  }
+
+  function open(tk){
+    tkEl.textContent=tk;
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+    load(tk, '1y');
+  }
+  function hide(){
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+  closeBtn.addEventListener('click', hide);
+  modal.addEventListener('click', e=>{ if(e.target===modal) hide(); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && modal.classList.contains('active')) hide(); });
+  tfBox.addEventListener('click', e=>{
+    const b=e.target.closest('.m7-tf-btn'); if(!b) return;
+    if(activeTk) load(activeTk, b.dataset.r);
+  });
+  document.querySelectorAll('.mag7-cell').forEach(cell=>{
+    cell.addEventListener('click', e=>{
+      // Don't open modal when interacting with the P/E input
+      if(e.target.closest('.m7-pe-i')) return;
+      const tk=cell.dataset.tk; if(tk) open(tk);
+    });
+  });
+})();
 
 const hadCache=loadCache();
 if(hadCache)setYhSt('live'); // show as live if cache available
