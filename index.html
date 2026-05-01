@@ -23,6 +23,140 @@
       --radius:28px;--radius-sm:16px;
     }
 
+    /* ─────────────────────────────────────────────────────────────
+       SPLIT COLOUR SCHEME
+       Home stays on the cool light gradient (default :root vars).
+       The content sections (Finance / Dilettante / Languages / Vita)
+       commit to a dark scheme, scoped via body.viewing-content so
+       the home is never affected. Glass cards keep full backdrop
+       blur + saturate so the gloss / transparency reads strongly.
+       ───────────────────────────────────────────────────────────── */
+    body.viewing-content {
+      /* Reduce glass alpha so backdrop blur of dark gradient + orbs reads through */
+      --glass: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.10);
+      /* Brighter, near-white text for legibility on dark glass.
+         The previous 0.66 sub / 0.38 dim values rendered as muddy grey;
+         these lift secondary text to readable contrast. */
+      --text-main: #faf6ec;
+      --text-sub:  rgba(250,246,236,0.86);
+      --text-dim:  rgba(250,246,236,0.58);
+      --bg-start: #14161b;
+      --bg-end:   #1c1f26;
+      /* Vivid traffic-light accents — the muted base colours (green #2d8a4e,
+         red #c0392b) are too dark to read on the dark gradient. Lift to
+         neon-leaning variants while staying within Hermès-aesthetic range. */
+      --green:      #3ee07a; --green-soft: #6cf09a;
+      --yellow:     #ffd14a; --yellow-soft:#ffe07d;
+      --red:        #ff5a4f; --red-soft:   #ff8a7a;
+    }
+    /* Body itself flips to the dark gradient when viewing content,
+       so the orbs and the glass surfaces have a dark substrate to live on. */
+    body.viewing-content {
+      background: linear-gradient(160deg, #14161b 0%, #1c1f26 100%);
+    }
+    /* Repaint the orbs with cooler, brighter blobs that read as gloss
+       through the glass — same pattern as the light scheme but on dark. */
+    body.viewing-content .orb{
+      background: radial-gradient(circle, rgba(160,180,255,0.16), rgba(120,140,200,0.06) 45%, transparent 75%);
+      filter: blur(90px);
+    }
+    /* Loader overlays in dark mode — same translucent + backdrop-blur recipe,
+       just tinted dark so they sit cleanly on the dark substrate. */
+    body.viewing-content #candleLoader,
+    body.viewing-content #langLoader,
+    body.viewing-content #passionLoader,
+    body.viewing-content #vitaLoader{
+      background: rgba(20,22,26,0.55);
+    }
+    body.viewing-content .cl-label{
+      color: rgba(236,230,216,0.78);
+      background: rgba(20,22,26,0.55);
+      border-color: rgba(236,230,216,0.12);
+    }
+    /* Topbar (the back-arrow strip) needs a dark variant too */
+    body.viewing-content .hub-topbar{
+      background: rgba(20,22,26,0.78);
+      border-bottom-color: rgba(236,230,216,0.10);
+    }
+    body.viewing-content .hub-back-btn{
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.12);
+    }
+    body.viewing-content .hub-back-btn:hover{
+      background: rgba(255,255,255,0.14);
+    }
+    /* GLOSS RESTORATION
+       The default .gp / .hub-card / .hub-sec-intro / .vita-* / .mag7-cell rules
+       all use box-shadow with `inset 0 1px 0 rgba(255,255,255,.45)` for the top
+       highlight that gives the glass its sheen. On dark glass that highlight
+       barely shows because it's the same lightness as the new --text-main.
+       Lift it to a stronger top-of-glass highlight + outer shadow with depth. */
+    body.viewing-content .gp,
+    body.viewing-content .hub-card,
+    body.viewing-content .hub-sec-intro,
+    body.viewing-content .vita-hero,
+    body.viewing-content .vita-entry,
+    body.viewing-content .vita-skills,
+    body.viewing-content .mag7-cell,
+    body.viewing-content .hold-chart-wrap,
+    body.viewing-content .hold-card,
+    body.viewing-content .hold-chip{
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.10);
+      box-shadow:
+        0 12px 40px rgba(0,0,0,0.32),
+        inset 0 1px 0 rgba(255,255,255,0.10),
+        inset 0 -1px 0 rgba(0,0,0,0.10);
+    }
+    /* A second translucent layer on top of glass via a ::before gradient
+       gives the cards their wet-glass shimmer in dark mode. */
+    body.viewing-content .gp,
+    body.viewing-content .hub-card,
+    body.viewing-content .vita-entry,
+    body.viewing-content .mag7-cell{
+      position: relative; isolation: isolate;
+    }
+    body.viewing-content .gp::before,
+    body.viewing-content .hub-card::before,
+    body.viewing-content .vita-entry::before,
+    body.viewing-content .mag7-cell::before{
+      content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+      background: linear-gradient(135deg,
+        rgba(255,255,255,0.08) 0%,
+        rgba(255,255,255,0.02) 30%,
+        rgba(255,255,255,0) 60%);
+      z-index:-1;
+    }
+    /* Keep backdrop blur + saturate in dark — this is the actual gloss engine */
+    body.viewing-content .gp,
+    body.viewing-content .hub-card,
+    body.viewing-content .vita-hero,
+    body.viewing-content .vita-entry,
+    body.viewing-content .vita-skills,
+    body.viewing-content .mag7-cell,
+    body.viewing-content .hold-chart-wrap{
+      backdrop-filter: blur(80px) saturate(220%);
+      -webkit-backdrop-filter: blur(80px) saturate(220%);
+    }
+    /* Status pills, bars and form inputs that have their own white-tint backgrounds
+       need a dark counterpart so they don't break out of the scheme. */
+    body.viewing-content input.mc-i,
+    body.viewing-content input.mi,
+    body.viewing-content input.m7-pe-i{
+      color: var(--text-main);
+    }
+    body.viewing-content input.mc-i:hover,
+    body.viewing-content input.mi:hover{
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.22);
+    }
+    body.viewing-content input.mc-i:focus,
+    body.viewing-content input.mi:focus{
+      background: rgba(255,255,255,0.16);
+      border-color: rgba(255,255,255,0.4);
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: auto; }
 
@@ -313,6 +447,19 @@
       max-width:320px;white-space:pre-wrap;box-shadow:0 6px 20px rgba(0,0,0,.22);
       transition:opacity .12s ease;opacity:0}
     /* Candlestick loader overlay (shown when navigating to Finance) */
+    /* Themed full-screen loaders — one per section, share the same fade pattern.
+       Translucent overlay + backdrop-blur (same recipe as #candleLoader) so the
+       page's cool grey-lavender background reads through and the transition
+       feels like one continuous surface, not a colour change. */
+    #langLoader, #passionLoader, #vitaLoader {position:fixed;inset:0;z-index:9998;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(207,208,223,.55);
+      backdrop-filter:blur(28px) saturate(180%);
+      -webkit-backdrop-filter:blur(28px) saturate(180%);
+      opacity:0;pointer-events:none;transition:opacity .55s ease}
+    #langLoader.show, #passionLoader.show, #vitaLoader.show {opacity:1;pointer-events:auto}
+    #langLoader canvas, #passionLoader canvas, #vitaLoader canvas {position:absolute;inset:0;width:100%;height:100%;display:block}
+    #langLoader .cl-label, #passionLoader .cl-label, #vitaLoader .cl-label {position:relative;z-index:2}
     #candleLoader{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;
       background:rgba(207,208,223,.55);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);
       opacity:0;pointer-events:none;transition:opacity .5s ease}
@@ -673,10 +820,13 @@
       box-shadow:0 8px 40px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.45);
       padding:1.8rem 1.8rem;margin-bottom:1.6rem;
       display:grid;grid-template-columns:280px 1fr;gap:2.2rem;align-items:center}
-    .hold-pie-box{position:relative;width:260px;height:260px;margin:0 auto;overflow:visible}
-    .hold-pie{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 6px 20px rgba(0,0,0,.08));overflow:visible}
-    .hold-pie-slice{transition:transform .35s ease,filter .35s ease;transform-origin:center;cursor:pointer;overflow:visible}
-    .hold-pie-slice:hover{transform:scale(1.035);filter:brightness(1.08) drop-shadow(0 4px 12px rgba(0,0,0,.15))}
+    .hold-pie-box{position:relative;width:260px;height:260px;margin:0 auto}
+    .hold-pie{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 6px 20px rgba(0,0,0,.08))}
+    /* Hover effect is brightness + slight stroke widening. NO scale transform —
+       scaling caused adjacent slices to visually overlap and bleed past the donut
+       bounds, especially on small inflated slices. */
+    .hold-pie-slice{transition:filter .25s ease,stroke-width .25s ease;transform-origin:center;cursor:pointer}
+    .hold-pie-slice:hover{filter:brightness(1.12) drop-shadow(0 0 8px rgba(0,0,0,.18))}
     .hold-pie-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
     .hold-pie-center-lbl{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim)}
     .hold-pie-center-val{font-family:var(--serif);font-size:1.75rem;font-weight:500;color:var(--text-main);letter-spacing:-.01em;margin-top:.1rem;font-variant-numeric:tabular-nums}
@@ -881,6 +1031,18 @@
 <div id="candleLoader" aria-hidden="true">
   <canvas id="candleCanvas"></canvas>
   <div class="cl-label">Loading Finance</div>
+</div>
+<div id="langLoader" aria-hidden="true">
+  <canvas id="langCanvas"></canvas>
+  <div class="cl-label">Loading Languages</div>
+</div>
+<div id="passionLoader" aria-hidden="true">
+  <canvas id="passionCanvas"></canvas>
+  <div class="cl-label">Loading</div>
+</div>
+<div id="vitaLoader" aria-hidden="true">
+  <canvas id="vitaCanvas"></canvas>
+  <div class="cl-label">Loading Vita</div>
 </div>
 
 <div class="hub-home" id="hubHome">
@@ -1396,29 +1558,6 @@
       </div>
     </div>
 
-    <div class="vita-group">
-      <div class="vita-group-hdr">Skills &amp; languages</div>
-      <div class="vita-skills">
-        <div class="vita-skill-sub">Markets &amp; analysis</div>
-        <div class="vita-skill"><span class="vita-skill-name">Equity &amp; crypto markets</span><span class="vita-skill-level">8 yrs</span></div>
-        <div class="vita-skill"><span class="vita-skill-name">Financial-statement analysis</span><span class="vita-skill-level">Fluent</span></div>
-        <div class="vita-skill"><span class="vita-skill-name">Macro &amp; on-chain research</span><span class="vita-skill-level">Proficient</span></div>
-        <div class="vita-skill"><span class="vita-skill-name">Portfolio construction</span><span class="vita-skill-level">Proficient</span></div>
-        <div class="vita-skill-sub">Communication &amp; pedagogy</div>
-        <div class="vita-skill"><span class="vita-skill-name">Teaching &amp; presentation</span><span class="vita-skill-level">Experienced</span></div>
-        <div class="vita-skill"><span class="vita-skill-name">Writing &amp; editing</span><span class="vita-skill-level">Experienced</span></div>
-        <div class="vita-skill"><span class="vita-skill-name">Translation &amp; subtitling</span><span class="vita-skill-level">Professional</span></div>
-        <div class="vita-skill"><span class="vita-skill-name">Social &amp; soft skills</span><span class="vita-skill-level">Strong</span></div>
-        <div class="vita-skill-sub">Languages</div>
-        <div class="vita-skill"><span class="vita-skill-name">Portuguese</span><span class="vita-skill-level">Native</span></div>
-        <div class="vita-skill"><span class="vita-skill-name">German</span><span class="vita-skill-level">Native</span></div>
-        <div class="vita-skill"><span class="vita-skill-name">English</span><span class="vita-skill-level">C2 &middot; Cambridge</span></div>
-        <div class="vita-skill"><span class="vita-skill-name">Japanese</span><span class="vita-skill-level">B2 &middot; Kyushu Univ.</span></div>
-        <div class="vita-skill"><span class="vita-skill-name">French</span><span class="vita-skill-level">Elementary</span></div>
-        <div class="vita-skill"><span class="vita-skill-name">Spanish</span><span class="vita-skill-level">Elementary</span></div>
-      </div>
-    </div>
-
   </div>
 </div>
 </div><!-- /hub-content -->
@@ -1563,14 +1702,140 @@ const candleLoader=(function(){
   };
 })();
 
+/* ───────────────────────────────────────────────────────────────
+   Themed loaders for the non-Finance sections.
+   Each draws a distinct float of glyphs on a canvas overlay, sharing
+   the same fade-in/fade-out pattern as the candle loader.
+   ─────────────────────────────────────────────────────────────── */
+function makeFloatLoader(overlayId, canvasId, glyphSet, font, hueLight){
+  const overlay=document.getElementById(overlayId);
+  const canvas=document.getElementById(canvasId);
+  if(!overlay||!canvas) return {start(){},fadeOut(){}};
+  const ctx=canvas.getContext('2d');
+  let raf=0, running=false, particles=[];
+  // Pick light vs dark ink based on the loader's actual substrate. The content
+  // sections run in dark mode (body.viewing-content), so the loader bg is dark
+  // and the glyphs need to be off-white to show. On the light home, glyphs stay
+  // slate. Re-evaluated each frame so a class change mid-animation takes effect.
+  function currentHue(){
+    return document.body.classList.contains('viewing-content')
+      ? '236, 230, 216'   // off-white ink for dark bg
+      : hueLight;          // slate ink for light bg
+  }
+  function resize(){
+    const dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+    canvas.width=Math.floor(innerWidth*dpr);
+    canvas.height=Math.floor(innerHeight*dpr);
+    canvas.style.width=innerWidth+'px';
+    canvas.style.height=innerHeight+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function spawn(initial){
+    const W=innerWidth, H=innerHeight;
+    return {
+      g: glyphSet[Math.floor(Math.random()*glyphSet.length)],
+      x: Math.random()*W,
+      y: initial ? Math.random()*H : H+30,
+      v: 0.25+Math.random()*0.55,
+      drift: (Math.random()-0.5)*0.4,
+      size: 22+Math.random()*46,
+      rot: (Math.random()-0.5)*0.4,
+      rotV: (Math.random()-0.5)*0.005,
+      a: 0.08+Math.random()*0.22
+    };
+  }
+  function seed(){
+    particles=[];
+    const W=innerWidth;
+    const n=Math.max(28, Math.min(70, Math.floor(W/22)));
+    for(let i=0;i<n;i++) particles.push(spawn(true));
+  }
+  function draw(){
+    if(!running) return;
+    const W=innerWidth, H=innerHeight;
+    ctx.clearRect(0,0,W,H);
+    for(const p of particles){
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.font=`${p.size}px ${font}`;
+      ctx.fillStyle=`rgba(${currentHue()}, ${p.a})`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(p.g, 0, 0);
+      ctx.restore();
+      p.y -= p.v;
+      p.x += p.drift;
+      p.rot += p.rotV;
+      if(p.y < -60 || p.x < -60 || p.x > W+60){
+        Object.assign(p, spawn(false));
+        p.x = Math.random()*W;
+      }
+    }
+    raf=requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',()=>{ if(running) resize(); });
+  return {
+    start(){
+      if(running) return;
+      resize(); seed(); running=true;
+      overlay.classList.add('show');
+      draw();
+    },
+    fadeOut(){
+      overlay.classList.remove('show');
+      setTimeout(()=>{
+        running=false; cancelAnimationFrame(raf);
+        ctx&&ctx.clearRect(0,0,canvas.width,canvas.height);
+      }, 550);
+    }
+  };
+}
+
+// Languages — letterforms from each language Johannes works in.
+// Glyph hue uses the same slate ink (~rgba(29,29,31,…)) as the rest of the page text.
+const langLoader = makeFloatLoader(
+  'langLoader','langCanvas',
+  ['A','b','C','d','E','f','Ñ','ß','ü','日','本','語','я','э','ω','π','Σ','ç','é','ô','а','к','字','話','の','é','è','à','ñ','ä','ö','ø','字','言','ا','ع','ك'],
+  '"Cormorant Garamond", serif',
+  '29, 29, 31' // page ink
+);
+
+// Dilettante — exploration glyphs (compass points, sextant arcs, faint star symbols)
+const passionLoader = makeFloatLoader(
+  'passionLoader','passionCanvas',
+  ['✦','✧','✶','✺','◈','◉','⊕','⌖','⊛','✱','⊙','⊚','✥','❉','❋','⌘','✜','☉','☽','★','✷','◐','◑','⌬','⎈'],
+  '"Cormorant Garamond", serif',
+  '29, 29, 31' // page ink
+);
+
+// Vita — history glyphs (page indicators, ink dots, Roman numerals, parchment marks)
+const vitaLoader = makeFloatLoader(
+  'vitaLoader','vitaCanvas',
+  ['§','¶','†','‡','I','II','III','IV','V','VI','VII','VIII','IX','X','XV','XX','MCMLIX','MMVI','MMXXVI','¤','‖','✤','❦','❧','№','℘','℅','℞'],
+  '"Cormorant Garamond", serif',
+  '29, 29, 31' // page ink
+);
+
 function hubNav(e, id, fromHistory) {
   if(e) e.preventDefault();
   const home = document.getElementById('hubHome');
   const content = document.getElementById('hubContent');
-  const showLoader = (id === 'sec-finance');
 
-  // Kick off the loader immediately so candles are already moving behind the fade
-  if(showLoader)candleLoader.start();
+  // Pick the right themed loader for the section.
+  const loaderMap = {
+    'sec-finance':   candleLoader,
+    'sec-languages': langLoader,
+    'sec-passion':   passionLoader,
+    'sec-vita':      vitaLoader,
+  };
+  const activeLoader = loaderMap[id] || null;
+  const showLoader = !!activeLoader;
+
+  // Flip body to dark scheme — content sections live in dark glass; home stays light.
+  document.body.classList.add('viewing-content');
+
+  // Kick off the loader immediately so the float is already in motion behind the fade
+  if(activeLoader) activeLoader.start();
 
   // Fade out home
   home.classList.add('hidden');
@@ -1593,9 +1858,9 @@ function hubNav(e, id, fromHistory) {
     // setTimeout is reliable even when the tab is hidden; rAF is not.
     setTimeout(() => { content.classList.add('active'); }, 20);
 
-    // Let Finance paint one frame, then fade the loader away
-    if(showLoader){
-      setTimeout(()=>candleLoader.fadeOut(),650);
+    // Paint one frame, then fade the active loader away
+    if(activeLoader){
+      setTimeout(()=>activeLoader.fadeOut(),650);
     }
   }, 350);
 
@@ -1611,6 +1876,8 @@ function showHub(fromHistory) {
   const content = document.getElementById('hubContent');
 
   content.classList.remove('active');
+  // Flip back to the light scheme — home is always light.
+  document.body.classList.remove('viewing-content');
 
   setTimeout(() => {
     content.style.display = 'none';
@@ -1654,6 +1921,7 @@ window.addEventListener('popstate', (e)=>{
     try{ history.replaceState({hub:'home'}, '', location.pathname+location.search); }catch(_){}
   }
 })();
+
 
 // Fallback wiring: if inline onclick is blocked (strict CSP) or never fires for
 // another reason, attach listeners programmatically via data-nav attributes.
@@ -1750,15 +2018,15 @@ const HOLDINGS = [
 ];
 
 // Each asset class gets a distinctly different hue family with strong saturation,
-// so the wheel reads as colour-grouped at a glance even on small screens.
-// Within a class, slices walk along the gradient for separation.
+// tuned to read brightly against the dark glass substrate of the Holdings view.
+// Each pair walks from a saturated mid-tone to a luminous near-white tip.
 const HOLD_TYPES = {
-  eq:{label:'Equity',          grad:['#0f7c3a','#5fd084']}, // deep emerald → mint
-  fd:{label:'Fund',            grad:['#3b2a8a','#8a6dff']}, // royal indigo → violet
-  cr:{label:'Crypto',          grad:['#e8650a','#ffc14d']}, // burnt orange → amber
-  fi:{label:'Fixed Income',    grad:['#0d4f8a','#5fb0e8']}, // navy → sky
-  cm:{label:'Precious Metals', grad:['#a06a1a','#f0e0a8']}, // bronze → champagne
-  cs:{label:'Cash',            grad:['#3a4a55','#9aa7b0']}  // slate → silver
+  eq:{label:'Equity',          grad:['#3ee07a','#a8ffce']}, // luminous emerald → mint glow
+  fd:{label:'Fund',            grad:['#9888ff','#d4c8ff']}, // periwinkle indigo → lavender
+  cr:{label:'Crypto',          grad:['#ff8a3d','#ffd57a']}, // vivid orange → gold
+  fi:{label:'Fixed Income',    grad:['#5dc0ff','#a6dfff']}, // cyan-sky → ice
+  cm:{label:'Precious Metals', grad:['#e8c468','#fff5d0']}, // bright bronze → cream
+  cs:{label:'Cash',            grad:['#a3aebb','#dde3ea']}  // bright slate → silver
 };
 
 /* Assign a distinct colour per position, derived from the type gradient so the
@@ -1867,7 +2135,7 @@ function renderHoldings(){
 
   // Centre: total unrealised return
   const tgSign=totalGain>=0?'+':'';
-  const tgCol =totalGain>=0?'#2e7d4f':'#b23a3a';
+  const tgCol =totalGain>=0?'#3ee07a':'#ff5a4f';
   countEl.textContent=`${tgSign}${totalGain.toFixed(1)}%`;
   countEl.style.color=tgCol;
   subEl.textContent='unrealised · book';
@@ -1878,7 +2146,7 @@ function renderHoldings(){
     const pct=(r._value/totalValue*100).toFixed(1);
     const tag=HOLD_TYPES[r.type]?HOLD_TYPES[r.type].label:'';
     const gSign=r._gain>=0?'+':'';
-    const gCol=r.type==='cs'?'var(--text-dim)':(r._gain>=0?'#2e7d4f':'#b23a3a');
+    const gCol=r.type==='cs'?'var(--text-dim)':(r._gain>=0?'#3ee07a':'#ff5a4f');
     const gainStr=r.type==='cs'?'':`<span class="hold-legend-sub" style="color:${gCol};font-weight:700">${gSign}${r._gain.toFixed(1)}%</span>`;
     return `<div class="hold-legend-item">
       <span class="hold-legend-sw" style="background:${col}"></span>
@@ -1892,7 +2160,7 @@ function renderHoldings(){
     const pct=(r._value/totalValue*100).toFixed(1);
     const tag=HOLD_TYPES[r.type]?HOLD_TYPES[r.type].label:'';
     const gSign=r._gain>=0?'+':'';
-    const gCol=r._gain>=0?'#2e7d4f':'#b23a3a';
+    const gCol=r._gain>=0?'#3ee07a':'#ff5a4f';
     const gainBadge=r.type==='cs'?'':`<span class="hold-card-gain" style="color:${gCol}">${gSign}${r._gain.toFixed(1)}%</span>`;
     return `<div class="hold-card">
       <div class="hold-card-hdr">
@@ -3166,8 +3434,8 @@ async function refreshMacroSnapshot(){
       if(fld==='10y' || fld==='2y'){
         const bp=(r.price - r.prevClose)*100;
         const abs=Math.abs(bp);
-        cell.style.color = abs>=15 ? '#fff' : abs>=5 ? (bp>=0?'#b23a3a':'#2e7d4f') : '';
-        cell.style.background = abs>=15 ? '#b23a3a' : '';
+        cell.style.color = abs>=15 ? '#fff' : abs>=5 ? (bp>=0?'#ff5a4f':'#3ee07a') : '';
+        cell.style.background = abs>=15 ? '#ff5a4f' : '';
       }
     }));
     await new Promise(r=>setTimeout(r,150));
@@ -3209,7 +3477,7 @@ function drawM7Spark(svg, data, up){
   const tX=i=>P+(i/(data.length-1))*(W-P*2);
   const tY=v=>H-P-((v-min)/rng)*(H-P*2);
   const pts=data.map((v,i)=>`${tX(i).toFixed(1)},${tY(v).toFixed(1)}`).join(' ');
-  const col=up?'#2e7d4f':'#b23a3a';
+  const col=up?'#3ee07a':'#ff5a4f';
   svg.innerHTML=`<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />`;
 }
 
@@ -3280,7 +3548,7 @@ function drawM7Chart(svg, pairs){
   const tY=v=>T+(1-(v-min)/rng)*(H-T-B);
   const start=closes[0], end=closes[closes.length-1];
   const up=end>=start;
-  const col=up?'#2e7d4f':'#b23a3a';
+  const col=up?'#3ee07a':'#ff5a4f';
 
   // Grid + y-axis labels (5 horizontal lines)
   const NS='http://www.w3.org/2000/svg';
