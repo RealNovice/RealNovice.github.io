@@ -94,7 +94,6 @@
        Lift it to a stronger top-of-glass highlight + outer shadow with depth. */
     body.viewing-content .gp,
     body.viewing-content .hub-card,
-    body.viewing-content .hub-sec-intro,
     body.viewing-content .vita-hero,
     body.viewing-content .vita-entry,
     body.viewing-content .vita-skills,
@@ -108,6 +107,34 @@
         0 12px 40px rgba(0,0,0,0.32),
         inset 0 1px 0 rgba(255,255,255,0.10),
         inset 0 -1px 0 rgba(0,0,0,0.10);
+    }
+    /* Section intros (Finance / Dilettante / Languages / Vita) and the Holdings
+       intro line — render the paragraph itself as a proper glass card with
+       padding + rounded corners so it stops looking like a naked grey rectangle. */
+    body.viewing-content .hub-sec-intro p,
+    body.viewing-content .hold-intro{
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      padding: 1.05rem 1.4rem;
+      backdrop-filter: blur(80px) saturate(220%);
+      -webkit-backdrop-filter: blur(80px) saturate(220%);
+      box-shadow:
+        0 8px 28px rgba(0,0,0,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.10),
+        inset 0 -1px 0 rgba(0,0,0,0.08);
+      color: var(--text-sub);
+      max-width: 720px;
+    }
+    /* Section headlines — kill the fade-to-dark in dark mode so the last
+       letters don't disappear. Replace the gradient text-fill with a solid
+       cream-white colour. */
+    body.viewing-content .hub-sec-title{
+      background: none;
+      -webkit-background-clip: initial;
+      background-clip: initial;
+      -webkit-text-fill-color: var(--text-main);
+      color: var(--text-main);
     }
     /* A second translucent layer on top of glass via a ::before gradient
        gives the cards their wet-glass shimmer in dark mode. */
