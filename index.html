@@ -227,6 +227,17 @@
     .yc-ch{font-size:.6rem;font-weight:700;letter-spacing:.08em;color:var(--text-dim);display:flex;justify-content:space-between;margin-bottom:3px}
     .yc-cv{font-size:.88rem;font-weight:700;color:var(--text-main);font-variant-numeric:tabular-nums}
     .yc-cv.rising{color:var(--red)}.yc-cv.falling{color:var(--green)}
+    .yc-dc{font-size:.62rem;font-weight:600;letter-spacing:.04em;color:var(--text-dim);
+      font-variant-numeric:tabular-nums;margin-bottom:2px}
+    .yc-dc.up{color:var(--red)}.yc-dc.down{color:var(--green)}
+    .yc-dc.shock{color:#fff;background:var(--red);padding:1px 6px;border-radius:6px;
+      letter-spacing:.08em;text-transform:uppercase;display:inline-block;font-weight:700}
+    .yc-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+      background:rgba(29,29,31,.06);border-radius:10px;overflow:hidden;margin-top:.5rem}
+    .yc-strip-cell{background:rgba(255,255,255,.18);padding:.4rem .5rem}
+    .yc-strip-lbl{font-size:.55rem;font-weight:700;letter-spacing:.1em;color:var(--text-dim);text-transform:uppercase}
+    .yc-strip-val{font-size:.78rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--text-main);margin-top:1px}
+    .yc-strip-val.up{color:var(--red)}.yc-strip-val.down{color:var(--green)}
     svg.spark{width:100%;height:44px;overflow:visible}
     .spark-line{fill:none;stroke-width:1.5px;stroke-linecap:round;stroke-linejoin:round}
     .spark-area{opacity:.1}.spark-dot{r:2.5px}
@@ -319,6 +330,71 @@
     .bf-live{font-size:.62rem;color:var(--text-dim);letter-spacing:.06em;display:flex;align-items:center;gap:4px}
     .bf-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pdot 1.5s infinite}
     .bf-ts{font-size:.62rem;color:var(--text-dim)}
+
+    /* ═══════════════════════════════════════
+       GLOBAL MACRO SNAPSHOT TABLE
+       ═══════════════════════════════════════ */
+    .macro-tbl-wrap{margin-top:.6rem;overflow-x:auto}
+    .macro-tbl{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:.78rem}
+    .macro-tbl thead th{font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+      color:var(--text-dim);text-align:left;padding:.55rem .55rem;
+      border-bottom:1px solid var(--glass-border);background:transparent}
+    .macro-tbl tbody td{padding:.55rem .35rem;font-variant-numeric:tabular-nums;color:var(--text-main);vertical-align:middle}
+    .mc-row{transition:background .2s ease}
+    .mc-row:hover{background:rgba(255,255,255,.18)}
+    .mc-row+.mc-row td{border-top:1px solid rgba(29,29,31,.06)}
+    .mc-reg{font-weight:600;display:flex;align-items:center;gap:.6rem;white-space:nowrap}
+    .mc-flag{font-size:1rem;line-height:1;width:1.4rem;display:inline-block;text-align:center}
+    /* Per-region accent bars */
+    .mc-us .mc-reg{box-shadow:inset 4px 0 0 #4a9e6a;padding-left:.55rem}
+    .mc-eu .mc-reg{box-shadow:inset 4px 0 0 #6b5ba3;padding-left:.55rem}
+    .mc-uk .mc-reg{box-shadow:inset 4px 0 0 #b23a3a;padding-left:.55rem}
+    .mc-cn .mc-reg{box-shadow:inset 4px 0 0 #d4a017;padding-left:.55rem}
+    .mc-jp .mc-reg{box-shadow:inset 4px 0 0 #b88;padding-left:.55rem}
+    .mc-ru .mc-reg{box-shadow:inset 4px 0 0 #8a6e96;padding-left:.55rem}
+    .mc-br .mc-reg{box-shadow:inset 4px 0 0 #2e7d4f;padding-left:.55rem}
+    .mc-i{background:transparent;border:1px solid transparent;border-radius:6px;padding:.25rem .4rem;
+      font-family:var(--sans);font-size:.78rem;font-weight:600;color:var(--text-main);
+      font-variant-numeric:tabular-nums;width:84px;transition:border-color .2s ease,background .2s ease}
+    .mc-i.mc-iw{width:160px}
+    .mc-i:hover{border-color:rgba(29,29,31,.1);background:rgba(255,255,255,.25)}
+    .mc-i:focus{outline:none;border-color:var(--text-dim);background:rgba(255,255,255,.45)}
+    .macro-foot{font-size:.6rem;color:var(--text-dim);letter-spacing:.04em;margin-top:.6rem;line-height:1.5}
+
+    /* ═══════════════════════════════════════
+       MAG 7 COMPACT GRID
+       ═══════════════════════════════════════ */
+    .mag7-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.4rem .6rem;margin-top:.4rem}
+    .mag7-cell{display:grid;grid-template-columns:54px 70px 60px 1fr;align-items:center;gap:.4rem;
+      padding:.45rem .55rem;border:1px solid var(--glass-border);border-radius:10px;
+      background:rgba(255,255,255,.18);transition:all .2s ease}
+    .mag7-cell:hover{background:rgba(255,255,255,.32);transform:translateY(-1px)}
+    .m7-tk{font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.05em;color:var(--text-main)}
+    .m7-px{font-family:var(--sans);font-size:.84rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--text-main)}
+    .m7-chg{font-size:.7rem;font-weight:700;font-variant-numeric:tabular-nums}
+    .m7-chg.up{color:var(--green)}.m7-chg.down{color:var(--red)}.m7-chg.flat{color:var(--text-dim)}
+    .m7-spk{width:80px;height:24px;grid-column:4;grid-row:1}
+    .m7-pe{font-size:.62rem;color:var(--text-dim);letter-spacing:.04em;grid-column:1/-1;
+      display:flex;align-items:center;gap:.4rem;margin-top:.1rem}
+    .m7-pe-i{background:transparent;border:1px solid transparent;border-radius:5px;padding:1px 4px;
+      font-family:var(--sans);font-size:.62rem;color:var(--text-main);width:38px;
+      font-variant-numeric:tabular-nums;text-align:right}
+    .m7-pe-i:hover{border-color:rgba(29,29,31,.1)}
+    .m7-pe-i:focus{outline:none;border-color:var(--text-dim);background:rgba(255,255,255,.45)}
+    .m7-foot{font-size:.6rem;color:var(--text-dim);letter-spacing:.04em;margin-top:.6rem}
+
+    /* ═══════════════════════════════════════
+       US STRESS GRID — two columns
+       ═══════════════════════════════════════ */
+    .us-stress-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:.4rem}
+    .us-stress-col{display:flex;flex-direction:column}
+
+    @media(max-width:760px){
+      .mag7-grid{grid-template-columns:1fr}
+      .us-stress-grid{grid-template-columns:1fr;gap:.4rem}
+      .macro-tbl{font-size:.68rem}
+      .mc-i{width:64px}.mc-i.mc-iw{width:120px}
+    }
 
     /* ═══════════════════════════════════════
        HUB NAVIGATION (card back buttons)
@@ -555,10 +631,10 @@
       box-shadow:0 8px 40px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.45);
       padding:1.8rem 1.8rem;margin-bottom:1.6rem;
       display:grid;grid-template-columns:280px 1fr;gap:2.2rem;align-items:center}
-    .hold-pie-box{position:relative;width:260px;height:260px;margin:0 auto}
-    .hold-pie{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 6px 20px rgba(0,0,0,.08))}
-    .hold-pie-slice{transition:transform .35s ease,filter .35s ease;transform-origin:center;cursor:default}
-    .hold-pie-slice:hover{transform:scale(1.04);filter:brightness(1.08) drop-shadow(0 4px 12px rgba(0,0,0,.15))}
+    .hold-pie-box{position:relative;width:260px;height:260px;margin:0 auto;overflow:visible}
+    .hold-pie{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 6px 20px rgba(0,0,0,.08));overflow:visible}
+    .hold-pie-slice{transition:transform .35s ease,filter .35s ease;transform-origin:center;cursor:pointer;overflow:visible}
+    .hold-pie-slice:hover{transform:scale(1.035);filter:brightness(1.08) drop-shadow(0 4px 12px rgba(0,0,0,.15))}
     .hold-pie-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
     .hold-pie-center-lbl{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim)}
     .hold-pie-center-val{font-family:var(--serif);font-size:1.75rem;font-weight:500;color:var(--text-main);letter-spacing:-.01em;margin-top:.1rem;font-variant-numeric:tabular-nums}
@@ -844,11 +920,12 @@
         <div class="pcell"><div class="psym">VIX</div><div class="pval" id="p-vix">—</div><div class="pchg" id="c-vix">—</div><div class="ptime" id="t-vix">awaiting</div></div>
       </div>
       <div class="sec-label">Commodities & FX</div>
-      <div class="pgrid c4">
+      <div class="pgrid c5">
         <div class="pcell"><div class="psym">WTI Crude</div><div class="pval" id="p-wti">—</div><div class="pchg" id="c-wti">—</div><div class="ptime" id="t-wti">awaiting</div></div>
         <div class="pcell"><div class="psym">Brent</div><div class="pval" id="p-brent">—</div><div class="pchg" id="c-brent">—</div><div class="ptime" id="t-brent">awaiting</div></div>
         <div class="pcell"><div class="psym">Gold</div><div class="pval" id="p-gold">—</div><div class="pchg" id="c-gold">—</div><div class="ptime" id="t-gold">awaiting</div></div>
         <div class="pcell"><div class="psym">DXY Dollar</div><div class="pval" id="p-dxy">—</div><div class="pchg" id="c-dxy">—</div><div class="ptime" id="t-dxy">awaiting</div></div>
+        <div class="pcell"><div class="psym">USD/JPY</div><div class="pval" id="p-jpy">—</div><div class="pchg" id="c-jpy">—</div><div class="ptime" id="t-jpy">awaiting</div></div>
       </div>
       <div class="sec-label">Sector ETFs</div>
       <div class="pgrid c4">
@@ -865,8 +942,24 @@
         <div class="yc-sb"><div class="yc-st">10Y − 2Y SPREAD</div><div class="yc-sv" id="ycSV">—</div><div class="yc-ss" id="ycSL">loading...</div></div>
       </div>
       <div class="yc-cg">
-        <div class="yc-cc"><div class="yc-ch"><span>2-YEAR YIELD</span><span class="yc-cv" id="y2C">—</span></div><svg class="spark" id="sp2y" viewBox="0 0 200 48"><text x="100" y="28" text-anchor="middle" fill="rgba(29,29,31,.2)" font-size="10" font-family="sans-serif">loading...</text></svg></div>
-        <div class="yc-cc"><div class="yc-ch"><span>10-YEAR YIELD</span><span class="yc-cv" id="y10C">—</span></div><svg class="spark" id="sp10y" viewBox="0 0 200 48"><text x="100" y="28" text-anchor="middle" fill="rgba(29,29,31,.2)" font-size="10" font-family="sans-serif">loading...</text></svg></div>
+        <div class="yc-cc">
+          <div class="yc-ch"><span>2-YEAR YIELD</span><span class="yc-cv" id="y2C">—</span></div>
+          <div class="yc-dc" id="y2DC">Δ today: —</div>
+          <svg class="spark" id="sp2y" viewBox="0 0 200 48"><text x="100" y="28" text-anchor="middle" fill="rgba(29,29,31,.2)" font-size="10" font-family="sans-serif">loading...</text></svg>
+        </div>
+        <div class="yc-cc">
+          <div class="yc-ch"><span>10-YEAR YIELD</span><span class="yc-cv" id="y10C">—</span></div>
+          <div class="yc-dc" id="y10DC">Δ today: —</div>
+          <svg class="spark" id="sp10y" viewBox="0 0 200 48"><text x="100" y="28" text-anchor="middle" fill="rgba(29,29,31,.2)" font-size="10" font-family="sans-serif">loading...</text></svg>
+        </div>
+      </div>
+      <!-- Cross-asset stress strip: JPY · oil/SPX correlation. Both sit beneath
+           the yield curve so that yield, carry-trade and risk-on/-off pressure
+           can be read on one glance. -->
+      <div class="yc-strip">
+        <div class="yc-strip-cell"><div class="yc-strip-lbl">USD/JPY · daily Δ</div><div class="yc-strip-val" id="jpyStrip">—</div></div>
+        <div class="yc-strip-cell"><div class="yc-strip-lbl">WTI vs S&amp;P 500 · 30d ρ</div><div class="yc-strip-val" id="oilSpxRho">—</div></div>
+        <div class="yc-strip-cell"><div class="yc-strip-lbl">DXY · daily Δ</div><div class="yc-strip-val" id="dxyStrip">—</div></div>
       </div>
     </div>
   </div>
@@ -914,152 +1007,169 @@
             <span class="osp-label">WTI–Brent Spread</span>
             <span class="osp-val neutral" id="oilSpread">—</span>
           </div>
-          <div class="oil-spread" style="margin-top:.3rem">
-            <span class="osp-label">3:2:1 Crack Spread</span>
-            <span class="osp-val neutral" id="crackSpread">—</span>
-          </div>
         </div>
 
-        <!-- RIGHT: ETFs + Inventory & Supply -->
+        <!-- RIGHT: Global Energy Benchmarks -->
         <div>
-          <div class="sec-label">Oil & Energy ETFs</div>
-          <div class="pgrid c3">
-            <div class="pcell"><div class="psym">USO · US Oil Fund</div><div class="pval" id="p-uso">—</div><div class="pchg" id="c-uso">—</div><div class="ptime" id="t-uso">awaiting</div></div>
-            <div class="pcell"><div class="psym">BNO · Brent Oil Fund</div><div class="pval" id="p-bno">—</div><div class="pchg" id="c-bno">—</div><div class="ptime" id="t-bno">awaiting</div></div>
-            <div class="pcell"><div class="psym">CRAK · Refiners ETF</div><div class="pval" id="p-crak">—</div><div class="pchg" id="c-crak">—</div><div class="ptime" id="t-crak">awaiting</div></div>
-          </div>
-          <div class="pgrid c3">
-            <div class="pcell"><div class="psym">XOP · Oil & Gas E&P</div><div class="pval" id="p-xop">—</div><div class="pchg" id="c-xop">—</div><div class="ptime" id="t-xop">awaiting</div></div>
-            <div class="pcell"><div class="psym">OIH · Oil Services</div><div class="pval" id="p-oih">—</div><div class="pchg" id="c-oih">—</div><div class="ptime" id="t-oih">awaiting</div></div>
-            <div class="pcell"><div class="psym">XLE · Energy Sector</div><div class="pval" id="p-o-xle">—</div><div class="pchg" id="c-o-xle">—</div><div class="ptime" id="t-o-xle">awaiting</div></div>
-          </div>
+          <div class="sec-label">Global Energy Benchmarks <span style="font-weight:400;letter-spacing:.06em;font-size:.58rem">MANUAL · weekly refresh</span></div>
+          <div class="cl" style="margin-top:0">Renewables &amp; transition <span class="pb">manual</span></div>
+          <div class="mr"><div class="md normal" id="d-cnsolar"></div><div class="mn">China · Polysilicon spot<span class="ms">$/kg · solar-grade · OPIS</span></div><div class="mrt"><input class="mi" id="i-cnsolar" value="6.2" onchange="evalManual()"/><div class="mst" id="s-cnsolar">—</div></div></div>
+          <div class="mr"><div class="md normal" id="d-euwind"></div><div class="mn">EU · Offshore-wind PPA<span class="ms">€/MWh · weighted avg.</span></div><div class="mrt"><input class="mi" id="i-euwind" value="78" onchange="evalManual()"/><div class="mst" id="s-euwind">—</div></div></div>
+          <div class="mr"><div class="md normal" id="d-eucarb"></div><div class="mn">EU ETS · Carbon allowance<span class="ms">€/tonne CO₂ · ICE EUA</span></div><div class="mrt"><input class="mi" id="i-eucarb" value="72" onchange="evalManual()"/><div class="mst" id="s-eucarb">—</div></div></div>
+          <div class="mr"><div class="md normal" id="d-libat"></div><div class="mn">Lithium carbonate (CN)<span class="ms">RMB/tonne · battery grade</span></div><div class="mrt"><input class="mi" id="i-libat" value="78000" onchange="evalManual()"/><div class="mst" id="s-libat">—</div></div></div>
 
-          <div class="sec-label">Supply & Inventory <span style="font-weight:400;letter-spacing:.06em;font-size:.58rem">FRED · EIA</span></div>
-          <div class="cl" style="margin-top:0">Crude Stocks <span class="pb" id="bo">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-cstocks"></div><div class="mn">US Commercial Stocks<span class="ms">FRED: WCESTUS1 · weekly</span></div><div class="mrt"><div class="mv loading" id="v-cstocks">—</div><div class="mst" id="s-cstocks">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-spr"></div><div class="mn">Strategic Petroleum Reserve<span class="ms">FRED: WCSSTUS1 · weekly</span></div><div class="mrt"><div class="mv loading" id="v-spr">—</div><div class="mst" id="s-spr">—</div></div></div>
-
-          <div class="cl">Production & Prices <span class="pb" id="bp">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-prod"></div><div class="mn">US Crude Production<span class="ms">FRED: WCRFPUS2 · weekly</span></div><div class="mrt"><div class="mv loading" id="v-prod">—</div><div class="mst" id="s-prod">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-gas"></div><div class="mn">Retail Gasoline<span class="ms">FRED: GASREGW · weekly</span></div><div class="mrt"><div class="mv loading" id="v-gas">—</div><div class="mst" id="s-gas">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-diesel"></div><div class="mn">US Gulf Diesel<span class="ms">FRED: DDFUELUSGULF · daily</span></div><div class="mrt"><div class="mv loading" id="v-diesel">—</div><div class="mst" id="s-diesel">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-jet"></div><div class="mn">Jet Fuel Gulf Coast<span class="ms">FRED: DJFUELUSGULF · daily</span></div><div class="mrt"><div class="mv loading" id="v-jet">—</div><div class="mst" id="s-jet">—</div></div></div>
-
-          <div class="cl">WTI & Brent Spot <span class="pb" id="bs">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-wtispot"></div><div class="mn">WTI Spot (Cushing)<span class="ms">FRED: DCOILWTICO · daily</span></div><div class="mrt"><div class="mv loading" id="v-wtispot">—</div><div class="mst" id="s-wtispot">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-brentspot"></div><div class="mn">Brent Spot (Europe)<span class="ms">FRED: DCOILBRENTEU · daily</span></div><div class="mrt"><div class="mv loading" id="v-brentspot">—</div><div class="mst" id="s-brentspot">—</div></div></div>
+          <div class="cl">Power &amp; gas hubs <span class="pb">manual</span></div>
+          <div class="mr"><div class="md normal" id="d-ttf"></div><div class="mn">TTF · Dutch nat-gas<span class="ms">€/MWh · ICE front-month</span></div><div class="mrt"><input class="mi" id="i-ttf" value="34" onchange="evalManual()"/><div class="mst" id="s-ttf">—</div></div></div>
+          <div class="mr"><div class="md normal" id="d-jkm"></div><div class="mn">JKM · Asian LNG<span class="ms">$/MMBtu · Platts</span></div><div class="mrt"><input class="mi" id="i-jkm" value="11.5" onchange="evalManual()"/><div class="mst" id="s-jkm">—</div></div></div>
+          <div class="mr"><div class="md normal" id="d-eupow"></div><div class="mn">EU baseload power<span class="ms">€/MWh · DE+FR avg.</span></div><div class="mrt"><input class="mi" id="i-eupow" value="92" onchange="evalManual()"/><div class="mst" id="s-eupow">—</div></div></div>
+          <div class="mr"><div class="md normal" id="d-uran"></div><div class="mn">U₃O₈ · Uranium spot<span class="ms">$/lb · UxC weekly</span></div><div class="mrt"><input class="mi" id="i-uran" value="78" onchange="evalManual()"/><div class="mst" id="s-uran">—</div></div></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Region Carousel -->
+  <!-- ═══════════════ GLOBAL MACRO SNAPSHOT ═══════════════ -->
   <div class="gp">
-    <div class="car-nav" id="carNav"></div>
-    <div class="car-label" id="carLabel">🇺🇸 UNITED STATES</div>
-    <div class="car-vp" id="carVP">
-      <div class="car-track" id="carTrack">
+    <div class="oil-tab-hdr">
+      <h2>Global <em>Macro</em> Snapshot</h2>
+      <span class="oil-badge">CPI · YIELDS · POLICY · INDEX</span>
+    </div>
+    <div class="macro-tbl-wrap">
+      <table class="macro-tbl">
+        <thead>
+          <tr>
+            <th>Region</th>
+            <th>CPI Y/Y</th>
+            <th>Policy Rate</th>
+            <th>2Y Yield</th>
+            <th>10Y Yield</th>
+            <th>Main Index</th>
+            <th>FX vs USD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="mc-row mc-us">
+            <td class="mc-reg"><span class="mc-flag">🇺🇸</span><span>United States</span></td>
+            <td><input class="mc-i" id="mc-us-cpi" value="3.0"/></td>
+            <td><input class="mc-i" id="mc-us-pol" value="4.50"/></td>
+            <td><input class="mc-i" id="mc-us-2y"  value="4.21"/></td>
+            <td><input class="mc-i" id="mc-us-10y" value="4.45"/></td>
+            <td><input class="mc-i mc-iw" id="mc-us-idx" value="S&P 5,820"/></td>
+            <td><input class="mc-i" id="mc-us-fx"  value="DXY 102.5"/></td>
+          </tr>
+          <tr class="mc-row mc-eu">
+            <td class="mc-reg"><span class="mc-flag">🇪🇺</span><span>Eurozone</span></td>
+            <td><input class="mc-i" id="mc-eu-cpi" value="2.4"/></td>
+            <td><input class="mc-i mc-iw" id="mc-eu-pol" value="MRO 2.50 / DFR 2.25"/></td>
+            <td><input class="mc-i" id="mc-eu-2y"  value="2.06"/></td>
+            <td><input class="mc-i" id="mc-eu-10y" value="2.62"/></td>
+            <td><input class="mc-i mc-iw" id="mc-eu-idx" value="DAX 19,420"/></td>
+            <td><input class="mc-i" id="mc-eu-fx"  value="EUR 1.078"/></td>
+          </tr>
+          <tr class="mc-row mc-uk">
+            <td class="mc-reg"><span class="mc-flag">🇬🇧</span><span>United Kingdom</span></td>
+            <td><input class="mc-i" id="mc-uk-cpi" value="3.4"/></td>
+            <td><input class="mc-i" id="mc-uk-pol" value="4.25"/></td>
+            <td><input class="mc-i" id="mc-uk-2y"  value="4.18"/></td>
+            <td><input class="mc-i" id="mc-uk-10y" value="4.51"/></td>
+            <td><input class="mc-i mc-iw" id="mc-uk-idx" value="FTSE 8,210"/></td>
+            <td><input class="mc-i" id="mc-uk-fx"  value="GBP 1.252"/></td>
+          </tr>
+          <tr class="mc-row mc-cn">
+            <td class="mc-reg"><span class="mc-flag">🇨🇳</span><span>China</span></td>
+            <td><input class="mc-i" id="mc-cn-cpi" value="0.4"/></td>
+            <td><input class="mc-i mc-iw" id="mc-cn-pol" value="MLF 2.30 / 1Y LPR 3.10"/></td>
+            <td><input class="mc-i" id="mc-cn-2y"  value="1.42"/></td>
+            <td><input class="mc-i" id="mc-cn-10y" value="1.78"/></td>
+            <td><input class="mc-i mc-iw" id="mc-cn-idx" value="CSI 300 3,890"/></td>
+            <td><input class="mc-i" id="mc-cn-fx"  value="CNY 7.23"/></td>
+          </tr>
+          <tr class="mc-row mc-jp">
+            <td class="mc-reg"><span class="mc-flag">🇯🇵</span><span>Japan</span></td>
+            <td><input class="mc-i" id="mc-jp-cpi" value="2.6"/></td>
+            <td><input class="mc-i" id="mc-jp-pol" value="0.50"/></td>
+            <td><input class="mc-i" id="mc-jp-2y"  value="0.79"/></td>
+            <td><input class="mc-i" id="mc-jp-10y" value="1.42"/></td>
+            <td><input class="mc-i mc-iw" id="mc-jp-idx" value="Nikkei 38,420"/></td>
+            <td><input class="mc-i" id="mc-jp-fx"  value="JPY 150.4"/></td>
+          </tr>
+          <tr class="mc-row mc-ru">
+            <td class="mc-reg"><span class="mc-flag">🇷🇺</span><span>Russia</span></td>
+            <td><input class="mc-i" id="mc-ru-cpi" value="8.7"/></td>
+            <td><input class="mc-i" id="mc-ru-pol" value="21.00"/></td>
+            <td><input class="mc-i" id="mc-ru-2y"  value="—"/></td>
+            <td><input class="mc-i" id="mc-ru-10y" value="14.20"/></td>
+            <td><input class="mc-i mc-iw" id="mc-ru-idx" value="MOEX 2,650"/></td>
+            <td><input class="mc-i" id="mc-ru-fx"  value="RUB 92.1"/></td>
+          </tr>
+          <tr class="mc-row mc-br">
+            <td class="mc-reg"><span class="mc-flag">🇧🇷</span><span>Brazil</span></td>
+            <td><input class="mc-i" id="mc-br-cpi" value="4.6"/></td>
+            <td><input class="mc-i mc-iw" id="mc-br-pol" value="SELIC 12.25"/></td>
+            <td><input class="mc-i" id="mc-br-2y"  value="11.70"/></td>
+            <td><input class="mc-i" id="mc-br-10y" value="13.40"/></td>
+            <td><input class="mc-i mc-iw" id="mc-br-idx" value="Bovespa 132K"/></td>
+            <td><input class="mc-i" id="mc-br-fx"  value="BRL 5.78"/></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="macro-foot">All values manually editable — click a cell to override. Policy-rate cell shows multi-rate frameworks where applicable (ECB MRO/DFR, China MLF/LPR, Brazil SELIC).</div>
+    </div>
+  </div>
 
-        <!-- US -->
-        <div class="car-panel" id="pan-0">
-          <div class="cl">Labor Market <span class="pb" id="bl">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-sahm"></div><div class="mn">Sahm Rule<span class="ms">FRED: SAHMREALTIME</span></div><div class="mrt"><div class="mv loading" id="v-sahm">—</div><div class="mst" id="s-sahm">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-claims"></div><div class="mn">Initial Claims<span class="ms">FRED: ICSA · weekly</span></div><div class="mrt"><div class="mv loading" id="v-claims">—</div><div class="mst" id="s-claims">—</div></div></div>
+  <!-- ═══════════════ MAG 7 + BORROWING RATES ═══════════════ -->
+  <div class="top2">
+    <div class="gp">
+      <div class="sec-label">Magnificent 7 <span style="font-weight:400;letter-spacing:.06em;font-size:.58rem">YAHOO · LIVE</span></div>
+      <div class="mag7-grid" id="mag7Grid">
+        <div class="mag7-cell" data-tk="AAPL"><span class="m7-tk">AAPL</span><span class="m7-px" id="m7-px-AAPL">—</span><span class="m7-chg" id="m7-chg-AAPL">—</span><svg class="m7-spk" id="m7-spk-AAPL" viewBox="0 0 80 24"></svg><span class="m7-pe">P/E <input class="m7-pe-i" id="m7-pe-AAPL" value="34"/></span></div>
+        <div class="mag7-cell" data-tk="MSFT"><span class="m7-tk">MSFT</span><span class="m7-px" id="m7-px-MSFT">—</span><span class="m7-chg" id="m7-chg-MSFT">—</span><svg class="m7-spk" id="m7-spk-MSFT" viewBox="0 0 80 24"></svg><span class="m7-pe">P/E <input class="m7-pe-i" id="m7-pe-MSFT" value="36"/></span></div>
+        <div class="mag7-cell" data-tk="GOOGL"><span class="m7-tk">GOOGL</span><span class="m7-px" id="m7-px-GOOGL">—</span><span class="m7-chg" id="m7-chg-GOOGL">—</span><svg class="m7-spk" id="m7-spk-GOOGL" viewBox="0 0 80 24"></svg><span class="m7-pe">P/E <input class="m7-pe-i" id="m7-pe-GOOGL" value="24"/></span></div>
+        <div class="mag7-cell" data-tk="AMZN"><span class="m7-tk">AMZN</span><span class="m7-px" id="m7-px-AMZN">—</span><span class="m7-chg" id="m7-chg-AMZN">—</span><svg class="m7-spk" id="m7-spk-AMZN" viewBox="0 0 80 24"></svg><span class="m7-pe">P/E <input class="m7-pe-i" id="m7-pe-AMZN" value="40"/></span></div>
+        <div class="mag7-cell" data-tk="META"><span class="m7-tk">META</span><span class="m7-px" id="m7-px-META">—</span><span class="m7-chg" id="m7-chg-META">—</span><svg class="m7-spk" id="m7-spk-META" viewBox="0 0 80 24"></svg><span class="m7-pe">P/E <input class="m7-pe-i" id="m7-pe-META" value="27"/></span></div>
+        <div class="mag7-cell" data-tk="NVDA"><span class="m7-tk">NVDA</span><span class="m7-px" id="m7-px-NVDA">—</span><span class="m7-chg" id="m7-chg-NVDA">—</span><svg class="m7-spk" id="m7-spk-NVDA" viewBox="0 0 80 24"></svg><span class="m7-pe">P/E <input class="m7-pe-i" id="m7-pe-NVDA" value="50"/></span></div>
+        <div class="mag7-cell" data-tk="TSLA"><span class="m7-tk">TSLA</span><span class="m7-px" id="m7-px-TSLA">—</span><span class="m7-chg" id="m7-chg-TSLA">—</span><svg class="m7-spk" id="m7-spk-TSLA" viewBox="0 0 80 24"></svg><span class="m7-pe">P/E <input class="m7-pe-i" id="m7-pe-TSLA" value="80"/></span></div>
+      </div>
+      <div class="m7-foot">Click a cell to view returns · 1Y avg P/E editable · sparkline = 1Y daily close</div>
+    </div>
 
-          <div class="cl">Rates & Credit <span class="pb" id="br">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-yc"></div><div class="mn">Yield Curve (10Y-2Y)<span class="ms">FRED: T10Y2Y</span></div><div class="mrt"><div class="mv loading" id="v-yc">—</div><div class="mst" id="s-yc">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-hy"></div><div class="mn">HY Credit Spread<span class="ms">FRED: BAMLH0A0HYM2</span></div><div class="mrt"><div class="mv loading" id="v-hy">—</div><div class="mst" id="s-hy">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-mort"></div><div class="mn">30Y Mortgage Rate<span class="ms">FRED: MORTGAGE30US</span></div><div class="mrt"><div class="mv loading" id="v-mort">—</div><div class="mst" id="s-mort">—</div></div></div>
+    <div class="gp">
+      <div class="sec-label">Borrowing Rates <span style="font-weight:400;letter-spacing:.06em;font-size:.58rem">REAL ESTATE · CONSUMER CREDIT</span></div>
+      <div class="cl" style="margin-top:0">United States <span class="pb">manual / FRED</span></div>
+      <div class="mr"><div class="md loading" id="d-mort"></div><div class="mn">30Y Mortgage Rate<span class="ms">FRED: MORTGAGE30US · weekly</span></div><div class="mrt"><div class="mv loading" id="v-mort">—</div><div class="mst" id="s-mort">—</div></div></div>
+      <div class="mr"><div class="md normal" id="d-ccrate"></div><div class="mn">Credit-card APR avg.<span class="ms">Manual · all-account assessed</span></div><div class="mrt"><input class="mi" id="i-ccrate" value="21.5" onchange="evalManual()"/><div class="mst" id="s-ccrate">—</div></div></div>
+      <div class="mr"><div class="md normal" id="d-autoloan"></div><div class="mn">60-mo new auto loan<span class="ms">Manual · % APR avg.</span></div><div class="mrt"><input class="mi" id="i-autoloan" value="7.9" onchange="evalManual()"/><div class="mst" id="s-autoloan">—</div></div></div>
 
-          <div class="cl">Real Economy <span class="pb" id="bre">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-indpro"></div><div class="mn">Industrial Production<span class="ms">FRED: INDPRO · MoM%</span></div><div class="mrt"><div class="mv loading" id="v-indpro">—</div><div class="mst" id="s-indpro">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-permits"></div><div class="mn">Building Permits<span class="ms">FRED: PERMIT</span></div><div class="mrt"><div class="mv loading" id="v-permits">—</div><div class="mst" id="s-permits">—</div></div></div>
-          <div class="mr"><div class="md normal" id="d-ism-mfg"></div><div class="mn">ISM Manufacturing PMI<span class="ms">Manual · &lt;50 = contraction</span></div><div class="mrt"><input class="mi" id="i-ism-mfg" value="49.0" onchange="evalManual()"/><div class="mst" id="s-ism-mfg">—</div></div></div>
-          <div class="mr"><div class="md normal" id="d-ism-svc"></div><div class="mn">ISM Services PMI<span class="ms">Manual · 70% of GDP</span></div><div class="mrt"><input class="mi" id="i-ism-svc" value="53.5" onchange="evalManual()"/><div class="mst" id="s-ism-svc">—</div></div></div>
+      <div class="cl">Eurozone <span class="pb">manual / ECB</span></div>
+      <div class="mr"><div class="md normal" id="d-eumort"></div><div class="mn">House loan rate<span class="ms">Manual · ECB MFI new business</span></div><div class="mrt"><input class="mi" id="i-eumort" value="3.45" onchange="evalManual()"/><div class="mst" id="s-eumort">—</div></div></div>
+      <div class="mr"><div class="md normal" id="d-euccrate"></div><div class="mn">Consumer-credit rate<span class="ms">Manual · ECB MFI new business</span></div><div class="mrt"><input class="mi" id="i-euccrate" value="7.9" onchange="evalManual()"/><div class="mst" id="s-euccrate">—</div></div></div>
+      <div class="mr"><div class="md normal" id="d-euauto"></div><div class="mn">Vehicle-loan rate (DE)<span class="ms">Manual · % APR retail avg.</span></div><div class="mrt"><input class="mi" id="i-euauto" value="6.4" onchange="evalManual()"/><div class="mst" id="s-euauto">—</div></div></div>
+    </div>
+  </div>
 
-          <div class="cl">Consumer <span class="pb" id="bc">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-umcs"></div><div class="mn">Consumer Sentiment<span class="ms">FRED: UMCSENT</span></div><div class="mrt"><div class="mv loading" id="v-umcs">—</div><div class="mst" id="s-umcs">—</div></div></div>
-
-          <div class="cl">Market</div>
-          <div class="mr"><div class="md normal" id="d-vixm"></div><div class="mn">VIX Level<span class="ms">Auto-sync from Yahoo Finance</span></div><div class="mrt"><input class="mi" id="i-vix" value="31.2" onchange="evalManual()"/><div class="mst" id="s-vixm">—</div></div></div>
-          <div class="mr"><div class="md normal" id="d-spx"></div><div class="mn">S&P 500 Drawdown<span class="ms">Manual · % from ATH</span></div><div class="mrt"><input class="mi" id="i-spx" value="-8.7" onchange="evalManual()"/><div class="mst" id="s-spx">—</div></div></div>
-
-          <div class="cl">Inflation <span class="pb" id="bi">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-cpi"></div><div class="mn">CPI Y/Y<span class="ms">FRED: CPIAUCSL · computed</span></div><div class="mrt"><div class="mv loading" id="v-cpi">—</div><div class="mst" id="s-cpi">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-bei"></div><div class="mn">5Y Breakeven Inflation<span class="ms">FRED: T5YIE</span></div><div class="mrt"><div class="mv loading" id="v-bei">—</div><div class="mst" id="s-bei">—</div></div></div>
-
-          <div class="cl">Valuation</div>
-          <div class="mr"><div class="md normal" id="d-pe"></div><div class="mn">S&P 500 P/E<span class="ms">Manual · trailing 12M</span></div><div class="mrt"><input class="mi" id="i-pe" value="25.2" onchange="evalManual()"/><div class="mst" id="s-pe">—</div></div></div>
-          <div class="mr"><div class="md normal" id="d-mktm2"></div><div class="mn">Mkt Cap / M2<span class="ms">Manual · Buffett indicator %</span></div><div class="mrt"><input class="mi" id="i-mktm2" value="286" onchange="evalManual()"/><div class="mst" id="s-mktm2">—</div></div></div>
-
-          <div class="cl">Financial Conditions <span class="pb" id="bn">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-nfci"></div><div class="mn">NFCI<span class="ms">FRED: NFCI · Chicago Fed</span></div><div class="mrt"><div class="mv loading" id="v-nfci">—</div><div class="mst" id="s-nfci">—</div></div></div>
-        </div>
-
-        <!-- EU -->
-        <div class="car-panel" id="pan-1">
-          <div class="cl">Monetary Policy <span class="pb" id="beu1">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-ecbrate"></div><div class="mn">ECB Refi Rate<span class="ms">FRED: ECBMRRFR</span></div><div class="mrt"><div class="mv loading" id="v-ecbrate">—</div><div class="mst" id="s-ecbrate">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-eurusd"></div><div class="mn">EUR/USD<span class="ms">FRED: DEXUSEU · daily</span></div><div class="mrt"><div class="mv loading" id="v-eurusd">—</div><div class="mst" id="s-eurusd">—</div></div></div>
-
-          <div class="cl">Inflation & Economy <span class="pb" id="beu2">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-eucpi"></div><div class="mn">HICP Inflation<span class="ms">FRED: CP0000EZ19M086NEST</span></div><div class="mrt"><div class="mv loading" id="v-eucpi">—</div><div class="mst" id="s-eucpi">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-euunemp"></div><div class="mn">Unemployment Rate<span class="ms">FRED: LRHUTTTTEZM156S</span></div><div class="mrt"><div class="mv loading" id="v-euunemp">—</div><div class="mst" id="s-euunemp">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-euconf"></div><div class="mn">Consumer Confidence<span class="ms">FRED: CSCICP02EZM460S</span></div><div class="mrt"><div class="mv loading" id="v-euconf">—</div><div class="mst" id="s-euconf">—</div></div></div>
-
-          <div class="cl">Market</div>
-          <div class="mr"><div class="md normal" id="d-eupmi"></div><div class="mn">Composite PMI<span class="ms">Manual · &gt;50 = expansion</span></div><div class="mrt"><input class="mi" id="i-eupmi" value="50.4" onchange="evalManual()"/><div class="mst" id="s-eupmi">—</div></div></div>
-          <div class="mr"><div class="md normal" id="d-bund"></div><div class="mn">BTP-Bund Spread<span class="ms">Manual · Italian risk premium bps</span></div><div class="mrt"><input class="mi" id="i-bund" value="130" onchange="evalManual()"/><div class="mst" id="s-bund">—</div></div></div>
-        </div>
-
-        <!-- China -->
-        <div class="car-panel" id="pan-2">
-          <div class="cl">Prices <span class="pb" id="bcn1">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-cncpi"></div><div class="mn">CPI Y/Y<span class="ms">FRED: CPALTT01CNM657N</span></div><div class="mrt"><div class="mv loading" id="v-cncpi">—</div><div class="mst" id="s-cncpi">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-cnppi"></div><div class="mn">PPI Y/Y<span class="ms">FRED: CHNPIEATI01GYM</span></div><div class="mrt"><div class="mv loading" id="v-cnppi">—</div><div class="mst" id="s-cnppi">—</div></div></div>
-
-          <div class="cl">Currency <span class="pb" id="bcn2">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-cny"></div><div class="mn">USD/CNY<span class="ms">FRED: DEXCHUS · daily</span></div><div class="mrt"><div class="mv loading" id="v-cny">—</div><div class="mst" id="s-cny">—</div></div></div>
-
-          <div class="cl">Activity</div>
-          <div class="mr"><div class="md normal" id="d-cnpmi"></div><div class="mn">NBS Manufacturing PMI<span class="ms">Manual · &lt;50 = contraction</span></div><div class="mrt"><input class="mi" id="i-cnpmi" value="50.5" onchange="evalManual()"/><div class="mst" id="s-cnpmi">—</div></div></div>
-          <div class="mr"><div class="md normal" id="d-cxpmi"></div><div class="mn">Caixin Services PMI<span class="ms">Manual · private survey</span></div><div class="mrt"><input class="mi" id="i-cxpmi" value="51.9" onchange="evalManual()"/><div class="mst" id="s-cxpmi">—</div></div></div>
-          <div class="mr"><div class="md normal" id="d-cnfx"></div><div class="mn">FX Reserves<span class="ms">Manual · $T</span></div><div class="mrt"><input class="mi" id="i-cnfx" value="3.2" onchange="evalManual()"/><div class="mst" id="s-cnfx">—</div></div></div>
-        </div>
-
-        <!-- Japan -->
-        <div class="car-panel" id="pan-3">
-          <div class="cl">Monetary Policy <span class="pb" id="bjp1">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-bojrate"></div><div class="mn">BOJ Policy Rate<span class="ms">FRED: IRSTCB01JPM156N</span></div><div class="mrt"><div class="mv loading" id="v-bojrate">—</div><div class="mst" id="s-bojrate">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-jgb"></div><div class="mn">10Y JGB Yield<span class="ms">FRED: IRLTLT01JPM156N</span></div><div class="mrt"><div class="mv loading" id="v-jgb">—</div><div class="mst" id="s-jgb">—</div></div></div>
-
-          <div class="cl">Prices & FX <span class="pb" id="bjp2">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-jpcpi"></div><div class="mn">CPI (All Items)<span class="ms">FRED: JPNCPIALLMINMEI</span></div><div class="mrt"><div class="mv loading" id="v-jpcpi">—</div><div class="mst" id="s-jpcpi">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-jpyusd"></div><div class="mn">JPY/USD<span class="ms">FRED: DEXJPUS · daily</span></div><div class="mrt"><div class="mv loading" id="v-jpyusd">—</div><div class="mst" id="s-jpyusd">—</div></div></div>
-
-          <div class="cl">Market <span class="pb" id="bjp3">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-nikkei"></div><div class="mn">Nikkei 225<span class="ms">FRED: NIKKEI225 · daily</span></div><div class="mrt"><div class="mv loading" id="v-nikkei">—</div><div class="mst" id="s-nikkei">—</div></div></div>
-          <div class="mr"><div class="md normal" id="d-tankan"></div><div class="mn">Tankan Index<span class="ms">Manual · BOJ survey</span></div><div class="mrt"><input class="mi" id="i-tankan" value="14" onchange="evalManual()"/><div class="mst" id="s-tankan">—</div></div></div>
-        </div>
-
-        <!-- UK -->
-        <div class="car-panel" id="pan-4">
-          <div class="cl">Monetary Policy <span class="pb" id="buk1">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-boerate"></div><div class="mn">BOE Base Rate<span class="ms">FRED: BOERUKM · monthly</span></div><div class="mrt"><div class="mv loading" id="v-boerate">—</div><div class="mst" id="s-boerate">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-gbpusd"></div><div class="mn">GBP/USD<span class="ms">FRED: DEXUSUK · daily</span></div><div class="mrt"><div class="mv loading" id="v-gbpusd">—</div><div class="mst" id="s-gbpusd">—</div></div></div>
-
-          <div class="cl">Economy <span class="pb" id="buk2">60s</span></div>
-          <div class="mr"><div class="md loading" id="d-ukcpi"></div><div class="mn">CPI (All Items)<span class="ms">FRED: GBRCPIALLMINMEI</span></div><div class="mrt"><div class="mv loading" id="v-ukcpi">—</div><div class="mst" id="s-ukcpi">—</div></div></div>
-          <div class="mr"><div class="md loading" id="d-ukuem"></div><div class="mn">Unemployment Rate<span class="ms">FRED: LRHUTTTTGBM156S</span></div><div class="mrt"><div class="mv loading" id="v-ukuem">—</div><div class="mst" id="s-ukuem">—</div></div></div>
-
-          <div class="cl">Market</div>
-          <div class="mr"><div class="md normal" id="d-ukpmi"></div><div class="mn">UK Composite PMI<span class="ms">Manual · &gt;50 = expansion</span></div><div class="mrt"><input class="mi" id="i-ukpmi" value="51.5" onchange="evalManual()"/><div class="mst" id="s-ukpmi">—</div></div></div>
-          <div class="mr"><div class="md normal" id="d-gilt"></div><div class="mn">10Y Gilt Yield<span class="ms">Manual · %</span></div><div class="mrt"><input class="mi" id="i-gilt" value="4.5" onchange="evalManual()"/><div class="mst" id="s-gilt">—</div></div></div>
-        </div>
+  <!-- ═══════════════ US STRESS INDICATORS ═══════════════ -->
+  <div class="gp">
+    <div class="sec-label">US Stress Indicators <span style="font-weight:400;letter-spacing:.06em;font-size:.58rem">FRED · LIVE</span></div>
+    <div class="us-stress-grid">
+      <div class="us-stress-col">
+        <div class="cl" style="margin-top:0">Labor &amp; Credit <span class="pb" id="bl">60s</span></div>
+        <div class="mr"><div class="md loading" id="d-sahm"></div><div class="mn">Sahm Rule<span class="ms">FRED: SAHMREALTIME</span></div><div class="mrt"><div class="mv loading" id="v-sahm">—</div><div class="mst" id="s-sahm">—</div></div></div>
+        <div class="mr"><div class="md loading" id="d-claims"></div><div class="mn">Initial Claims<span class="ms">FRED: ICSA · weekly</span></div><div class="mrt"><div class="mv loading" id="v-claims">—</div><div class="mst" id="s-claims">—</div></div></div>
+        <div class="mr"><div class="md loading" id="d-hy"></div><div class="mn">HY Credit Spread<span class="ms">FRED: BAMLH0A0HYM2</span></div><div class="mrt"><div class="mv loading" id="v-hy">—</div><div class="mst" id="s-hy">—</div></div></div>
+        <div class="mr"><div class="md loading" id="d-nfci"></div><div class="mn">NFCI<span class="ms">FRED: NFCI · Chicago Fed</span></div><div class="mrt"><div class="mv loading" id="v-nfci">—</div><div class="mst" id="s-nfci">—</div></div></div>
+      </div>
+      <div class="us-stress-col">
+        <div class="cl" style="margin-top:0">Inflation &amp; Valuation <span class="pb" id="bi">60s</span></div>
+        <div class="mr"><div class="md loading" id="d-cpi"></div><div class="mn">CPI Y/Y<span class="ms">FRED: CPIAUCSL · computed</span></div><div class="mrt"><div class="mv loading" id="v-cpi">—</div><div class="mst" id="s-cpi">—</div></div></div>
+        <div class="mr"><div class="md loading" id="d-bei"></div><div class="mn">5Y Breakeven Inflation<span class="ms">FRED: T5YIE</span></div><div class="mrt"><div class="mv loading" id="v-bei">—</div><div class="mst" id="s-bei">—</div></div></div>
+        <div class="mr"><div class="md normal" id="d-pe"></div><div class="mn">S&amp;P 500 P/E<span class="ms">Manual · trailing 12M</span></div><div class="mrt"><input class="mi" id="i-pe" value="25.2" onchange="evalManual()"/><div class="mst" id="s-pe">—</div></div></div>
+        <div class="mr"><div class="md normal" id="d-mktm2"></div><div class="mn">Mkt Cap / M2<span class="ms">Manual · Buffett indicator %</span></div><div class="mrt"><input class="mi" id="i-mktm2" value="286" onchange="evalManual()"/><div class="mst" id="s-mktm2">—</div></div></div>
       </div>
     </div>
-    <div class="drag-hint">← drag to flip between regions →</div>
   </div>
+
+  <!-- legacy marker so updSum() has something to query without throwing. -->
+  <div id="pan-0" style="display:none"></div>
 
   <div class="bfooter">
     <div class="bf-live"><div class="bf-dot"></div>FRED · Yahoo Finance · Hyperliquid · Smart Polling</div>
@@ -1075,7 +1185,7 @@
 
       <div class="hold-chart-wrap">
         <div class="hold-pie-box">
-          <svg class="hold-pie" id="holdPie" viewBox="-110 -110 220 220"></svg>
+          <svg class="hold-pie" id="holdPie" viewBox="-118 -118 236 236" overflow="visible"></svg>
           <div class="hold-pie-center">
             <div class="hold-pie-center-lbl">Book P/L</div>
             <div class="hold-pie-center-val" id="holdPieCount">—</div>
@@ -1401,11 +1511,7 @@ function hubNav(e, id, fromHistory) {
     content.style.display = 'block';
     window.scrollTo(0, 0);
 
-    // Force carousel height recalculation for finance section.
-    // Use setTimeout (works even if the tab is hidden, unlike rAF).
-    if (id === 'sec-finance' && typeof goP === 'function') {
-      setTimeout(() => goP(curP), 20);
-    }
+    // Carousel was replaced with a static macro snapshot — no relayout needed.
 
     // Add .active on next tick so the opacity transition fires.
     // setTimeout is reliable even when the tab is hidden; rAF is not.
@@ -1549,8 +1655,10 @@ const HOLDINGS = [
     thesis:'Stablecoin-rail pure play. Added on the post-IPO re-rating — USDC float + interest income is a structural yield on the cycle.'},
   {ticker:'PLTR',  name:'Palantir',                    type:'eq', shares:33.77, avgBuy:22.31,  last:22.31,  ccy:'EUR',
     thesis:'Held from well before the AIP inflection. Commercial segment growth and defence contracts justify continuing to ride.'},
-  {ticker:'HIMS',  name:'Hims & Hers Health',          type:'eq', shares:92.49, avgBuy:27.03,  last:27.03,  ccy:'EUR',
+  {ticker:'HIMS',  name:'Hims & Hers Health',          type:'eq', shares:92.52, avgBuy:27.03,  last:27.03,  ccy:'EUR',
     thesis:'Telehealth / consumer-medicine disruptor. Compounding subscription model, GLP-1 optionality, and margin expansion as the personalised-rx book scales.'},
+  {ticker:'ORCL',  name:'Oracle',                       type:'eq', shares:16.972,avgBuy:147.36, last:147.36, ccy:'EUR',
+    thesis:'AI-infrastructure re-rating. OCI capacity build-out + multi-billion-dollar RPO backlog reposition Oracle as a credible cloud incumbent. Targeting €350+ on continued data-centre demand.'},
   {ticker:'VWRL',  name:'Vanguard FTSE All-World Dist.',type:'fd',shares:56.75, avgBuy:123.00, last:123.00, ccy:'EUR',
     thesis:'Global-equity core holding. Distributing share-class — the dividend stream is the point as much as the beta exposure.'},
   {ticker:'CSPX',  name:'iShares Core S&P 500 UCITS',  type:'fd', shares:6.44,  avgBuy:527.81, last:527.81, ccy:'EUR',
@@ -1561,7 +1669,7 @@ const HOLDINGS = [
     thesis:'Physical fine-gold bullion. Monetary hedge held outside the banking rails — held for tail-risk coverage rather than yield.'},
   {ticker:'XAG',   name:'Silver',                      type:'cm', shares:7,     avgBuy:66,     last:66,     ccy:'USD',
     thesis:'Physical silver bullion. Industrial-metal kicker alongside gold; more volatile, more cyclical upside if the monetary-debasement story plays out.'},
-  {ticker:'CASH',  name:'Cash',                        type:'cs', shares:5500,  avgBuy:1.00,   last:1.00,   ccy:'EUR',
+  {ticker:'CASH',  name:'Cash',                        type:'cs', shares:2999,  avgBuy:1.00,   last:1.00,   ccy:'EUR',
     thesis:''}
 ];
 
@@ -1631,14 +1739,32 @@ function renderHoldings(){
   const R=90, SW=30;
   const C=2*Math.PI*R;
 
-  // Pie slices (SVG donut using strokeDasharray trick)
+  // Pie slices (SVG donut using strokeDasharray trick).
+  // True fractions can be sub-1% (e.g. silver at ~0.9%) which produces an arc
+  // too thin to see or click. Inflate any positive slice to MIN_FRAC for the
+  // visual only, taking the deficit from the largest slice. Legend & tooltip
+  // percentages stay truthful — only the on-wheel arc length is adjusted.
+  const trueFracs = rows.map(r => Math.max(r._value/totalValue, 0));
+  const visualFracs = trueFracs.slice();
+  const MIN_FRAC = 0.018; // ~1.8% of the wheel = ~6.5° — visible & clickable
+  let deficit = 0;
+  visualFracs.forEach((f,i)=>{
+    if (f > 0 && f < MIN_FRAC) { deficit += (MIN_FRAC - f); visualFracs[i] = MIN_FRAC; }
+  });
+  if (deficit > 0) {
+    // Spread the deficit across slices that are above MIN_FRAC, proportionally
+    const eligible = visualFracs.map((f,i)=>f>MIN_FRAC?i:-1).filter(i=>i>=0);
+    const eligibleTotal = eligible.reduce((s,i)=>s+visualFracs[i],0);
+    eligible.forEach(i=>{ visualFracs[i] -= deficit * (visualFracs[i]/eligibleTotal); });
+  }
+
   let offset=0;
-  const svgParts=rows.map(r=>{
-    const frac=r._value/totalValue;
+  const svgParts=rows.map((r,i)=>{
+    const frac=visualFracs[i];
     const len=C*frac;
     const col=colours.get(HOLDINGS.find(h=>h.ticker===r.ticker));
-    const pct=(frac*100).toFixed(1);
-    const seg=`<circle class="hold-pie-slice" r="${R}" cx="0" cy="0" fill="none" stroke="${col}" stroke-width="${SW}" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-offset}"><title>${r.ticker} · ${r.name} — ${pct}% of portfolio · ${r._gain>=0?'+':''}${r._gain.toFixed(1)}%</title></circle>`;
+    const truePct=(trueFracs[i]*100).toFixed(1);
+    const seg=`<circle class="hold-pie-slice" r="${R}" cx="0" cy="0" fill="none" stroke="${col}" stroke-width="${SW}" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-offset}"><title>${r.ticker} · ${r.name} — ${truePct}% of portfolio · ${r._gain>=0?'+':''}${r._gain.toFixed(1)}%</title></circle>`;
     offset+=len;
     return seg;
   }).join('');
@@ -1699,6 +1825,7 @@ const HL_ALIASES = {
   CRCL:['CRCL','kCRCL','uCRCL'],
   PLTR:['PLTR','kPLTR','uPLTR'],
   HIMS:['HIMS','kHIMS','uHIMS'],
+  ORCL:['ORCL','kORCL','uORCL'],
   XAU :['PAXG','XAU','GOLD','kXAU','uXAU'],
   XAG :['XAG','SILVER','kXAG','uXAG']
 };
@@ -1747,6 +1874,7 @@ const YH_SYMBOLS = {
   CRCL:['CRCL'],
   PLTR:['PLTR'],
   HIMS:['HIMS'],
+  ORCL:['ORCL'],
   // Precious metals — front-month futures on Yahoo (USD/oz)
   XAU:['GC=F'],
   XAG:['SI=F']
@@ -1952,22 +2080,11 @@ function switchFinView(id){
 })();
 
 // ═══════════════════════════════════════════════════════════════
-// CAROUSEL
+// CAROUSEL — replaced with consolidated Global Macro Snapshot.
+// Guards retained so legacy goP / layP names don't crash anything that
+// might still reference them.
 // ═══════════════════════════════════════════════════════════════
-const REGIONS=[{f:'🇺🇸',n:'UNITED STATES'},{f:'🇪🇺',n:'EURO AREA'},{f:'🇨🇳',n:'CHINA'},{f:'🇯🇵',n:'JAPAN'},{f:'🇬🇧',n:'UNITED KINGDOM'}];
-let curP=0;const vp=document.getElementById('carVP'),trk=document.getElementById('carTrack'),lbl=document.getElementById('carLabel'),nav=document.getElementById('carNav'),pans=document.querySelectorAll('.car-panel');
-REGIONS.forEach((_,i)=>{const d=document.createElement('button');d.className='car-dot'+(i===0?' active':'');d.onclick=()=>goP(i);nav.appendChild(d)});
-function goP(i){if(i<0||i>=REGIONS.length)return;curP=i;layP();lbl.textContent=`${REGIONS[i].f} ${REGIONS[i].n}`;nav.querySelectorAll('.car-dot').forEach((d,j)=>d.classList.toggle('active',j===i));requestAnimationFrame(()=>{const p=document.getElementById(`pan-${i}`);if(p)trk.style.minHeight=p.scrollHeight+'px'})}
-function layP(){pans.forEach((p,i)=>{const o=i-curP;if(o===0){p.style.transform='translateX(0)';p.style.opacity='1';p.style.pointerEvents='auto';p.style.zIndex='2'}else{p.style.transform=`translateX(${o>0?'100':'-100'}%)`;p.style.opacity='0';p.style.pointerEvents='none';p.style.zIndex='0'}})}
-let dsx=0,dragging=false,dd=0;const DTH=50;
-vp.addEventListener('mousedown',e=>{dsx=e.clientX;dragging=true;dd=0});
-vp.addEventListener('mousemove',e=>{if(!dragging)return;dd=e.clientX-dsx;pans[curP].style.transition='none';pans[curP].style.transform=`translateX(${dd}px)`;pans[curP].style.opacity=`${1-Math.abs(dd)/400}`});
-vp.addEventListener('mouseup',endD);vp.addEventListener('mouseleave',e=>{if(dragging)endD()});
-vp.addEventListener('touchstart',e=>{dsx=e.touches[0].clientX;dragging=true;dd=0},{passive:true});
-vp.addEventListener('touchmove',e=>{if(!dragging)return;dd=e.touches[0].clientX-dsx;pans[curP].style.transition='none';pans[curP].style.transform=`translateX(${dd}px)`;pans[curP].style.opacity=`${1-Math.abs(dd)/400}`},{passive:true});
-vp.addEventListener('touchend',endD);
-function endD(){if(!dragging)return;dragging=false;if(dd<-DTH&&curP<REGIONS.length-1)goP(curP+1);else if(dd>DTH&&curP>0)goP(curP-1);else{pans[curP].style.transition='transform .35s ease, opacity .25s ease';pans[curP].style.transform='translateX(0)';pans[curP].style.opacity='1'}}
-layP();goP(0);
+function goP(){} function layP(){}
 
 // ═══════════════════════════════════════════════════════════════
 // ECONOMIC CALENDAR
@@ -2050,8 +2167,29 @@ const TH={
   ukuem:{t:[{s:'concern',l:'High',f:v=>v>=5},{s:'watch',l:'Rising',f:v=>v>=4.5},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>`${v.toFixed(1)}%`},
   ukpmi:{t:[{s:'concern',l:'Contracting',f:v=>v<48},{s:'watch',l:'Slowing',f:v=>v<50},{s:'normal',l:'Expanding',f:()=>1}]},
   gilt:{t:[{s:'concern',l:'Spiking',f:v=>v>=5},{s:'watch',l:'Elevated',f:v=>v>=4.5},{s:'normal',l:'Normal',f:()=>1}]},
+  // ── Borrowing rates (US + EU) ───────────────────────────────────
+  ccrate:  {t:[{s:'concern',l:'Punitive',f:v=>v>=22},{s:'watch',l:'Elevated',f:v=>v>=18},{s:'normal',l:'Normal',f:()=>1}],fmt:v=>`${v.toFixed(1)}%`},
+  autoloan:{t:[{s:'concern',l:'Very high',f:v=>v>=8.5},{s:'watch',l:'Elevated',f:v=>v>=7},{s:'normal',l:'Normal',f:()=>1}],fmt:v=>`${v.toFixed(2)}%`},
+  eumort:  {t:[{s:'concern',l:'Very high',f:v=>v>=4.5},{s:'watch',l:'Elevated',f:v=>v>=3.5},{s:'normal',l:'Moderate',f:()=>1}],fmt:v=>`${v.toFixed(2)}%`},
+  euccrate:{t:[{s:'concern',l:'Punitive',f:v=>v>=9},{s:'watch',l:'Elevated',f:v=>v>=7},{s:'normal',l:'Normal',f:()=>1}],fmt:v=>`${v.toFixed(2)}%`},
+  euauto:  {t:[{s:'concern',l:'Very high',f:v=>v>=7.5},{s:'watch',l:'Elevated',f:v=>v>=6},{s:'normal',l:'Normal',f:()=>1}],fmt:v=>`${v.toFixed(2)}%`},
+  // ── Energy benchmarks ──────────────────────────────────────────
+  cnsolar: {t:[{s:'concern',l:'Glut',f:v=>v<=5},{s:'watch',l:'Soft',f:v=>v<=8},{s:'normal',l:'Healthy',f:()=>1}],fmt:v=>`$${v.toFixed(1)}/kg`},
+  euwind:  {t:[{s:'concern',l:'High',f:v=>v>=100},{s:'watch',l:'Elevated',f:v=>v>=80},{s:'normal',l:'Competitive',f:()=>1}],fmt:v=>`€${Math.round(v)}`},
+  eucarb:  {t:[{s:'concern',l:'High',f:v=>v>=100},{s:'watch',l:'Elevated',f:v=>v>=80},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>`€${Math.round(v)}`},
+  libat:   {t:[{s:'concern',l:'Crash',f:v=>v<=70000},{s:'watch',l:'Soft',f:v=>v<=90000},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>Math.round(v).toLocaleString()},
+  ttf:     {t:[{s:'concern',l:'Spike',f:v=>v>=60},{s:'watch',l:'Elevated',f:v=>v>=40},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>`€${Math.round(v)}`},
+  jkm:     {t:[{s:'concern',l:'Spike',f:v=>v>=18},{s:'watch',l:'Elevated',f:v=>v>=13},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>`$${v.toFixed(1)}`},
+  eupow:   {t:[{s:'concern',l:'Spike',f:v=>v>=140},{s:'watch',l:'Elevated',f:v=>v>=100},{s:'normal',l:'Stable',f:()=>1}],fmt:v=>`€${Math.round(v)}`},
+  uran:    {t:[{s:'normal',l:'Strong',f:v=>v>=70},{s:'watch',l:'Soft',f:v=>v>=50},{s:'concern',l:'Weak',f:()=>1}],fmt:v=>`$${Math.round(v)}`},
 };
-function evSt(k,v){for(const t of TH[k].t)if(t.f(v))return{status:t.s,label:t.l};return{status:'normal',label:'Normal'}}
+function evSt(k,v){
+  // Defensive — if a config key is missing, fall back to a neutral verdict
+  // rather than throwing and aborting the whole eval pass.
+  const cfg=TH[k]; if(!cfg||!cfg.t) return {status:'normal',label:'—'};
+  for(const t of cfg.t) if(t.f(v)) return {status:t.s, label:t.l};
+  return {status:'normal',label:'Normal'};
+}
 function setM(id,fmt,st,lb){const d=document.getElementById(`d-${id}`),v=document.getElementById(`v-${id}`),s=document.getElementById(`s-${id}`);if(d)d.className=`md ${st}`;if(v){v.className=`mv ${st}`;v.textContent=fmt}if(s)s.textContent=lb}
 
 // ═══════════════════════════════════════════════════════════════
@@ -2172,9 +2310,9 @@ async function fredF(series,limit=3){
 const YH_RAW={
   'SPY':'spy','DIA':'dia','%5EVIX':'vix',
   'CL%3DF':'wti','BZ%3DF':'brent','GC%3DF':'gold',
-  'DX-Y.NYB':'dxy','XLE':'xle','ITA':'ita','XLP':'xlp','MOO':'moo',
-  'RB%3DF':'rbob','HO%3DF':'ho','NG%3DF':'natgas',
-  'USO':'uso','BNO':'bno','CRAK':'crak','XOP':'xop','OIH':'oih'
+  'DX-Y.NYB':'dxy','JPY%3DX':'jpy',
+  'XLE':'xle','ITA':'ita','XLP':'xlp','MOO':'moo',
+  'RB%3DF':'rbob','HO%3DF':'ho','NG%3DF':'natgas'
 };
 // Oil-tab mirrors: map main YH ids to oil-tab element ids
 const OIL_MIRRORS={'wti':'o-wti','brent':'o-brent','xle':'o-xle'};
@@ -2209,7 +2347,7 @@ async function pollYH(){
   results.forEach((r,i)=>{
     const[,id]=entries[i];
     if(r.status==='fulfilled'){ok++;const{price,prevClose}=r.value;updPr(id,price,prevClose);
-      if(id==='vix'){document.getElementById('i-vix').value=price.toFixed(1);evalManual()}}
+      if(id==='vix'){const iv=document.getElementById('i-vix');if(iv){iv.value=price.toFixed(1);evalManual();}}}
     else{fail++;const el=document.getElementById(`t-${id}`);if(el){el.textContent='stale';el.className='pstale'}}
   });
   setYhSt(fail===entries.length?'error':ok>0?'live':'stale');
@@ -2228,6 +2366,17 @@ function updPr(id,price,prevClose){
   if(id==='wti')oilPrices.wti=price;if(id==='brent')oilPrices.brent=price;
   if(id==='rbob')oilPrices.rbob=price;if(id==='ho')oilPrices.ho=price;
   if(oilPrices.wti&&oilPrices.brent)calcOilSpreads();
+
+  // Cross-asset strip — JPY/DXY day-change cells under the yield curve.
+  if(id==='jpy' || id==='dxy'){
+    const stripEl=document.getElementById(id==='jpy'?'jpyStrip':'dxyStrip');
+    if(stripEl){
+      const dpct = prevClose ? ((price-prevClose)/prevClose)*100 : 0;
+      const sign = dpct>=0?'+':'';
+      stripEl.textContent=`${price.toFixed(2)} (${sign}${dpct.toFixed(2)}%)`;
+      stripEl.className='yc-strip-val '+(Math.abs(dpct)<.05?'':(dpct>0?'up':'down'));
+    }
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2236,19 +2385,12 @@ function updPr(id,price,prevClose){
 const oilPrices={wti:null,brent:null,rbob:null,ho:null};
 
 function calcOilSpreads(){
-  // WTI-Brent spread
+  // WTI-Brent spread (the crack spread row was retired with the energy ETF block).
   if(oilPrices.wti&&oilPrices.brent){
     const sp=oilPrices.wti-oilPrices.brent;
     const el=document.getElementById('oilSpread');
     if(el){el.textContent=`${sp>=0?'+':''}${sp.toFixed(2)} $/bbl`;
       el.className=`osp-val ${sp>0?'contango':sp<-2?'backw':'neutral'}`}
-  }
-  // 3:2:1 crack spread: (2*gasoline_gal*42 + heating_gal*42 - 3*crude) / 3
-  if(oilPrices.wti&&oilPrices.rbob&&oilPrices.ho){
-    const crack=(2*oilPrices.rbob*42+oilPrices.ho*42-3*oilPrices.wti)/3;
-    const el=document.getElementById('crackSpread');
-    if(el){el.textContent=`$${crack.toFixed(2)}/bbl`;
-      el.className=`osp-val ${crack<10?'backw':crack>30?'contango':'neutral'}`}
   }
 }
 
@@ -2358,15 +2500,17 @@ async function fetchAll(){
 function evalManual(){[
   {id:'vixm',inp:'vix',cfg:'vixm'},{id:'spx',inp:'spx',cfg:'spx'},
   {id:'pe',inp:'pe',cfg:'pe'},{id:'mktm2',inp:'mktm2',cfg:'mktm2'},
-  {id:'ism-mfg',inp:'ism-mfg',cfg:'ismmfg'},{id:'ism-svc',inp:'ism-svc',cfg:'ismsvc'},
-  // EU
-  {id:'eupmi',inp:'eupmi',cfg:'eupmi'},{id:'bund',inp:'bund',cfg:'bund'},
-  // China
-  {id:'cnpmi',inp:'cnpmi',cfg:'cnpmi'},{id:'cxpmi',inp:'cxpmi',cfg:'cxpmi'},{id:'cnfx',inp:'cnfx',cfg:'cnfx'},
-  // Japan
-  {id:'tankan',inp:'tankan',cfg:'tankan'},
-  // UK
-  {id:'ukpmi',inp:'ukpmi',cfg:'ukpmi'},{id:'gilt',inp:'gilt',cfg:'gilt'},
+  // Borrowing rates (US + EU)
+  {id:'ccrate',inp:'ccrate',cfg:'ccrate'},
+  {id:'autoloan',inp:'autoloan',cfg:'autoloan'},
+  {id:'eumort',inp:'eumort',cfg:'eumort'},
+  {id:'euccrate',inp:'euccrate',cfg:'euccrate'},
+  {id:'euauto',inp:'euauto',cfg:'euauto'},
+  // Energy benchmarks
+  {id:'cnsolar',inp:'cnsolar',cfg:'cnsolar'},{id:'euwind',inp:'euwind',cfg:'euwind'},
+  {id:'eucarb',inp:'eucarb',cfg:'eucarb'},{id:'libat',inp:'libat',cfg:'libat'},
+  {id:'ttf',inp:'ttf',cfg:'ttf'},{id:'jkm',inp:'jkm',cfg:'jkm'},
+  {id:'eupow',inp:'eupow',cfg:'eupow'},{id:'uran',inp:'uran',cfg:'uran'},
 ].forEach(m=>{
   const inp=document.getElementById(`i-${m.inp}`),dot=document.getElementById(`d-${m.id}`),stat=document.getElementById(`s-${m.id}`);
   if(!inp)return;const v=parseFloat(inp.value);if(isNaN(v))return;
@@ -2374,8 +2518,20 @@ function evalManual(){[
   inp.style.color=`var(--${status==='concern'?'red':status==='watch'?'yellow':'green'})`;
   if(stat)stat.textContent=label});updSum()}
 
-function updSum(){let c=0,w=0,n=0;document.querySelectorAll('#pan-0 .md').forEach(d=>{if(d.classList.contains('concern'))c++;else if(d.classList.contains('watch'))w++;else if(d.classList.contains('normal'))n++});
-document.getElementById('cC').textContent=`${c} concern`;document.getElementById('cW').textContent=`${w} watch`;document.getElementById('cN').textContent=`${n} normal`}
+function updSum(){
+  // Count status dots across the new US stress grid + borrowing rates
+  // (the old #pan-0 carousel is gone). Same colour buckets, new selector.
+  let c=0,w=0,n=0;
+  document.querySelectorAll('.us-stress-col .md, .gp .md').forEach(d=>{
+    if(d.classList.contains('concern'))c++;
+    else if(d.classList.contains('watch'))w++;
+    else if(d.classList.contains('normal'))n++;
+  });
+  const cC=document.getElementById('cC'),cW=document.getElementById('cW'),cN=document.getElementById('cN');
+  if(cC)cC.textContent=`${c} concern`;
+  if(cW)cW.textContent=`${w} watch`;
+  if(cN)cN.textContent=`${n} normal`;
+}
 
 // ═══════════════════════════════════════════════════════════════
 // YIELD CURVE
@@ -2393,7 +2549,55 @@ async function fetchYC(){try{
   e2.textContent=`${c2.toFixed(2)}%`;e10.textContent=`${c10.toFixed(2)}%`;
   e2.className=`yc-cv ${c2>p2?'rising':c2<p2?'falling':''}`;e10.className=`yc-cv ${c10>p10?'rising':c10<p10?'falling':''}`;
   drawSp('sp2y',a2,'rgba(74,158,255,.8)');drawSp('sp10y',a10,'rgba(184,134,11,.8)');
+
+  // Day-over-day change in basis points. Anything >=15bp is a catastrophic
+  // intraday move on a benchmark yield (think Aug-2024-style sell-off, or
+  // the 2022 Truss episode for Gilts). 5–15bp is "watch", <5bp normal.
+  const setDC = (id, prev, cur) => {
+    const el=document.getElementById(id); if(!el) return;
+    const bp=(cur-prev)*100; const abs=Math.abs(bp);
+    const sign=bp>=0?'+':'';
+    const cls=abs>=15?'shock':abs>=5?(bp>=0?'up':'down'):'';
+    el.className='yc-dc '+cls;
+    const tag=abs>=15?' · SHOCK':'';
+    el.textContent=`Δ today: ${sign}${bp.toFixed(1)}bp${tag}`;
+  };
+  setDC('y2DC',  p2,  c2);
+  setDC('y10DC', p10, c10);
+
+  // Stash latest series so the cross-asset correlation block can read them
+  window.__y2Series=a2; window.__y10Series=a10;
+  refreshOilSpxRho().catch(()=>{});
 }catch(e){console.error('YC fail',e)}}
+
+// Pearson 30-day correlation between WTI and S&P 500 daily returns.
+// Negative reading = oil shock + risk-off (1970s/2022 regime).
+async function refreshOilSpxRho(){
+  try{
+    const cell=document.getElementById('oilSpxRho'); if(!cell) return;
+    const [wti, spx] = await Promise.all([
+      fredF('DCOILWTICO', 80),
+      fredF('SP500', 80)
+    ]);
+    if(!wti||!spx){ cell.textContent='—'; return; }
+    const w=wti.slice().reverse().map(v=>+v).filter(v=>!isNaN(v));
+    const s=spx.slice().reverse().map(v=>+v).filter(v=>!isNaN(v));
+    const n=Math.min(w.length, s.length, 31); if(n<10){ cell.textContent='—'; return; }
+    const wA=w.slice(-n), sA=s.slice(-n);
+    const wR=[], sR=[];
+    for(let i=1;i<n;i++){ wR.push((wA[i]-wA[i-1])/wA[i-1]); sR.push((sA[i]-sA[i-1])/sA[i-1]); }
+    const mean=a=>a.reduce((s,v)=>s+v,0)/a.length;
+    const mw=mean(wR), ms=mean(sR);
+    let num=0, dw=0, ds=0;
+    for(let i=0;i<wR.length;i++){
+      const a=wR[i]-mw, b=sR[i]-ms;
+      num+=a*b; dw+=a*a; ds+=b*b;
+    }
+    const rho=num/Math.sqrt(dw*ds);
+    cell.textContent=`${rho>=0?'+':''}${rho.toFixed(2)}`;
+    cell.className='yc-strip-val '+(rho<=-0.3?'up':rho>=0.3?'down':'');
+  }catch(e){ /* swallow */ }
+}
 
 function drawSp(id,data,color){const svg=document.getElementById(id);if(!svg)return;svg.innerHTML='';
 const W=200,H=48,P=4,min=Math.min(...data)-.05,max=Math.max(...data)+.05,rng=max-min||1;
@@ -2645,12 +2849,71 @@ function updateSummaryTips(){
   set('cC',cats.concern);set('cW',cats.watch);set('cN',cats.normal);
 }
 
+// ═══════════════════════════════════════════════════════════════
+// MAG 7 — compact live tile per stock
+// 1y daily closes for sparkline, intraday meta for price + day-change.
+// Routes through the same PROXIES chain Yahoo ETFs use.
+// ═══════════════════════════════════════════════════════════════
+const MAG7_TICKERS=['AAPL','MSFT','GOOGL','AMZN','META','NVDA','TSLA'];
+
+async function fetchMag7One(tk){
+  const raw=`https://query1.finance.yahoo.com/v8/finance/chart/${tk}?interval=1d&range=1y`;
+  let P; try { P = PROXIES; } catch(_) { P = null; }
+  if(!P||!P.length) P=[r=>r];
+  for(let i=0;i<P.length;i++){
+    const pi=(proxyIdx+i)%P.length;
+    try{
+      const r=await fetch(P[pi](raw),{signal:AbortSignal.timeout(8000)});
+      if(!r.ok) continue;
+      const j=await r.json();
+      const res=j?.chart?.result?.[0]; if(!res) continue;
+      const m=res.meta;
+      const closes=(res.indicators?.quote?.[0]?.close||[]).filter(v=>typeof v==='number');
+      const px=m.regularMarketPrice;
+      const prev=m.chartPreviousClose||m.previousClose||closes[closes.length-2]||px;
+      return {px, prev, closes};
+    }catch(e){ /* try next proxy */ }
+  }
+  return null;
+}
+
+function drawM7Spark(svg, data, up){
+  if(!svg) return;
+  const W=80,H=24,P=2;
+  const min=Math.min(...data), max=Math.max(...data), rng=max-min||1;
+  const tX=i=>P+(i/(data.length-1))*(W-P*2);
+  const tY=v=>H-P-((v-min)/rng)*(H-P*2);
+  const pts=data.map((v,i)=>`${tX(i).toFixed(1)},${tY(v).toFixed(1)}`).join(' ');
+  const col=up?'#2e7d4f':'#b23a3a';
+  svg.innerHTML=`<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />`;
+}
+
+async function refreshMag7(){
+  // Sequential with 200ms stagger to avoid tripping proxy rate-limits.
+  for(const tk of MAG7_TICKERS){
+    const r=await fetchMag7One(tk); if(!r){ continue; }
+    const ch=r.px-r.prev, pct=r.prev>0?(ch/r.prev)*100:0;
+    const pE=document.getElementById(`m7-px-${tk}`);
+    const cE=document.getElementById(`m7-chg-${tk}`);
+    const sp=document.getElementById(`m7-spk-${tk}`);
+    if(pE) pE.textContent=r.px.toFixed(2);
+    if(cE){
+      cE.textContent=`${pct>=0?'+':''}${pct.toFixed(2)}%`;
+      cE.className='m7-chg '+(pct>0.05?'up':pct<-0.05?'down':'flat');
+    }
+    if(sp && r.closes.length>5) drawM7Spark(sp, r.closes, pct>=0);
+    await new Promise(r=>setTimeout(r,200));
+  }
+}
+
 const hadCache=loadCache();
 if(hadCache)setYhSt('live'); // show as live if cache available
 evalManual();updEv();setInterval(updEv,1000);schedP();
 pollYH();setInterval(pollYH,15000);
 fetchHL();setInterval(fetchHL,15000);
 fetchAll();
+// Mag 7 — slower cadence (every 60s) since each call uses a proxy slot.
+refreshMag7().catch(()=>{}); setInterval(()=>refreshMag7().catch(()=>{}), 60000);
 applyEvTip();updateSummaryTips();
 setInterval(()=>{applyEvTip();updateSummaryTips();},2000);
 </script>
