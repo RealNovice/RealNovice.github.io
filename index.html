@@ -136,6 +136,41 @@
       -webkit-text-fill-color: var(--text-main);
       color: var(--text-main);
     }
+    /* Oil-tab headline & badges — the `em` accent and badge use a brown-gold
+       (#8b6914 / rgba(139,105,20,...)) that disappears against the dark gradient.
+       Lift to a luminous champagne so "Oil & Energy Focus" and "Global Macro
+       Snapshot" headlines stay legible. */
+    body.viewing-content .oil-tab-hdr h2 em{ color: #ffd57a; }
+    body.viewing-content .oil-tab-hdr .oil-badge{
+      color: rgba(255,213,122,.92);
+      background: rgba(255,213,122,.10);
+      border-color: rgba(255,213,122,.28);
+    }
+    /* MAG 7 CHART MODAL — keep its light glass body but force LIGHT-THEME
+       text vars inside so labels/numbers don't render white-on-white. The
+       modal is a "lightbox" — it shouldn't inherit the page's dark text. */
+    body.viewing-content .m7-modal-inner{
+      --text-main: #1d1d1f;
+      --text-sub:  rgba(29,29,31,0.60);
+      --text-dim:  rgba(29,29,31,0.32);
+      --green:     #2d8a4e;
+      --red:       #c0392b;
+      color: #1d1d1f;
+    }
+    body.viewing-content .m7-modal-tk,
+    body.viewing-content .m7-modal-px,
+    body.viewing-content .m7-stat-v{ color: #1d1d1f; }
+    body.viewing-content .m7-modal-meta,
+    body.viewing-content .m7-stat-l{ color: rgba(29,29,31,0.55); }
+    body.viewing-content .m7-tf-btn{
+      color: #1d1d1f;
+      border-color: rgba(29,29,31,0.18);
+      background: rgba(29,29,31,0.04);
+    }
+    body.viewing-content .m7-tf-btn:hover{ background: rgba(29,29,31,0.10); }
+    body.viewing-content .m7-tf-btn.active{
+      background: #1d1d1f; color: #fff; border-color: #1d1d1f;
+    }
     /* A second translucent layer on top of glass via a ::before gradient
        gives the cards their wet-glass shimmer in dark mode. */
     body.viewing-content .gp,
@@ -3397,9 +3432,10 @@ const EVENT_TIPS={
 function applyEvTip(){const ev=nextEv();if(!ev)return;const b=document.getElementById('evBanner');
   if(b&&EVENT_TIPS[ev.name])b.setAttribute('data-tip',EVENT_TIPS[ev.name]);}
 function updateSummaryTips(){
-  // Counts + hover list must reflect the SAME scope — the Overview panel (#pan-0)
+  // Counts + hover list must reflect the SAME scope as updSum() — the new
+  // US-stress grid + every glass panel (.gp) since the old #pan-0 carousel is gone.
   const cats={concern:[],watch:[],normal:[]};
-  document.querySelectorAll('#pan-0 .mr').forEach(row=>{
+  document.querySelectorAll('.us-stress-col .mr, .gp .mr').forEach(row=>{
     const md=row.querySelector('.md'),mn=row.querySelector('.mn');
     if(!md||!mn)return;
     const name=(mn.firstChild?.textContent||'').trim()||mn.textContent.trim().split(/\s{2,}|\n/)[0];
@@ -3408,7 +3444,9 @@ function updateSummaryTips(){
     else if(md.classList.contains('normal'))cats.normal.push(name);
   });
   const set=(id,arr)=>{const el=document.getElementById(id);if(!el)return;
-    el.setAttribute('data-tip',arr.length?arr.join(' • '):'None');};
+    // Dedupe (same row may match multiple selectors) and cap at 24 lines.
+    const uniq=Array.from(new Set(arr));
+    el.setAttribute('data-tip',uniq.length?uniq.slice(0,24).join(' • ')+(uniq.length>24?` · +${uniq.length-24} more`:''):'None');};
   set('cC',cats.concern);set('cW',cats.watch);set('cN',cats.normal);
 }
 
