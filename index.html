@@ -2424,38 +2424,35 @@ async function refreshHoldingsLive(){
   // already filled IN THIS PASS, so wiping at the start is correct.
   HOLDINGS.forEach(h=>{ h._liveSource=null; });
 
-  // HL first — direct call, no proxy, perps are 24/7. Yahoo is a fallback if
-  // HL doesn't list EURUSD (different builder DEXes carry different universes).
+  // ─── PHASE 1 — FAST PATH: Hyperliquid only ────────────────────────────
+  // HL is a direct call, no CORS proxy, ~1 s round-trip. We render the
+  // moment HL data is back so first-time visitors see real gains in 1-2 s
+  // instead of waiting 5-10 s for the Yahoo proxy chain.
   const fxFresh = window.__lastEurUsd && window.__lastEurUsdTs && (Date.now()-window.__lastEurUsdTs<30*60*1000);
   const prices = await fetchHLQueries();
 
-  // Pull EUR/USD from Hyperliquid first — try the most common naming variants
-  // across the main perp + builder DEXes. If HL has it, we get a live, second-by-
-  // second rate with no CORS proxy involved. Otherwise fall through to Yahoo.
+  // Try EUR/USD from HL across common naming variants (main perp + builder DEXes).
   const HL_FX_NAMES = ['EURUSD','EUR','EUR/USD','EURO','EUR-USD',
                        'xyz:EUR','xyz:EURUSD','xyz:EURO',
                        'km:EUR','km:EURUSD',
                        'cash:EUR','cash:EURUSD'];
   let eurusdFromHL = null;
   for (const n of HL_FX_NAMES) { if (prices.has(n)) { eurusdFromHL = prices.get(n); break; } }
-  let fxSource = eurusdFromHL ? 'HL' : null;
 
-  let eurusd = eurusdFromHL;
-  if (!eurusd && fxFresh) { eurusd = window.__lastEurUsd; fxSource = 'cache'; }
-  if (!eurusd) {
-    const yhFx = await fetchEurUsdViaProxy();
-    if (yhFx && yhFx > 0) { eurusd = yhFx; fxSource = 'YH'; }
-  }
+  // Use HL FX if available, else cached if fresh, else null (convertCcy will
+  // use the FX_FALLBACK_EURUSD constant). We DO NOT block on Yahoo's FX call
+  // here — that's what was making cold-start feel slow. Instead we render
+  // immediately with whatever rate we've got, then refine in the background.
+  let eurusd = eurusdFromHL || (fxFresh ? window.__lastEurUsd : null);
+  let fxSource = eurusdFromHL ? 'HL' : (fxFresh ? 'cache' : 'fallback');
   if (eurusd && eurusd > 0) { window.__lastEurUsd = eurusd; window.__lastEurUsdTs = Date.now(); }
-  if (eurusd) console.info(`[holdings] EUR/USD = ${eurusd.toFixed(4)} (${fxSource})`);
-  else console.warn(`[holdings] EUR/USD unavailable — using fallback ${FX_FALLBACK_EURUSD}`);
 
   let touched=false, sources=new Set();
 
-  // First pass: Hyperliquid (HYPE native; stock-perps/PAXG if listed)
+  // Apply HL prices to every matching holding
   HOLDINGS.forEach(h=>{
     const aliases=HL_ALIASES[h.ticker];
-    if(!aliases)return;
+    if(!aliases) return;
     for(const a of aliases){
       if(prices.has(a)){
         const usdPx=prices.get(a);
@@ -2468,9 +2465,41 @@ async function refreshHoldingsLive(){
     }
   });
 
-  // Second pass: Yahoo for everything HL didn't fill.
-  // SEQUENTIAL with 250 ms stagger — the stressboard is pounding the same proxies,
-  // firing in parallel here trips rate limits and silently drops 6 of 9 fetches.
+  // PAINT NOW — 8 of 11 holdings (HYPE/AMZN/CRCL/PLTR/HIMS/ORCL/XAU/XAG) are
+  // covered by HL stock-perps + PAXG. Gains visible within ~1 s of page load.
+  if (touched) renderHoldings();
+  console.info(`[holdings] phase 1 (HL) — eurusd ${eurusd?eurusd.toFixed(4):'fallback'} (${fxSource}) · hit ${[...sources].join('+')}`);
+
+  // ─── PHASE 2 — BACKGROUND: refine FX from Yahoo if we don't have it ──
+  // Fire-and-forget. When it lands, re-convert HL-sourced EUR holdings with
+  // the real rate and re-render. No blocking.
+  if (!eurusdFromHL && !fxFresh) {
+    fetchEurUsdViaProxy().then(yhFx => {
+      if (!yhFx || yhFx <= 0) return;
+      window.__lastEurUsd = yhFx;
+      window.__lastEurUsdTs = Date.now();
+      // Re-convert the HL-sourced holdings that were originally USD-quoted but
+      // need to be displayed in EUR (i.e. everything except HYPE itself).
+      HOLDINGS.forEach(h => {
+        if (!h._liveSource || !h._liveSource.startsWith('HL:')) return;
+        if ((h.ccy||'EUR') !== 'EUR') return;
+        const aliases = HL_ALIASES[h.ticker]; if (!aliases) return;
+        for (const a of aliases) {
+          if (prices.has(a)) {
+            h.last = +(convertCcy(prices.get(a),'USD','EUR',yhFx)).toFixed(4);
+            break;
+          }
+        }
+      });
+      renderHoldings();
+      console.info(`[holdings] phase 2 (FX refine) — eurusd ${yhFx.toFixed(4)} (YH)`);
+    }).catch(()=>{});
+  }
+
+  // ─── PHASE 3 — Yahoo for ETFs (the only thing HL doesn't cover) ──────
+  // Only ~3 holdings (VWRL/CSPX/EIMI). Sequential with a small stagger to
+  // play nice with the stressboard's parallel proxy traffic. Stagger reduced
+  // 250→100ms now that there are fewer of them.
   const yhTargets = HOLDINGS.filter(h=>!h._liveSource && YH_SYMBOLS[h.ticker]);
   for(const h of yhTargets){
     const syms=YH_SYMBOLS[h.ticker];
@@ -2479,14 +2508,14 @@ async function refreshHoldingsLive(){
       const r=await fetchYhChart(s);
       if(!r) continue;
       const target=h.ccy||'EUR';
-      h.last = +(convertCcy(r.px, r.ccy||'USD', target, eurusd)).toFixed(4);
+      h.last = +(convertCcy(r.px, r.ccy||'USD', target, window.__lastEurUsd)).toFixed(4);
       h._liveSource=`YH:${s}(${r.ccy||'?'})`;
       touched=true; sources.add('YH');
       got=true; break;
     }
     // Re-render after each success so numbers fill in progressively rather than in a lump.
     if(got) renderHoldings();
-    await new Promise(r=>setTimeout(r,250));
+    await new Promise(r=>setTimeout(r,100));
   }
 
   if(touched) renderHoldings();
