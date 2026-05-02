@@ -2047,7 +2047,11 @@ if(document.readyState!=='loading'){
 
 /* Persisted price cache — survives reloads so the Holdings view always opens
    with the last-known real numbers instead of 0% while we wait for fetches.  */
-const HOLD_CACHE_KEY = 'stressboard-holdings-v2';
+// v3 — bumped when ccy handling changed (HYPE flipped to USD entry, convertCcy
+//      now always normalises USD↔EUR using HL/YH/fallback). Old caches may
+//      contain USD prices stored under an EUR-tagged holding; this invalidates
+//      them on first load so the next live fetch overwrites cleanly.
+const HOLD_CACHE_KEY = 'stressboard-holdings-v3';
 function loadHoldCache(){
   try{
     const raw=localStorage.getItem(HOLD_CACHE_KEY); if(!raw)return null;
@@ -2072,7 +2076,7 @@ function saveHoldCache(eurusd){
    Absolute monetary values are never shown — only the two percentages. Update
    `last` whenever you want a fresh snapshot.                                   */
 const HOLDINGS = [
-  {ticker:'HYPE',  name:'Hyperliquid',                 type:'cr', shares:2000,  avgBuy:2.00,   last:2.00,   ccy:'EUR',
+  {ticker:'HYPE',  name:'Hyperliquid',                 type:'cr', shares:2000,  avgBuy:2.00,   last:2.00,   ccy:'USD',
     thesis:'Day-one TGE allocation. High-conviction bet on the Hyperliquid L1 and its perp-DEX capturing on- and off-chain derivatives share in the future. Heavily dependent on regulatory environment which we believe will develop favourably.'},
   {ticker:'AMZN',  name:'Amazon',                      type:'eq', shares:50,    avgBuy:199.00, last:199.00, ccy:'EUR',
     thesis:'Core mega-cap position. Expecting skyrocketing AWS margins from AI hyperscalers. Furthermore selected for heavy Anthropic exposure'},
@@ -2372,18 +2376,22 @@ async function fetchEurUsdViaProxy(){
   return r?r.px:null;
 }
 
-/* Convert a value quoted in `fromCcy` to `toCcy` using the USD/EUR rate we
-   just fetched. Handles USD, EUR, GBP (pound sterling) and GBp/GBX (pence). */
+/* Convert a value quoted in `fromCcy` to `toCcy`. ALWAYS converts — uses the
+   live EURUSD if fresh, otherwise a sensible static fallback (~mid-2026 range)
+   so a failed FX fetch never silently leaves USD numbers tagged as EUR. The
+   small drift introduced by the fallback (~1-2%) is corrected the moment the
+   live rate lands. Handles USD, EUR, GBP (pound sterling) and GBp/GBX (pence). */
+const FX_FALLBACK_EURUSD = 1.08; // last-resort if every proxy fails
 function convertCcy(px, fromCcy, toCcy, eurusd){
   if(!fromCcy) return px;
   if(fromCcy===toCcy) return px;
-  // Normalise pence → pounds first
+  // Normalise pence → pounds → USD first using a static GBP-USD rate
   if(fromCcy==='GBP') { fromCcy='USD'; px=px*1.27; }
-  else if(fromCcy==='GBX'||fromCcy==='GBP'||fromCcy==='GBp') { fromCcy='USD'; px=(px/100)*1.27; }
-  if(!eurusd||eurusd<=0) return px; // no FX → return native
-  // eurusd = USD per 1 EUR
-  if(fromCcy==='USD' && toCcy==='EUR') return px/eurusd;
-  if(fromCcy==='EUR' && toCcy==='USD') return px*eurusd;
+  else if(fromCcy==='GBX'||fromCcy==='GBp') { fromCcy='USD'; px=(px/100)*1.27; }
+  // Always have a usable rate for USD↔EUR — live first, fallback second.
+  const rate = (eurusd && eurusd > 0) ? eurusd : FX_FALLBACK_EURUSD;
+  if(fromCcy==='USD' && toCcy==='EUR') return px/rate;
+  if(fromCcy==='EUR' && toCcy==='USD') return px*rate;
   return px;
 }
 
@@ -2395,15 +2403,32 @@ async function refreshHoldingsLive(){
   // already filled IN THIS PASS, so wiping at the start is correct.
   HOLDINGS.forEach(h=>{ h._liveSource=null; });
 
-  // HL is direct (no proxy), so we can always fire it in parallel.
-  // For EURUSD reuse a freshly-cached rate if it's under 30 min old — saves one proxy slot.
+  // HL first — direct call, no proxy, perps are 24/7. Yahoo is a fallback if
+  // HL doesn't list EURUSD (different builder DEXes carry different universes).
   const fxFresh = window.__lastEurUsd && window.__lastEurUsdTs && (Date.now()-window.__lastEurUsdTs<30*60*1000);
-  const [prices, eurusdFetched] = await Promise.all([
-    fetchHLQueries(),
-    fxFresh ? Promise.resolve(window.__lastEurUsd) : fetchEurUsdViaProxy()
-  ]);
-  const eurusd = eurusdFetched || window.__lastEurUsd || null;
-  if(eurusd && eurusd>0){ window.__lastEurUsd = eurusd; window.__lastEurUsdTs = Date.now(); }
+  const prices = await fetchHLQueries();
+
+  // Pull EUR/USD from Hyperliquid first — try the most common naming variants
+  // across the main perp + builder DEXes. If HL has it, we get a live, second-by-
+  // second rate with no CORS proxy involved. Otherwise fall through to Yahoo.
+  const HL_FX_NAMES = ['EURUSD','EUR','EUR/USD','EURO','EUR-USD',
+                       'xyz:EUR','xyz:EURUSD','xyz:EURO',
+                       'km:EUR','km:EURUSD',
+                       'cash:EUR','cash:EURUSD'];
+  let eurusdFromHL = null;
+  for (const n of HL_FX_NAMES) { if (prices.has(n)) { eurusdFromHL = prices.get(n); break; } }
+  let fxSource = eurusdFromHL ? 'HL' : null;
+
+  let eurusd = eurusdFromHL;
+  if (!eurusd && fxFresh) { eurusd = window.__lastEurUsd; fxSource = 'cache'; }
+  if (!eurusd) {
+    const yhFx = await fetchEurUsdViaProxy();
+    if (yhFx && yhFx > 0) { eurusd = yhFx; fxSource = 'YH'; }
+  }
+  if (eurusd && eurusd > 0) { window.__lastEurUsd = eurusd; window.__lastEurUsdTs = Date.now(); }
+  if (eurusd) console.info(`[holdings] EUR/USD = ${eurusd.toFixed(4)} (${fxSource})`);
+  else console.warn(`[holdings] EUR/USD unavailable — using fallback ${FX_FALLBACK_EURUSD}`);
+
   let touched=false, sources=new Set();
 
   // First pass: Hyperliquid (HYPE native; stock-perps/PAXG if listed)
