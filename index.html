@@ -2218,12 +2218,23 @@ function renderHoldings(){
     slice.dataset.idx=idx;
   });
 
+  // Distinguish "haven't fetched yet" from "really 0%". Until at least one
+  // holding has a live source (`_liveSource` set by HL or YH), show a
+  // loading state instead of a misleading 0.0%.
+  const anyLive = rows.some(r => r._liveSource);
+
   // Centre: total unrealised return
-  const tgSign=totalGain>=0?'+':'';
-  const tgCol =totalGain>=0?'#3ee07a':'#ff5a4f';
-  countEl.textContent=`${tgSign}${totalGain.toFixed(1)}%`;
-  countEl.style.color=tgCol;
-  subEl.textContent='unrealised · book';
+  if (!anyLive){
+    countEl.textContent = '…';
+    countEl.style.color = 'var(--text-dim)';
+    subEl.textContent = 'fetching live prices';
+  } else {
+    const tgSign=totalGain>=0?'+':'';
+    const tgCol =totalGain>=0?'#3ee07a':'#ff5a4f';
+    countEl.textContent=`${tgSign}${totalGain.toFixed(1)}%`;
+    countEl.style.color=tgCol;
+    subEl.textContent='unrealised · book';
+  }
 
   // Build the hover tooltip for each holding — shows the latest mark, the
   // source it was pulled from (HL / YH / cached), and the entry price for
@@ -2250,7 +2261,12 @@ function renderHoldings(){
     const tag=HOLD_TYPES[r.type]?HOLD_TYPES[r.type].label:'';
     const gSign=r._gain>=0?'+':'';
     const gCol=r.type==='cs'?'var(--text-dim)':(r._gain>=0?'#3ee07a':'#ff5a4f');
-    const gainStr=r.type==='cs'?'':`<span class="hold-legend-sub" style="color:${gCol};font-weight:700">${gSign}${r._gain.toFixed(1)}%</span>`;
+    // Show gain only once a live price has actually landed for this row;
+    // otherwise show a quiet placeholder so 0.0% doesn't confuse cold-start.
+    const gainStr = (r.type==='cs') ? ''
+      : (r._liveSource
+          ? `<span class="hold-legend-sub" style="color:${gCol};font-weight:700">${gSign}${r._gain.toFixed(1)}%</span>`
+          : `<span class="hold-legend-sub" style="opacity:.45">…</span>`);
     return `<div class="hold-legend-item" data-tip="${priceTip(r)}">
       <span class="hold-legend-sw" style="background:${col}"></span>
       <span class="hold-legend-name"><strong>${r.ticker}</strong>${r.name}<span class="hold-legend-sub">· ${tag}</span>${gainStr}</span>
@@ -2259,13 +2275,18 @@ function renderHoldings(){
   }).join('');
 
   // Reasoning cards with gain badge — tooltip on the header strip only so the
-  // thesis paragraph below stays free of overlay noise.
+  // thesis paragraph below stays free of overlay noise. Like the legend,
+  // the gain badge stays muted "…" until live data lands so cold-start 0.0%
+  // never appears.
   cards.innerHTML=rows.map(r=>{
     const pct=(r._value/totalValue*100).toFixed(1);
     const tag=HOLD_TYPES[r.type]?HOLD_TYPES[r.type].label:'';
     const gSign=r._gain>=0?'+':'';
     const gCol=r._gain>=0?'#3ee07a':'#ff5a4f';
-    const gainBadge=r.type==='cs'?'':`<span class="hold-card-gain" style="color:${gCol}">${gSign}${r._gain.toFixed(1)}%</span>`;
+    const gainBadge = (r.type==='cs') ? ''
+      : (r._liveSource
+          ? `<span class="hold-card-gain" style="color:${gCol}">${gSign}${r._gain.toFixed(1)}%</span>`
+          : `<span class="hold-card-gain" style="opacity:.45">…</span>`);
     return `<div class="hold-card">
       <div class="hold-card-hdr" data-tip="${priceTip(r)}">
         <div class="hold-card-t">
