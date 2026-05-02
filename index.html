@@ -893,10 +893,14 @@
       display:grid;grid-template-columns:280px 1fr;gap:2.2rem;align-items:center}
     .hold-pie-box{position:relative;width:260px;height:260px;margin:0 auto;overflow:visible}
     .hold-pie{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 6px 20px rgba(0,0,0,.08));overflow:visible}
-    /* Pop-out + glow hover. The bring-to-top JS in renderHoldings re-appends
-       the hovered slice so its scale doesn't get clipped under neighbours. */
-    .hold-pie-slice{transition:transform .25s ease,filter .25s ease;transform-origin:center;cursor:pointer;overflow:visible}
-    .hold-pie-slice:hover{transform:scale(1.04);filter:brightness(1.15) drop-shadow(0 0 10px rgba(0,0,0,.25))}
+    /* Brightness + glow only — no scale transform.
+       The <circle> + stroke-dasharray slice technique can't be cleanly scaled
+       (the dash gaps stretch with the element, so the visible arc's "tail" pokes
+       past where it should terminate, overlapping its neighbour). Pop-out would
+       require switching every slice to an explicit <path> arc, which is a much
+       bigger refactor for a cosmetic effect — not worth it. */
+    .hold-pie-slice{transition:filter .25s ease;transform-origin:center;cursor:pointer}
+    .hold-pie-slice:hover{filter:brightness(1.18) drop-shadow(0 0 12px rgba(0,0,0,.28))}
     .hold-pie-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
     .hold-pie-center-lbl{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim)}
     .hold-pie-center-val{font-family:var(--serif);font-size:1.75rem;font-weight:500;color:var(--text-main);letter-spacing:-.01em;margin-top:.1rem;font-variant-numeric:tabular-nums}
