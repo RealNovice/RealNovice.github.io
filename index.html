@@ -2217,6 +2217,24 @@ function renderHoldings(){
   countEl.style.color=tgCol;
   subEl.textContent='unrealised · book';
 
+  // Build the hover tooltip for each holding — shows the latest mark, the
+  // source it was pulled from (HL / YH / cached), and the entry price for
+  // context. Multi-line via &#10; entity since the global tooltip CSS uses
+  // white-space:pre-wrap. HTML-escape the whole thing to avoid attribute
+  // injection from anything in `_liveSource` (quotes / ampersands etc.).
+  const escAttr = s => String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  const priceTip = (r) => {
+    if (r.type === 'cs') return escAttr('Cash position · not market-fetched');
+    const ccy   = r.ccy || 'EUR';
+    const last  = (typeof r.last === 'number')
+      ? r.last.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:4})
+      : '—';
+    const entry = (+r.avgBuy).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const src   = r._liveSource || 'no live data yet — showing entry price';
+    const txt   = `Last: ${last} ${ccy}\nSource: ${src}\nEntry: ${entry} ${ccy}`;
+    return escAttr(txt).replace(/\n/g,'&#10;');
+  };
+
   // Legend
   legend.innerHTML=rows.map(r=>{
     const col=colours.get(HOLDINGS.find(h=>h.ticker===r.ticker));
@@ -2225,14 +2243,15 @@ function renderHoldings(){
     const gSign=r._gain>=0?'+':'';
     const gCol=r.type==='cs'?'var(--text-dim)':(r._gain>=0?'#3ee07a':'#ff5a4f');
     const gainStr=r.type==='cs'?'':`<span class="hold-legend-sub" style="color:${gCol};font-weight:700">${gSign}${r._gain.toFixed(1)}%</span>`;
-    return `<div class="hold-legend-item">
+    return `<div class="hold-legend-item" data-tip="${priceTip(r)}">
       <span class="hold-legend-sw" style="background:${col}"></span>
       <span class="hold-legend-name"><strong>${r.ticker}</strong>${r.name}<span class="hold-legend-sub">· ${tag}</span>${gainStr}</span>
       <span class="hold-legend-pct">${pct}%</span>
     </div>`;
   }).join('');
 
-  // Reasoning cards with gain badge
+  // Reasoning cards with gain badge — tooltip on the header strip only so the
+  // thesis paragraph below stays free of overlay noise.
   cards.innerHTML=rows.map(r=>{
     const pct=(r._value/totalValue*100).toFixed(1);
     const tag=HOLD_TYPES[r.type]?HOLD_TYPES[r.type].label:'';
@@ -2240,7 +2259,7 @@ function renderHoldings(){
     const gCol=r._gain>=0?'#3ee07a':'#ff5a4f';
     const gainBadge=r.type==='cs'?'':`<span class="hold-card-gain" style="color:${gCol}">${gSign}${r._gain.toFixed(1)}%</span>`;
     return `<div class="hold-card">
-      <div class="hold-card-hdr">
+      <div class="hold-card-hdr" data-tip="${priceTip(r)}">
         <div class="hold-card-t">
           <span class="hold-card-tick">${r.ticker}</span>
           <span class="hold-card-name">${r.name}</span>
@@ -2365,6 +2384,13 @@ function convertCcy(px, fromCcy, toCcy, eurusd){
 }
 
 async function refreshHoldingsLive(){
+  // Clear source flags at the START of a refresh — not the end — so the
+  // previously-pulled source stays attached to each holding and is visible
+  // in the legend / card-header tooltip until the next refresh actually
+  // succeeds. The Yahoo pass uses `!h._liveSource` to skip holdings that HL
+  // already filled IN THIS PASS, so wiping at the start is correct.
+  HOLDINGS.forEach(h=>{ h._liveSource=null; });
+
   // HL is direct (no proxy), so we can always fire it in parallel.
   // For EURUSD reuse a freshly-cached rate if it's under 30 min old — saves one proxy slot.
   const fxFresh = window.__lastEurUsd && window.__lastEurUsdTs && (Date.now()-window.__lastEurUsdTs<30*60*1000);
@@ -2430,8 +2456,8 @@ async function refreshHoldingsLive(){
     }
   }
   console.info('[holdings] live refresh — hit:', hit, 'miss:', miss, 'eurusd:', eurusd);
-  // Clear source flags so the next refresh re-evaluates every holding
-  HOLDINGS.forEach(h=>{ h._liveSource=null; });
+  // (source flags now cleared at the START of the next refresh, not here —
+  //  see comment at top of refreshHoldingsLive. Keeps tooltips accurate.)
 }
 
 /* Sub-nav pill switching */
