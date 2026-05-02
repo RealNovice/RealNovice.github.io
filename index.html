@@ -2496,11 +2496,21 @@ async function refreshHoldingsLive(){
     }).catch(()=>{});
   }
 
-  // ─── PHASE 3 — Yahoo for ETFs (the only thing HL doesn't cover) ──────
-  // Only ~3 holdings (VWRL/CSPX/EIMI). Sequential with a small stagger to
-  // play nice with the stressboard's parallel proxy traffic. Stagger reduced
-  // 250→100ms now that there are fewer of them.
-  const yhTargets = HOLDINGS.filter(h=>!h._liveSource && YH_SYMBOLS[h.ticker]);
+  // ─── PHASE 3 — Yahoo refinement ──────────────────────────────────────
+  // Two roles for Yahoo:
+  //   (a) cover what HL doesn't list at all (the European ETFs VWRL/CSPX/EIMI)
+  //   (b) ON TRADING DAYS ONLY, refine HL-covered holdings with the
+  //       exchange-official close. On weekends Yahoo's value would just be
+  //       Friday's close, so HL's 24/7 perp/spot is more current — we leave
+  //       the HL value in place and skip the proxy call entirely.
+  // HYPE and CASH have no Yahoo symbol and are always HL-only / not fetched.
+  const day = new Date().getDay(); // 0=Sun, 6=Sat
+  const tradingWeek = day >= 1 && day <= 5;
+  const yhTargets = HOLDINGS.filter(h => {
+    if (!YH_SYMBOLS[h.ticker]) return false;     // not in YH map
+    if (!h._liveSource) return true;             // HL didn't cover → always fill
+    return tradingWeek;                          // HL covered → refine only Mon-Fri
+  });
   for(const h of yhTargets){
     const syms=YH_SYMBOLS[h.ticker];
     let got=false;
