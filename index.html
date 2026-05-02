@@ -146,6 +146,11 @@
       background: rgba(255,213,122,.10);
       border-color: rgba(255,213,122,.28);
     }
+    /* Hyperliquid perp cells inherit the same brown-gold ink (.hl-sym,
+       .hl-oracle, .hl-vol use rgba(139,105,20,...)) — lift to champagne. */
+    body.viewing-content .hl-sym{ color: rgba(255,213,122,.88); }
+    body.viewing-content .hl-oracle,
+    body.viewing-content .hl-vol{ color: rgba(255,213,122,.55); }
     /* MAG 7 CHART MODAL — keep its light glass body but force LIGHT-THEME
        text vars inside so labels/numbers don't render white-on-white. The
        modal is a "lightbox" — it shouldn't inherit the page's dark text. */
@@ -882,13 +887,12 @@
       box-shadow:0 8px 40px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.45);
       padding:1.8rem 1.8rem;margin-bottom:1.6rem;
       display:grid;grid-template-columns:280px 1fr;gap:2.2rem;align-items:center}
-    .hold-pie-box{position:relative;width:260px;height:260px;margin:0 auto}
-    .hold-pie{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 6px 20px rgba(0,0,0,.08))}
-    /* Hover effect is brightness + slight stroke widening. NO scale transform —
-       scaling caused adjacent slices to visually overlap and bleed past the donut
-       bounds, especially on small inflated slices. */
-    .hold-pie-slice{transition:filter .25s ease,stroke-width .25s ease;transform-origin:center;cursor:pointer}
-    .hold-pie-slice:hover{filter:brightness(1.12) drop-shadow(0 0 8px rgba(0,0,0,.18))}
+    .hold-pie-box{position:relative;width:260px;height:260px;margin:0 auto;overflow:visible}
+    .hold-pie{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 6px 20px rgba(0,0,0,.08));overflow:visible}
+    /* Pop-out + glow hover. The bring-to-top JS in renderHoldings re-appends
+       the hovered slice so its scale doesn't get clipped under neighbours. */
+    .hold-pie-slice{transition:transform .25s ease,filter .25s ease;transform-origin:center;cursor:pointer;overflow:visible}
+    .hold-pie-slice:hover{transform:scale(1.04);filter:brightness(1.15) drop-shadow(0 0 10px rgba(0,0,0,.25))}
     .hold-pie-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
     .hold-pie-center-lbl{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim)}
     .hold-pie-center-val{font-family:var(--serif);font-size:1.75rem;font-weight:500;color:var(--text-main);letter-spacing:-.01em;margin-top:.1rem;font-variant-numeric:tabular-nums}
@@ -1478,7 +1482,7 @@
       <div class="hub-card">
         <h3>Building the Sheet Cheater App</h3>
         <div class="hub-card-meta">Piano · real-time note-to-notation</div>
-        <p>Browser tool for piano learners that annotates sheet music from PDFs or photographs.</p>
+        <p>Tool for piano learners that annotates sheet music from PDFs or photographs. Currently on iOS.</p>
       </div>
       <div class="hub-card">
         <h3>Presenting a personal hub</h3>
@@ -1487,8 +1491,8 @@
       </div>
       <div class="hub-card">
         <h3>Preparing for CFA Level 1</h3>
-        <div class="hub-card-meta">Candidate</div>
-        <p>In progress.</p>
+        <div class="hub-card-meta">Chartered Financial Analyst · Candidate</div>
+        <p>Globally recognised qualification in investment analysis, valuation and portfolio management.</p>
       </div>
       <div class="hub-card">
         <h3>Preparing for motorbike License A</h3>
@@ -1502,12 +1506,12 @@
       </div>
       <div class="hub-card">
         <h3>Looking into German hunters' license</h3>
-        <div class="hub-card-meta">German hunting license · "Grünes Abitur"</div>
+        <div class="hub-card-meta">German hunting license</div>
         <p>Required to pursue recreational or professional hunting in Germany.</p>
       </div>
       <div class="hub-card">
-        <h3>Vegetable Garden</h3>
-        <div class="hub-card-meta">Year-round self-sufficiency</div>
+        <h3>Caring for my vegetable garden</h3>
+        <div class="hub-card-meta">Unwinding and experimenting</div>
         <p>Tending different vegetables and planting calendars to wind down and experiment.</p>
       </div>
     </div>
@@ -1979,6 +1983,10 @@ window.addEventListener('popstate', (e)=>{
     document.getElementById(idFromHash).classList.add('active');
     const t=document.getElementById('hubTopTitle'); if(t)t.textContent=SEC_TITLES[idFromHash]||'';
     content.style.display='block'; content.classList.add('active');
+    // Reload-into-section deep links must keep the dark scheme too — otherwise
+    // the page boots in light mode despite showing content. hubNav() does this
+    // on click; mirror it here for the cold-start path.
+    document.body.classList.add('viewing-content');
   } else {
     try{ history.replaceState({hub:'home'}, '', location.pathname+location.search); }catch(_){}
   }
@@ -2035,8 +2043,10 @@ function loadHoldCache(){
   try{
     const raw=localStorage.getItem(HOLD_CACHE_KEY); if(!raw)return null;
     const j=JSON.parse(raw);
-    // Expire entries older than 7 days to avoid stale-forever data.
-    if(!j||!j.ts||Date.now()-j.ts>7*24*3600*1000) return null;
+    // Tightened to 4 hours so a returning visitor rarely sees more-than-half-a-day
+    // old marks while live fetches are still in flight. Anything older is treated
+    // as no-cache and the entry prices (avgBuy) are used until live data lands.
+    if(!j||!j.ts||Date.now()-j.ts>4*3600*1000) return null;
     return j;
   }catch(_){ return null; }
 }
