@@ -121,3 +121,4 @@
   addEventListener('scroll',hide,{passive:true,capture:true});
   addEventListener('resize',hide);
 })();
+
