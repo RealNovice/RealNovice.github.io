@@ -364,10 +364,33 @@ class Editor(tk.Tk):
 
     def _published(self, sha, feed):
         self.sha = sha; self.dirty = False
-        self.publish_btn.state(['!disabled'])
-        self.set_status('published ✓')
-        self.foot.configure(text=f"Committed to GitHub. The site updates in about 1–2 minutes ({SITE}). "
-                                 + ('Price feed refresh started.' if feed else 'Price feed will refresh on its next scheduled run.'))
+        self.set_status('committed ✓ — waiting for the site to redeploy…')
+        self.foot.configure(text='Committed to GitHub. GitHub Pages is rebuilding (usually 1–2 minutes). '
+                                 'Do not press Publish again — every extra publish restarts the rebuild. '
+                                 + ('Price feed refresh started.' if feed else ''))
+        snapshot = json.dumps({'holdings': self.holdings}, sort_keys=True)
+        threading.Thread(target=self._watch_deploy, args=(snapshot,), daemon=True).start()
+
+    def _watch_deploy(self, snapshot):
+        """Poll the live site until it serves the holdings we just published."""
+        import urllib.request, time as _t
+        deadline = _t.time() + 6 * 60
+        while _t.time() < deadline:
+            try:
+                url = f'https://lima-spielhofen.com/data/holdings.json?v={int(_t.time())}'
+                with urllib.request.urlopen(urllib.request.Request(url, headers={'Cache-Control': 'no-cache'}), timeout=15) as r:
+                    live = json.load(r)
+                if json.dumps({'holdings': live.get('holdings', [])}, sort_keys=True) == snapshot:
+                    self.after(0, lambda: (self.publish_btn.state(['!disabled']),
+                                           self.set_status('live on the website ✓'),
+                                           self.foot.configure(text=f'The site now shows these holdings ({SITE}). Reload the page if it is already open.')))
+                    return
+            except Exception:
+                pass
+            _t.sleep(10)
+        self.after(0, lambda: (self.publish_btn.state(['!disabled']),
+                               self.set_status('committed ✓ (site not confirmed yet)', err=True),
+                               self.foot.configure(text='The commit is on GitHub but the site had not picked it up after 6 minutes. Check github.com/RealNovice/RealNovice.github.io/actions.')))
 
     def _publish_failed(self, msg):
         self.publish_btn.state(['!disabled'])
