@@ -1,40 +1,175 @@
 {
   "updated": "2026-09-06",
   "holdings": [
-    {"ticker": "HYPE", "name": "Hyperliquid", "type": "cr", "shares": 2000, "avgBuy": 2.0, "ccy": "USD",
-     "hl": ["HYPE"], "yahoo": [],
-     "thesis": "Day-one TGE allocation. High-conviction bet on the Hyperliquid L1 and its perp-DEX capturing on- and off-chain derivatives share in the future. Heavily dependent on regulatory environment which we believe will develop favourably."},
-    {"ticker": "AMZN", "name": "Amazon", "type": "eq", "shares": 50, "avgBuy": 199.0, "ccy": "EUR",
-     "hl": ["AMZN", "kAMZN", "uAMZN"], "yahoo": ["AMZN"],
-     "thesis": "Core mega-cap position. Expecting skyrocketing AWS margins from AI hyperscalers. Furthermore selected for heavy Anthropic exposure"},
-    {"ticker": "CRCL", "name": "Circle Internet Group", "type": "eq", "shares": 91.3, "avgBuy": 109.51, "ccy": "EUR",
-     "hl": ["CRCL", "kCRCL", "uCRCL"], "yahoo": ["CRCL"],
-     "thesis": "Stablecoin-rails. USDC float + interest income is a structural yield on the cycle. Thesis validation dependent on passing of the CLARITY Act and regulatory developments."},
-    {"ticker": "PLTR", "name": "Palantir", "type": "eq", "shares": 33.77, "avgBuy": 22.31, "ccy": "EUR",
-     "hl": ["PLTR", "kPLTR", "uPLTR"], "yahoo": ["PLTR"],
-     "thesis": "Held from well before the AIP inflection. Commercial segment growth and defence contracts."},
-    {"ticker": "HIMS", "name": "Hims & Hers Health", "type": "eq", "shares": 92.52, "avgBuy": 27.03, "ccy": "EUR",
-     "hl": ["HIMS", "kHIMS", "uHIMS"], "yahoo": ["HIMS"],
-     "thesis": "Telehealth / consumer-medicine disruptor. Bet on rapidly expanding peptides market and GLP-1 optionality."},
-    {"ticker": "ORCL", "name": "Oracle", "type": "eq", "shares": 16.972, "avgBuy": 147.36, "ccy": "EUR",
-     "hl": ["ORCL", "kORCL", "uORCL"], "yahoo": ["ORCL"],
-     "thesis": "AI-infrastructure re-rating. OCI capacity build-out + multi-billion-dollar RPO backlog reposition Oracle as a credible cloud incumbent. Targeting €350+ on continued data-centre demand."},
-    {"ticker": "VWRL", "name": "Vanguard FTSE All-World Dist.", "type": "fd", "shares": 56.75, "avgBuy": 123.0, "ccy": "EUR",
-     "hl": [], "yahoo": ["VWRL.AS"],
-     "thesis": "Global-equity core holding. Distributing share-class."},
-    {"ticker": "CSPX", "name": "iShares Core S&P 500 UCITS", "type": "fd", "shares": 6.44, "avgBuy": 527.81, "ccy": "EUR",
-     "hl": [], "yahoo": ["CSPX.AS"],
-     "thesis": "Accumulating US large-cap sleeve. S&P concentration on top of the global tracker without extra tax drag."},
-    {"ticker": "EIMI", "name": "iShares Core MSCI EM IMI", "type": "fd", "shares": 68, "avgBuy": 31.44, "ccy": "EUR",
-     "hl": [], "yahoo": ["EMIM.AS", "IS3N.DE", "EIMI.L"],
-     "thesis": "Emerging-markets satellite. Small-caps included for a broader EM capture."},
-    {"ticker": "XAU", "name": "Gold", "type": "cm", "shares": 1, "avgBuy": 3800, "ccy": "EUR",
-     "hl": ["PAXG", "XAU", "GOLD", "kXAU", "uXAU"], "yahoo": ["GC=F"],
-     "thesis": "Physical fine-gold bullion. Held for debasement tail-risk coverage."},
-    {"ticker": "XAG", "name": "Silver", "type": "cm", "shares": 7, "avgBuy": 66, "ccy": "EUR",
-     "hl": ["XAG", "SILVER", "kXAG", "uXAG"], "yahoo": ["SI=F"],
-     "thesis": "Physical silver bullion. Held for debasement tail-risk coverage."},
-    {"ticker": "CASH", "name": "Cash", "type": "cs", "shares": 2999, "avgBuy": 1.0, "ccy": "EUR",
-     "hl": [], "yahoo": [], "thesis": ""}
+    {
+      "ticker": "HYPE",
+      "name": "Hyperliquid",
+      "type": "cr",
+      "shares": 2000,
+      "avgBuy": 2.0,
+      "ccy": "USD",
+      "hl": [
+        "HYPE"
+      ],
+      "yahoo": [],
+      "thesis": "Day-one TGE allocation. High-conviction bet on the Hyperliquid L1 and its perp-DEX capturing on- and off-chain derivatives share in the future. Heavily dependent on regulatory environment which we believe will develop favourably."
+    },
+    {
+      "ticker": "CRCL",
+      "name": "Circle Internet Group",
+      "type": "eq",
+      "shares": 91.3,
+      "avgBuy": 109.51,
+      "ccy": "EUR",
+      "hl": [
+        "CRCL",
+        "kCRCL",
+        "uCRCL"
+      ],
+      "yahoo": [
+        "CRCL"
+      ],
+      "thesis": "Stablecoin-rails. USDC float + interest income is a structural yield on the cycle. Thesis validation dependent on passing of the CLARITY Act and regulatory developments."
+    },
+    {
+      "ticker": "PLTR",
+      "name": "Palantir",
+      "type": "eq",
+      "shares": 33.77,
+      "avgBuy": 22.31,
+      "ccy": "EUR",
+      "hl": [
+        "PLTR",
+        "kPLTR",
+        "uPLTR"
+      ],
+      "yahoo": [
+        "PLTR"
+      ],
+      "thesis": "Held from well before the AIP inflection. Commercial segment growth and defence contracts."
+    },
+    {
+      "ticker": "HIMS",
+      "name": "Hims & Hers Health",
+      "type": "eq",
+      "shares": 92.52,
+      "avgBuy": 27.03,
+      "ccy": "EUR",
+      "hl": [
+        "HIMS",
+        "kHIMS",
+        "uHIMS"
+      ],
+      "yahoo": [
+        "HIMS"
+      ],
+      "thesis": "Telehealth / consumer-medicine disruptor. Bet on rapidly expanding peptides market and GLP-1 optionality."
+    },
+    {
+      "ticker": "ORCL",
+      "name": "Oracle",
+      "type": "eq",
+      "shares": 16.972,
+      "avgBuy": 147.36,
+      "ccy": "EUR",
+      "hl": [
+        "ORCL",
+        "kORCL",
+        "uORCL"
+      ],
+      "yahoo": [
+        "ORCL"
+      ],
+      "thesis": "AI-infrastructure re-rating. OCI capacity build-out + multi-billion-dollar RPO backlog reposition Oracle as a credible cloud incumbent. Targeting €350+ on continued data-centre demand."
+    },
+    {
+      "ticker": "VWRL",
+      "name": "Vanguard FTSE All-World Dist.",
+      "type": "fd",
+      "shares": 56.75,
+      "avgBuy": 123.0,
+      "ccy": "EUR",
+      "hl": [],
+      "yahoo": [
+        "VWRL.AS"
+      ],
+      "thesis": "Global-equity core holding. Distributing share-class."
+    },
+    {
+      "ticker": "CSPX",
+      "name": "iShares Core S&P 500 UCITS",
+      "type": "fd",
+      "shares": 6.44,
+      "avgBuy": 527.81,
+      "ccy": "EUR",
+      "hl": [],
+      "yahoo": [
+        "CSPX.AS"
+      ],
+      "thesis": "Accumulating US large-cap sleeve. S&P concentration on top of the global tracker without extra tax drag."
+    },
+    {
+      "ticker": "EIMI",
+      "name": "iShares Core MSCI EM IMI",
+      "type": "fd",
+      "shares": 68,
+      "avgBuy": 31.44,
+      "ccy": "EUR",
+      "hl": [],
+      "yahoo": [
+        "EMIM.AS",
+        "IS3N.DE",
+        "EIMI.L"
+      ],
+      "thesis": "Emerging-markets satellite. Small-caps included for a broader EM capture."
+    },
+    {
+      "ticker": "XAU",
+      "name": "Gold",
+      "type": "cm",
+      "shares": 1,
+      "avgBuy": 3800,
+      "ccy": "EUR",
+      "hl": [
+        "PAXG",
+        "XAU",
+        "GOLD",
+        "kXAU",
+        "uXAU"
+      ],
+      "yahoo": [
+        "GC=F"
+      ],
+      "thesis": "Physical fine-gold bullion. Held for debasement tail-risk coverage."
+    },
+    {
+      "ticker": "XAG",
+      "name": "Silver",
+      "type": "cm",
+      "shares": 7,
+      "avgBuy": 66,
+      "ccy": "EUR",
+      "hl": [
+        "XAG",
+        "SILVER",
+        "kXAG",
+        "uXAG"
+      ],
+      "yahoo": [
+        "SI=F"
+      ],
+      "thesis": "Physical silver bullion. Held for debasement tail-risk coverage."
+    },
+    {
+      "ticker": "CASH",
+      "name": "Cash",
+      "type": "cs",
+      "shares": 2999,
+      "avgBuy": 1.0,
+      "ccy": "EUR",
+      "hl": [],
+      "yahoo": [],
+      "thesis": ""
+    }
   ]
 }
