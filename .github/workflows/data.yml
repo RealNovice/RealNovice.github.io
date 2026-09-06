@@ -1,0 +1,54 @@
+name: Market data feed
+
+# Refreshes market.json / fred.json on the `data` branch. The site reads them
+# from raw.githubusercontent.com (which allows cross-origin requests), so no
+# third-party CORS proxy is involved any more.
+on:
+  schedule:
+    - cron: '*/15 13-22 * * 1-5'   # every 15 min during US/EU trading hours (UTC)
+    - cron: '0 */2 * * *'          # every 2 h otherwise (Hyperliquid perps trade 24/7)
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['data/holdings.json', 'scripts/fetch_data.py']
+
+concurrency:
+  group: data-feed
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch previous feed (so a failed source keeps its last value)
+        run: |
+          mkdir -p out
+          for f in market.json fred.json; do
+            curl -fsSL "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/data/$f" -o "out/$f" || true
+          done
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build feed
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python scripts/fetch_data.py --out out
+
+      - name: Publish to data branch
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd out
+          git init -q
+          git checkout -q -b data
+          git add .
+          git -c user.name="data-bot" -c user.email="data-bot@users.noreply.github.com" \
+              commit -qm "feed $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push -q --force "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" data
