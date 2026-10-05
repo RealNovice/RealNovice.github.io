@@ -5,16 +5,16 @@ market stress monitor he built for himself. Live at https://lima-spielhofen.com,
 served by GitHub Pages from `main` of `RealNovice/RealNovice.github.io`.
 
 This file is read at the start of every Claude Code session. It is the single
-source of truth for how this repo works. `docs/roadmap.md` (not written yet) is
-the order of work; `docs/legacy-inventory.md` documents the site as it stands;
+source of truth for how this repo works. `docs/roadmap.md` is the order of
+work; `docs/legacy-inventory.md` documents the site as it stands;
 `docs/legacy-text.md` holds every visible string. Where they disagree, the
 roadmap wins.
 
 ## Status
 
-**Phase: inventory done, rebuild not started.** No stack is chosen. Do not
-write site code until the five questions in `docs/status.md` are answered and
-a roadmap exists. Current position: `docs/status.md`.
+**Phase: roadmap written, awaiting the owner's go-ahead.** Work through
+`docs/roadmap.md` in order, one PR per step. Do not skip ahead. Current
+position: `docs/status.md`.
 
 ## What exists today
 
@@ -46,6 +46,12 @@ a roadmap exists. Current position: `docs/status.md`.
    and looks artificial. No Latin motto, no clever section names, no landing
    gate, no display serif, no decorative effects, no self-description in the
    third-person-CV voice. Plain words, content first. When in doubt, cut.
+   "A bit of a flex" is carried by facts and numbers, never by adjectives.
+7. **Share counts and absolute values are never public.** Percentages are.
+   No file served by the site and no commit to this repo carries them
+   (roadmap Step 1).
+8. Stack for the rebuild: Astro static, TypeScript strict, GitHub Pages,
+   content in `content/` and `data/`. Two pages: `/` and `/markets`.
 
 ## Conventions
 
