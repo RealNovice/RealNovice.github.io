@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>lima-spielhofen.com — one page, desktop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#f4f2ed;color:#1c1b18}
+a{color:#1c1b18}a:hover{color:#2f5d4b}
+</style>
+</helmet>
+<div style="width: 1280px; height: 2560px; box-sizing: border-box; display: flex; flex-direction: column; background: #f4f2ed; color: #1c1b18; font-size: 15px; line-height: 1.5;">
+
+  <!-- top bar: name + anchors -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 22px 120px; border-bottom: 1px solid rgba(28,27,24,0.10);">
+    <div style="font-weight: 600; font-size: 15px;">Johannes Lima Spielhofen</div>
+    <div style="display: flex; gap: 28px; font-size: 14px; color: rgba(28,27,24,0.62);">
+      <a href="#holdings" style="text-decoration: none; color: rgba(28,27,24,0.62);">Holdings</a>
+      <a href="#monitor" style="text-decoration: none; color: rgba(28,27,24,0.62);">Stress monitor</a>
+      <a href="#now" style="text-decoration: none; color: rgba(28,27,24,0.62);">Currently</a>
+      <a href="#cv" style="text-decoration: none; color: rgba(28,27,24,0.62);">CV</a>
+    </div>
+  </div>
+
+  <!-- intro -->
+  <div style="display: flex; gap: 56px; align-items: center; padding: 72px 120px 64px;">
+    <div style="width: 148px; height: 148px; border-radius: 50%; background: #dcd8cf; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; color: rgba(28,27,24,0.5);">[photo]</div>
+    <div style="display: flex; flex-direction: column; gap: 14px; max-width: 720px;">
+      <h1 style="margin: 0; font-size: 40px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.1;">Teacher in Bavaria. Investor since 2017.</h1>
+      <p style="margin: 0; font-size: 18px; color: rgba(28,27,24,0.70); line-height: 1.55;">I teach English, Economics and Political Science at a Gymnasium and run a concentrated, self-directed book on the side. This page shows what I hold and the numbers I watch. Portuguese and German native, English C2, Japanese B2.</p>
+    </div>
+  </div>
+
+  <!-- holdings -->
+  <div id="holdings" style="padding: 24px 120px 0; display: flex; flex-direction: column; gap: 18px;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid rgba(28,27,24,0.10); padding-bottom: 10px;">
+      <h2 style="margin: 0; font-size: 22px; font-weight: 500;">Holdings</h2>
+      <div style="font-size: 13px; color: rgba(28,27,24,0.55);">EUR book · Hyperliquid live · Yahoo 12 min ago</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 56px; align-items: start; padding-top: 8px;">
+      <!-- donut -->
+      <div style="display: flex; flex-direction: column; gap: 14px; align-items: center;">
+        <svg width="260" height="260" viewBox="-118 -118 236 236" style="transform: rotate(-90deg);">
+          <circle r="88" cx="0" cy="0" fill="none" stroke="#bf6d1e" stroke-width="26" stroke-dasharray="433.5 119.4" stroke-dashoffset="0"></circle>
+          <circle r="88" cx="0" cy="0" fill="none" stroke="#2c7a4b" stroke-width="26" stroke-dasharray="49.8 503.1" stroke-dashoffset="-433.5"></circle>
+          <circle r="88" cx="0" cy="0" fill="none" stroke="#465a9c" stroke-width="26" stroke-dasharray="48.6 504.3" stroke-dashoffset="-483.3"></circle>
+          <circle r="88" cx="0" cy="0" fill="none" stroke="#9c8433" stroke-width="26" stroke-dasharray="12.2 540.7" stroke-dashoffset="-531.9"></circle>
+          <circle r="88" cx="0" cy="0" fill="none" stroke="#8a877f" stroke-width="26" stroke-dasharray="8.8 544.1" stroke-dashoffset="-544.1"></circle>
+        </svg>
+        <div style="text-align: center; display: flex; flex-direction: column; gap: 2px; margin-top: -170px; margin-bottom: 96px;">
+          <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(28,27,24,0.5);">Unrealised</div>
+          <div style="font-size: 30px; font-weight: 500; color: #2c7a4b; font-family: 'IBM Plex Mono', monospace;">+399%</div>
+        </div>
+      </div>
+
+      <!-- table -->
+      <div style="display: flex; flex-direction: column; font-size: 14px;">
+        <div style="display: grid; grid-template-columns: 70px minmax(0, 1fr) 90px 80px 90px; gap: 16px; padding: 6px 0; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(28,27,24,0.5); border-bottom: 1px solid rgba(28,27,24,0.10);">
+          <div>Ticker</div><div>Name</div><div style="text-align: right;">Weight</div><div style="text-align: right;">Since entry</div><div style="text-align: right;">Source</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 70px minmax(0, 1fr) 90px 80px 90px; gap: 16px; padding: 9px 0; border-bottom: 1px solid rgba(28,27,24,0.06); align-items: baseline;">
+          <div style="font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 2px; background: #bf6d1e; display: inline-block;"></span>HYPE</div><div>Hyperliquid</div><div style="text-align: right; font-family: 'IBM Plex Mono', monospace;">78.4%</div><div style="text-align: right; color: #2c7a4b; font-family: 'IBM Plex Mono', monospace;">+4335%</div><div style="text-align: right; color: rgba(28,27,24,0.5); font-size: 12px;">Hyperliquid</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 70px minmax(0, 1fr) 90px 80px 90px; gap: 16px; padding: 9px 0; border-bottom: 1px solid rgba(28,27,24,0.06); align-items: baseline;">
+          <div style="font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 2px; background: #465a9c; display: inline-block;"></span>VWRL</div><div>Vanguard FTSE All-World</div><div style="text-align: right; font-family: 'IBM Plex Mono', monospace;">4.7%</div><div style="text-align: right; color: #2c7a4b; font-family: 'IBM Plex Mono', monospace;">+32%</div><div style="text-align: right; color: rgba(28,27,24,0.5); font-size: 12px;">Yahoo</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 70px minmax(0, 1fr) 90px 80px 90px; gap: 16px; padding: 9px 0; border-bottom: 1px solid rgba(28,27,24,0.06); align-items: baseline;">
+          <div style="font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 2px; background: #2c7a4b; display: inline-block;"></span>CRCL</div><div>Circle Internet Group</div><div style="text-align: right; font-family: 'IBM Plex Mono', monospace;">4.1%</div><div style="text-align: right; color: #b13a2c; font-family: 'IBM Plex Mono', monospace;">−20%</div><div style="text-align: right; color: rgba(28,27,24,0.5); font-size: 12px;">Yahoo</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 70px minmax(0, 1fr) 90px 80px 90px; gap: 16px; padding: 9px 0; border-bottom: 1px solid rgba(28,27,24,0.06); align-items: baseline;">
+          <div style="font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 2px; background: #3c9160; display: inline-block;"></span>PLTR</div><div>Palantir</div><div style="text-align: right; font-family: 'IBM Plex Mono', monospace;">2.6%</div><div style="text-align: right; color: #2c7a4b; font-family: 'IBM Plex Mono', monospace;">+572%</div><div style="text-align: right; color: rgba(28,27,24,0.5); font-size: 12px;">Yahoo</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 70px minmax(0, 1fr) 90px 80px 90px; gap: 16px; padding: 9px 0; border-bottom: 1px solid rgba(28,27,24,0.06); align-items: baseline;">
+          <div style="font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 2px; background: #6b7bb8; display: inline-block;"></span>CSPX</div><div>iShares Core S&amp;P 500</div><div style="text-align: right; font-family: 'IBM Plex Mono', monospace;">2.4%</div><div style="text-align: right; color: #2c7a4b; font-family: 'IBM Plex Mono', monospace;">+36%</div><div style="text-align: right; color: rgba(28,27,24,0.5); font-size: 12px;">Yahoo</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 70px minmax(0, 1fr) 90px 80px 90px; gap: 16px; padding: 9px 0; border-bottom: 1px solid rgba(28,27,24,0.06); align-items: baseline;">
+          <div style="font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 2px; background: #9c8433; display: inline-block;"></span>XAU</div><div>Gold, physical</div><div style="text-align: right; font-family: 'IBM Plex Mono', monospace;">2.0%</div><div style="text-align: right; color: #2c7a4b; font-family: 'IBM Plex Mono', monospace;">+1%</div><div style="text-align: right; color: rgba(28,27,24,0.5); font-size: 12px;">Yahoo</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 70px minmax(0, 1fr) 90px 80px 90px; gap: 16px; padding: 9px 0; border-bottom: 1px solid rgba(28,27,24,0.06); align-items: baseline;">
+          <div style="font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 2px; background: #8fa0d0; display: inline-block;"></span>EIMI</div><div>iShares MSCI EM IMI</div><div style="text-align: right; font-family: 'IBM Plex Mono', monospace;">1.7%</div><div style="text-align: right; color: #2c7a4b; font-family: 'IBM Plex Mono', monospace;">+53%</div><div style="text-align: right; color: rgba(28,27,24,0.5); font-size: 12px;">Yahoo</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 70px minmax(0, 1fr) 90px 80px 90px; gap: 16px; padding: 9px 0; border-bottom: 1px solid rgba(28,27,24,0.06); align-items: baseline;">
+          <div style="font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 2px; background: #8a877f; display: inline-block;"></span>CASH</div><div>Cash</div><div style="text-align: right; font-family: 'IBM Plex Mono', monospace;">1.5%</div><div style="text-align: right; color: rgba(28,27,24,0.4);">—</div><div style="text-align: right; color: rgba(28,27,24,0.5); font-size: 12px;"></div>
+        </div>
+        <div style="display: grid; grid-template-columns: 70px minmax(0, 1fr) 90px 80px 90px; gap: 16px; padding: 9px 0; align-items: baseline; color: rgba(28,27,24,0.55);">
+          <div></div><div>ORCL, HIMS, XAG · 2.5% together</div><div></div><div></div><div style="text-align: right; font-size: 12px;"><a href="#holdings">show all</a></div>
+        </div>
+        <p style="margin: 18px 0 0; font-size: 13.5px; color: rgba(28,27,24,0.62); line-height: 1.55; max-width: 620px;">Why these: HYPE is a day-one allocation and the only high-conviction bet; the ETFs are the boring core; the metals are debasement insurance. Full reasoning per position on click.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- monitor -->
+  <div id="monitor" style="padding: 64px 120px 0; display: flex; flex-direction: column; gap: 18px;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid rgba(28,27,24,0.10); padding-bottom: 10px;">
+      <h2 style="margin: 0; font-size: 22px; font-weight: 500;">Stress monitor</h2>
+      <div style="font-size: 13px; color: rgba(28,27,24,0.55);">2 concern · 9 watch · 11 normal · next: CPI in 5 days</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; padding-top: 8px;">
+      <!-- markets column -->
+      <div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px;">
+        <div style="font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(28,27,24,0.5); padding-bottom: 6px;">Markets</div>
+        <div style="display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span>S&amp;P 500</span><span style="font-family: 'IBM Plex Mono', monospace;">7,718.60 <span style="color: #b13a2c;">−0.38%</span></span></div>
+        <div style="display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span>VIX</span><span style="font-family: 'IBM Plex Mono', monospace;">14.53 <span style="color: #2c7a4b;">+1.47%</span></span></div>
+        <div style="display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span>WTI</span><span style="font-family: 'IBM Plex Mono', monospace;">91.48 <span style="color: #2c7a4b;">+0.20%</span></span></div>
+        <div style="display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span>Gold</span><span style="font-family: 'IBM Plex Mono', monospace;">4,476.60 <span style="color: #b13a2c;">−1.39%</span></span></div>
+        <div style="display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span>DXY</span><span style="font-family: 'IBM Plex Mono', monospace;">99.16 <span style="color: #b13a2c;">−0.02%</span></span></div>
+        <div style="display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span>USD/JPY</span><span style="font-family: 'IBM Plex Mono', monospace;">156.22 <span style="color: #2c7a4b;">+0.24%</span></span></div>
+        <div style="display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span>10y − 2y</span><span style="font-family: 'IBM Plex Mono', monospace;">+0.43% <span style="color: #9c6f14;">flat</span></span></div>
+        <div style="display: flex; justify-content: space-between; padding: 7px 0;"><span>WTI / SPX 30d ρ</span><span style="font-family: 'IBM Plex Mono', monospace;">−0.08</span></div>
+      </div>
+      <!-- US column -->
+      <div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px;">
+        <div style="font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(28,27,24,0.5); padding-bottom: 6px;">United States</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #2c7a4b;"></span>Sahm rule</span><span style="font-family: 'IBM Plex Mono', monospace;">−0.07</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #2c7a4b;"></span>Initial claims</span><span style="font-family: 'IBM Plex Mono', monospace;">218K</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #9c6f14;"></span>CPI y/y</span><span style="font-family: 'IBM Plex Mono', monospace;">3.5%</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #2c7a4b;"></span>HY spread</span><span style="font-family: 'IBM Plex Mono', monospace;">302 bp</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #9c6f14;"></span>30y mortgage</span><span style="font-family: 'IBM Plex Mono', monospace;">6.71%</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #b13a2c;"></span>5y breakeven</span><span style="font-family: 'IBM Plex Mono', monospace;">2.86%</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #2c7a4b;"></span>NFCI</span><span style="font-family: 'IBM Plex Mono', monospace;">−0.52</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 0;"><span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #2c7a4b;"></span>Fed funds</span><span style="font-family: 'IBM Plex Mono', monospace;">3.75%</span></div>
+      </div>
+      <!-- world column -->
+      <div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px;">
+        <div style="font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(28,27,24,0.5); padding-bottom: 6px;">Elsewhere · CPI / policy / 10y</div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 52px 60px 52px; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06); font-family: 'IBM Plex Mono', monospace;"><span style="font-family: 'IBM Plex Sans', sans-serif;">Eurozone</span><span style="text-align: right;">2.1</span><span style="text-align: right;">2.40</span><span style="text-align: right;">2.74</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 52px 60px 52px; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06); font-family: 'IBM Plex Mono', monospace;"><span style="font-family: 'IBM Plex Sans', sans-serif;">UK</span><span style="text-align: right;">3.4</span><span style="text-align: right;">4.00</span><span style="text-align: right;">4.61</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 52px 60px 52px; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06); font-family: 'IBM Plex Mono', monospace;"><span style="font-family: 'IBM Plex Sans', sans-serif;">Japan</span><span style="text-align: right;">2.7</span><span style="text-align: right;">0.75</span><span style="text-align: right;">1.61</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 52px 60px 52px; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06); font-family: 'IBM Plex Mono', monospace;"><span style="font-family: 'IBM Plex Sans', sans-serif;">China</span><span style="text-align: right;">0.1</span><span style="text-align: right;">—</span><span style="text-align: right;">1.72</span></div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 52px 60px 52px; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(28,27,24,0.06); font-family: 'IBM Plex Mono', monospace;"><span style="font-family: 'IBM Plex Sans', sans-serif;">Brazil</span><span style="text-align: right;">4.6</span><span style="text-align: right;">11.96</span><span style="text-align: right;">13.40</span></div>
+        <div style="padding-top: 14px; font-size: 13px; color: rgba(28,27,24,0.55); line-height: 1.5;">Colours: green inside the normal band, amber on watch, red past the threshold. Hover any row for the definition and the lines.</div>
+      </div>
+    </div>
+
+    <!-- Mag 7 strip -->
+    <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 12px; padding-top: 22px;">
+      <div style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border: 1px solid rgba(28,27,24,0.10); border-radius: 8px; font-size: 13px;"><span style="font-weight: 600;">AAPL</span><span style="font-family: 'IBM Plex Mono', monospace;">319.97</span><span style="color: #b13a2c; font-size: 12px;">−2.51%</span></div>
+      <div style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border: 1px solid rgba(28,27,24,0.10); border-radius: 8px; font-size: 13px;"><span style="font-weight: 600;">MSFT</span><span style="font-family: 'IBM Plex Mono', monospace;">499.70</span><span style="color: #b13a2c; font-size: 12px;">−2.04%</span></div>
+      <div style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border: 1px solid rgba(28,27,24,0.10); border-radius: 8px; font-size: 13px;"><span style="font-weight: 600;">GOOGL</span><span style="font-family: 'IBM Plex Mono', monospace;">338.46</span><span style="color: #b13a2c; font-size: 12px;">−1.11%</span></div>
+      <div style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border: 1px solid rgba(28,27,24,0.10); border-radius: 8px; font-size: 13px;"><span style="font-weight: 600;">AMZN</span><span style="font-family: 'IBM Plex Mono', monospace;">258.51</span><span style="color: #b13a2c; font-size: 12px;">−0.15%</span></div>
+      <div style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border: 1px solid rgba(28,27,24,0.10); border-radius: 8px; font-size: 13px;"><span style="font-weight: 600;">META</span><span style="font-family: 'IBM Plex Mono', monospace;">616.77</span><span style="color: #2c7a4b; font-size: 12px;">+1.00%</span></div>
+      <div style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border: 1px solid rgba(28,27,24,0.10); border-radius: 8px; font-size: 13px;"><span style="font-weight: 600;">NVDA</span><span style="font-family: 'IBM Plex Mono', monospace;">230.36</span><span style="color: #2c7a4b; font-size: 12px;">+0.84%</span></div>
+      <div style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border: 1px solid rgba(28,27,24,0.10); border-radius: 8px; font-size: 13px;"><span style="font-weight: 600;">TSLA</span><span style="font-family: 'IBM Plex Mono', monospace;">354.08</span><span style="color: #b13a2c; font-size: 12px;">−5.92%</span></div>
+    </div>
+    <div style="font-size: 12.5px; color: rgba(28,27,24,0.5);">Click a ticker for a 1D / 1W / 1Y / 10Y chart. Energy, borrowing rates and manual benchmarks moved to a collapsed "More" row below.</div>
+    <div style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(28,27,24,0.7); padding: 10px 0; border-top: 1px solid rgba(28,27,24,0.10); border-bottom: 1px solid rgba(28,27,24,0.10);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"></path></svg>More: energy &amp; Hyperliquid oil perps, borrowing rates, yield-curve sparklines</div>
+  </div>
+
+  <!-- currently -->
+  <div id="now" style="padding: 64px 120px 0; display: flex; flex-direction: column; gap: 18px;">
+    <div style="border-bottom: 1px solid rgba(28,27,24,0.10); padding-bottom: 10px;"><h2 style="margin: 0; font-size: 22px; font-weight: 500;">Currently</h2></div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 48px; font-size: 15px; padding-top: 4px;">
+      <div style="display: flex; gap: 14px; padding: 8px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="color: rgba(28,27,24,0.45); width: 110px; flex-shrink: 0; font-size: 13px; padding-top: 2px;">Building</span><span>Sheet Cheater, an iOS app that annotates piano sheet music from PDFs or photos.</span></div>
+      <div style="display: flex; gap: 14px; padding: 8px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="color: rgba(28,27,24,0.45); width: 110px; flex-shrink: 0; font-size: 13px; padding-top: 2px;">Studying</span><span>CFA Level 1.</span></div>
+      <div style="display: flex; gap: 14px; padding: 8px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="color: rgba(28,27,24,0.45); width: 110px; flex-shrink: 0; font-size: 13px; padding-top: 2px;">Also studying</span><span>The DGfM mushroom-expert exam, and the German hunting licence.</span></div>
+      <div style="display: flex; gap: 14px; padding: 8px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="color: rgba(28,27,24,0.45); width: 110px; flex-shrink: 0; font-size: 13px; padding-top: 2px;">Learning</span><span>Motorbike licence, class A.</span></div>
+      <div style="display: flex; gap: 14px; padding: 8px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="color: rgba(28,27,24,0.45); width: 110px; flex-shrink: 0; font-size: 13px; padding-top: 2px;">Growing</span><span>A vegetable garden.</span></div>
+      <div style="display: flex; gap: 14px; padding: 8px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="color: rgba(28,27,24,0.45); width: 110px; flex-shrink: 0; font-size: 13px; padding-top: 2px;">Languages</span><span>Portuguese, German (native) · English C2 <a href="#now" style="font-size: 12px; color: rgba(28,27,24,0.5);">certificate</a> · Japanese B2 · French, Spanish basics</span></div>
+    </div>
+  </div>
+
+  <!-- cv -->
+  <div id="cv" style="padding: 64px 120px 0; display: flex; flex-direction: column; gap: 18px;">
+    <div style="border-bottom: 1px solid rgba(28,27,24,0.10); padding-bottom: 10px;"><h2 style="margin: 0; font-size: 22px; font-weight: 500;">CV</h2></div>
+    <div style="display: flex; flex-direction: column; font-size: 15px; padding-top: 4px;">
+      <div style="display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 24px; padding: 12px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="color: rgba(28,27,24,0.5); font-size: 13px; padding-top: 2px; font-family: 'IBM Plex Mono', monospace;">2023 – now</span><span><strong style="font-weight: 600;">Gymnasium teacher</strong>, Bavarian State Government. English, Economics, Political Science, years 5 to 13.</span></div>
+      <div style="display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 24px; padding: 12px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="color: rgba(28,27,24,0.5); font-size: 13px; padding-top: 2px; font-family: 'IBM Plex Mono', monospace;">2021 – 2023</span><span><strong style="font-weight: 600;">Translator and subtitler</strong>, self-employed via TV1 GmbH. Bundestag sessions; film and TV for Netflix and Sony.</span></div>
+      <div style="display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 24px; padding: 12px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="color: rgba(28,27,24,0.5); font-size: 13px; padding-top: 2px; font-family: 'IBM Plex Mono', monospace;">2017 – now</span><span><strong style="font-weight: 600;">Self-directed investor.</strong> US/EU equities, ETFs, metals, digital assets.</span></div>
+      <div style="display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 24px; padding: 12px 0; border-bottom: 1px solid rgba(28,27,24,0.06);"><span style="color: rgba(28,27,24,0.5); font-size: 13px; padding-top: 2px; font-family: 'IBM Plex Mono', monospace;">2016 – 2023</span><span><strong style="font-weight: 600;">LMU Munich</strong>, teacher training in English, Economics, later Political Science. One year at Kyushu University, Fukuoka.</span></div>
+    </div>
+  </div>
+
+  <div style="margin-top: auto; padding: 40px 120px 32px; display: flex; justify-content: space-between; font-size: 12.5px; color: rgba(28,27,24,0.45);">
+    <span>© Johannes Lima Spielhofen</span>
+    <span>Prices: Hyperliquid live, Yahoo and FRED via a 15-minute feed. Nothing here is advice.</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2560}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
