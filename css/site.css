@@ -7,15 +7,15 @@
    ───────────────────────────────────────────────────────────── */
 :root{
   /* Palette and type from the Bandwidth "Mint" kit (docs/brand.md in the exam-trainer repo) */
-  --bg:#eef4f0;
-  --surface:#ffffff;
-  --surface-2:#e2ece6;
-  --surface-3:#d5ece2;
-  --line:#dbe6e0;
-  --line-2:rgba(15,36,28,.08);
-  --ink:#0f241c;
-  --ink-2:#4b675d;
-  --ink-3:rgba(15,36,28,.5);
+  --bg:#f3f1ec;
+  --surface:#fbfaf7;
+  --surface-2:#f0ede6;
+  --surface-3:#e7e3da;
+  --line:rgba(27,26,23,.12);
+  --line-2:rgba(27,26,23,.07);
+  --ink:#1b1a17;
+  --ink-2:rgba(27,26,23,.66);
+  --ink-3:rgba(27,26,23,.44);
   --accent:#0a7a7a;
   --green:#0e8a5f;  --green-soft:#5bd6a6;
   --yellow:#a8670f; --yellow-soft:#e9b867;
@@ -24,7 +24,7 @@
   --sans:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'Space Mono',ui-monospace,Menlo,Consolas,monospace;
   --radius:16px; --radius-sm:10px;
-  --shadow:0 1px 2px rgba(15,36,28,.05),0 24px 48px -24px rgba(15,36,28,.25);
+  --shadow:0 1px 2px rgba(27,26,23,.04),0 10px 30px -18px rgba(27,26,23,.18);
   --photo:260px;
   /* legacy aliases still referenced by the stressboard rules */
   --text-main:var(--ink); --text-sub:var(--ink-2); --text-dim:var(--ink-3);
@@ -64,9 +64,9 @@ button,input{font:inherit;color:inherit}
   background:radial-gradient(circle at 50% 50%,var(--c) 0%,transparent 62%);
   opacity:.9;
 }
-.drift-a{--c:rgba(91,214,166,.42);width:66vmax;height:66vmax;left:-6%;top:-2%;animation:drift-a 38s ease-in-out infinite alternate}
-.drift-b{--c:rgba(14,165,165,.26);width:58vmax;height:58vmax;right:-6%;top:14%;animation:drift-b 46s ease-in-out infinite alternate}
-.drift-c{--c:rgba(233,184,103,.24);width:52vmax;height:52vmax;left:26%;bottom:-14%;animation:drift-c 52s ease-in-out infinite alternate}
+.drift-a{--c:rgba(197,178,140,.55);width:66vmax;height:66vmax;left:-6%;top:-2%;animation:drift-a 38s ease-in-out infinite alternate}
+.drift-b{--c:rgba(150,178,168,.50);width:58vmax;height:58vmax;right:-6%;top:14%;animation:drift-b 46s ease-in-out infinite alternate}
+.drift-c{--c:rgba(214,190,196,.48);width:52vmax;height:52vmax;left:26%;bottom:-14%;animation:drift-c 52s ease-in-out infinite alternate}
 @keyframes drift-a{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(9vw,7vh,0) scale(1.12)}}
 @keyframes drift-b{from{transform:translate3d(0,0,0) scale(1.08)}to{transform:translate3d(-8vw,-9vh,0) scale(.96)}}
 @keyframes drift-c{from{transform:translate3d(0,0,0) scale(.98)}to{transform:translate3d(-6vw,-10vh,0) scale(1.1)}}
@@ -107,9 +107,10 @@ button,input{font:inherit;color:inherit}
   font-size:.84rem;font-weight:600;letter-spacing:.01em;color:var(--ink);
   transition:border-color .15s ease,background .15s ease,transform .15s ease;
 }
-.hub-btn[data-nav="sec-finance"]{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:700}
+.hub-btn[data-nav="sec-finance"]{background:#5bd6a6;border-color:#5bd6a6;color:#0f241c;font-weight:700}
 .hub-btn:hover{border-color:var(--ink);background:#fff;transform:translateY(-2px);box-shadow:0 10px 22px -14px rgba(15,36,28,.4)}
-.hub-btn[data-nav="sec-finance"]:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.hub-btn:hover{border-color:#0ea5a5;background:#fff}
+.hub-btn[data-nav="sec-finance"]:hover{background:#3ec993;border-color:#3ec993;color:#0f241c}
 .hub-btn:active{transform:translateY(0);box-shadow:none}
 
 footer{
