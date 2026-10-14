@@ -52,3 +52,17 @@ gone; `data/holdings.json` no longer has a `thesis` key; the Portfolio Editor
 no longer has the field and never publishes one). Editor rebuilt and copied to
 `Desktop\Dillettanteism`. `docs/legacy-text.md` still shows these strings as
 they were on 2026-10-05, by design. Roadmap position unchanged.
+
+## 2026-10-14, evening
+
+Owner-authorised changes on `main` (no structural redesign):
+- Type and palette from the Bandwidth "Mint" kit: Bricolage Grotesque 800 lowercase for
+  the name and headings, Manrope for text, Space Mono for numbers; Mint ground, Deep ink,
+  kit greens for gains and the donut, kit red/amber for the monitor. Tokens at the top of
+  `css/site.css`; holdings colours in `js/holdings.js`. Layout, sections and copy unchanged
+  apart from the Vita, which now says FOS/BOS (Gymnasium = study and Referendariat).
+- `docs/mockup/` refreshed with all six artboards (neutral one-page, full Bandwidth, and
+  "current layout with Bandwidth type + palette", which is what shipped).
+- Owner's feedback recorded: the headline "Teacher in Bavaria. Investor since 2017." was
+  too boastful; the name is the headline, the role is a small line under it.
+Roadmap position unchanged.

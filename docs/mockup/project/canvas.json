@@ -1,1 +1,111 @@
-{"v":3,"createdOnFiles":{"v":1,"at":"2026-09-19T10:00:00Z"},"title":"lima-spielhofen.com redesign mockup","launch":{"view":"canvas"},"pages":[],"boards":{"Main.dc.html":{"x":0,"y":0,"w":1280,"h":2560,"title":"Desktop · one scrolling page"},"Phone.dc.html":{"x":1360,"y":0,"w":390,"h":1560,"title":"Phone"}},"order":["Main.dc.html","Phone.dc.html"],"notes":{"n1":{"x":0,"y":-300,"text":"lima-spielhofen.com — one page, no gate, holdings first","kind":"title1","maxW":1750},"n2":{"x":1360,"y":1680,"w":390,"text":"What changed: no landing screen, no section switching, no Latin motto, no serif display face, no manual input boxes in public. One sans (IBM Plex) plus mono for numbers. Holdings before the monitor. Energy, borrowing rates and yield sparklines fold into a 'More' row. Languages become one line under Currently. Vita becomes four CV lines.","color":"gray"}},"designSystems":[]}
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Main.dc.html": {
+      "h": 2560,
+      "title": "Desktop · one scrolling page",
+      "w": 1280,
+      "x": 0,
+      "y": 0
+    },
+    "Phone.dc.html": {
+      "h": 1560,
+      "title": "Phone",
+      "w": 390,
+      "x": 1360,
+      "y": 0
+    },
+    "Bandwidth.dc.html": {
+      "h": 2520,
+      "title": "Desktop · Bandwidth brand (Mint kit)",
+      "w": 1280,
+      "x": 0,
+      "y": 3000
+    },
+    "Bandwidth-Phone.dc.html": {
+      "h": 1500,
+      "title": "Phone · Bandwidth brand",
+      "w": 390,
+      "x": 1360,
+      "y": 3000
+    },
+    "Current-Home.dc.html": {
+      "h": 800,
+      "title": "Current layout · Bandwidth type + palette · home",
+      "w": 1280,
+      "x": 0,
+      "y": 5900
+    },
+    "Current-Finance.dc.html": {
+      "h": 1560,
+      "title": "Current layout · Bandwidth type + palette · Finance",
+      "w": 1280,
+      "x": 0,
+      "y": 6820
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-19T10:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "n1": {
+      "kind": "title1",
+      "maxW": 1750,
+      "text": "lima-spielhofen.com — one page, no gate, holdings first",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "n2": {
+      "color": "gray",
+      "text": "What changed: no landing screen, no section switching, no Latin motto, no serif display face, no manual input boxes in public. One sans (IBM Plex) plus mono for numbers. Holdings before the monitor. Energy, borrowing rates and yield sparklines fold into a 'More' row. Languages become one line under Currently. Vita becomes four CV lines.",
+      "w": 390,
+      "x": 1360,
+      "y": 1680
+    },
+    "n3": {
+      "kind": "title1",
+      "maxW": 1750,
+      "text": "Same page in the Bandwidth brand (Mint kit)",
+      "x": 0,
+      "y": 2700
+    },
+    "n4": {
+      "color": "teal",
+      "text": "Brand applied from docs/brand.md of the Bandwidth app: Deep #0F241C for the intro band and footer, Mint #EEF4F0 page, white cards with #DBE6E0 hairlines and the kit's soft shadow, 16 px radius. Fresh #5BD6A6 for the one primary button, Teal/Green/Fresh for the donut, Deep for links on light. Bricolage Grotesque 800 lowercase headings, Manrope body, Space Mono for labels and every number. The four rising bars sit beside a lowercase wordmark. Content updated: no CFA, no rowing, no theses; Bandwidth added as one 'building' line. Mockup only, nothing deployed.",
+      "w": 390,
+      "x": 1360,
+      "y": 4560
+    },
+    "n5": {
+      "kind": "title1",
+      "maxW": 1750,
+      "text": "Keep the site as it is, swap only type and palette",
+      "x": 0,
+      "y": 5600
+    },
+    "n6": {
+      "color": "teal",
+      "w": 390,
+      "x": 1360,
+      "y": 5900,
+      "text": "Nothing moves. Same home with photo, name, motto, four pills, drifting colour fields; same Finance section with its tabs, donut and legend. Changed: Bricolage Grotesque 800 lowercase for the name and headings, Manrope for text, Space Mono for labels and numbers. Page ground Mint #EEF4F0, text Deep #0F241C, white cards with #DBE6E0 hairlines and the kit's soft shadow. Primary pill in Deep, the rest white. Donut and gains in Teal/Green/Fresh; red and amber stay the app's #B4403A and #A8670F. The colour fields are recoloured to Fresh, Teal and the kit's amber. No logo bars: this is your site, not the app's."
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Phone.dc.html",
+    "Bandwidth.dc.html",
+    "Bandwidth-Phone.dc.html",
+    "Current-Home.dc.html",
+    "Current-Finance.dc.html"
+  ],
+  "pages": [],
+  "title": "lima-spielhofen.com redesign mockup"
+}

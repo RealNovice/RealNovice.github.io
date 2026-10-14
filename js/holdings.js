@@ -9,11 +9,11 @@
   let lastLive=0;
 
   const HOLD_TYPES={
-    eq:{label:'Equity',       grad:['#2c7a4b','#8cc4a3']},
-    fd:{label:'Fund',         grad:['#465a9c','#a5b0dd']},
-    cr:{label:'Crypto',       grad:['#bf6d1e','#ecb877']},
-    fi:{label:'Fixed Income', grad:['#3676a3','#9ec4de']},
-    cm:{label:'Commodity',    grad:['#9c8433','#dccf95']},
+    eq:{label:'Equity',       grad:['#12b981','#9fe6c9']},
+    fd:{label:'Fund',         grad:['#0f241c','#4b675d']},
+    cr:{label:'Crypto',       grad:['#0ea5a5','#5bd6a6']},
+    fi:{label:'Fixed Income', grad:['#0a7a7a','#9ed7d7']},
+    cm:{label:'Commodity',    grad:['#e9b867','#f1d9a3']},
     cs:{label:'Cash',         grad:['#8a877f','#c9c6bd']}
   };
   const CACHE_KEY='holdings-prices-v4';

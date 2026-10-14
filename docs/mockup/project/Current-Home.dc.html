@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Current layout, Bandwidth type and palette — home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Manrope',system-ui,sans-serif;background:#eef4f0;color:#0f241c}
+a{color:#0f241c}a:hover{color:#0a7a7a}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; position: relative; overflow: hidden; background: #eef4f0; color: #0f241c; display: flex; align-items: center; justify-content: center; padding: 64px 24px 80px;">
+  <!-- the drifting colour fields, recoloured to the kit -->
+  <div style="position: absolute; left: -120px; top: -160px; width: 720px; height: 720px; border-radius: 50%; background: radial-gradient(circle at 50% 50%, rgba(91,214,166,0.35) 0%, transparent 62%);"></div>
+  <div style="position: absolute; right: -140px; top: 120px; width: 640px; height: 640px; border-radius: 50%; background: radial-gradient(circle at 50% 50%, rgba(14,165,165,0.22) 0%, transparent 62%);"></div>
+  <div style="position: absolute; left: 34%; bottom: -260px; width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle at 50% 50%, rgba(233,184,103,0.20) 0%, transparent 62%);"></div>
+
+  <div style="position: relative; display: grid; grid-template-columns: auto 1fr; gap: 64px; align-items: center; max-width: 960px; width: 100%;">
+    <div style="width: 260px; height: 260px; border-radius: 50%; background: #dbe6e0; border: 1px solid #dbe6e0; box-shadow: 0 1px 2px rgba(15,36,28,0.05), 0 30px 50px -28px rgba(15,36,28,0.35); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #4b675d;">[photo]</div>
+    <div style="display: flex; flex-direction: column;">
+      <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 68px; line-height: 0.98; letter-spacing: -0.035em;">johannes lima<br>spielhofen</h1>
+      <div style="margin-top: 14px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #4b675d;">per aspera ad astra</div>
+      <p style="margin: 20px 0 0; font-size: 17px; line-height: 1.6; color: #4b675d; max-width: 40ch;">I teach, do finance and other things.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 9px; margin-top: 30px;">
+        <a href="#finance" style="text-decoration: none; display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 999px; background: #0f241c; color: #ffffff; font-size: 13.5px; font-weight: 700;">Finance</a>
+        <a href="#passion" style="text-decoration: none; display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 999px; border: 1px solid #dbe6e0; background: #ffffff; font-size: 13.5px; font-weight: 600;">Professional Dilettante</a>
+        <a href="#languages" style="text-decoration: none; display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 999px; border: 1px solid #dbe6e0; background: #ffffff; font-size: 13.5px; font-weight: 600;">Languages</a>
+        <a href="#vita" style="text-decoration: none; display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 999px; border: 1px solid #dbe6e0; background: #ffffff; font-size: 13.5px; font-weight: 600;">Vita</a>
+      </div>
+    </div>
+  </div>
+  <div style="position: absolute; left: 0; right: 0; bottom: 18px; text-align: center; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #4b675d;">© johannes lima spielhofen</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
