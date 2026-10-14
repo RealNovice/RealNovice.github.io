@@ -52,7 +52,7 @@ Nothing from the inventory is dropped silently.
 
 | Legacy item | Fate |
 |---|---|
-| Holdings donut, legend, gain per position, theses | Kept on `/markets`. Share counts no longer published (Step 1). |
+| Holdings donut, legend, gain per position | Kept on `/markets`. Theses removed 2026-10-14 at the owner's request. Share counts no longer published (Step 1). |
 | Stress monitor: indices, FX, commodities, yield curve, US indicators, macro table, Mag 7 with chart | Kept on `/markets`, driven by a config file. |
 | Oil and energy block, Hyperliquid perps, borrowing rates | Kept, collapsed by default under "More". |
 | 18 manual inputs, 7 P/E fields, 42 editable macro cells | **Removed.** Stale, unsaved, and meaningless to a visitor. Rows with a live source stay as read-only rows; rows without one go. |
@@ -83,7 +83,7 @@ Nothing from the inventory is dropped silently.
 The public `data/holdings.json` stops carrying `shares`. The Portfolio Editor
 keeps the full book in a private place (a local file, backed up to a new
 private repo `lima-spielhofen-private`) and, on Publish, writes a public file
-with, per position: ticker, name, type, currency, entry price, symbols, thesis,
+with, per position: ticker, name, type, currency, entry price, symbols,
 `weight` and the `refPrice` the weight was computed at. The page derives live
 weights as `weight × price / refPrice`, renormalised, so the donut still moves
 with the market and the book's size cannot be recovered. Cash is a weight like

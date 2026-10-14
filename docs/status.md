@@ -43,3 +43,12 @@ Owner-authorised exception to rule 1: added one Dilettante card on `main`
 linking to the property calculator at https://immobilienrechner.lima-spielhofen.com
 (repo `RealNovice/immobilienrechner`). Legacy inventory and text updated. Roadmap
 position unchanged.
+
+## 2026-10-14, later
+
+Owner-authorised content removals on `main`: the CFA card, the word "row" in
+the Vita paragraph, and every investment thesis (the cards under the donut are
+gone; `data/holdings.json` no longer has a `thesis` key; the Portfolio Editor
+no longer has the field and never publishes one). Editor rebuilt and copied to
+`Desktop\Dillettanteism`. `docs/legacy-text.md` still shows these strings as
+they were on 2026-10-05, by design. Roadmap position unchanged.

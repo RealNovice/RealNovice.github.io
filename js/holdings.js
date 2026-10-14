@@ -50,8 +50,8 @@
 
   /* ---------- render ---------- */
   function render(){
-    const pie=$('holdPie'),legend=$('holdLegend'),cards=$('holdCards');
-    if(!pie||!HOLDINGS.length) return;
+    const pie=$('holdPie'),legend=$('holdLegend');
+    if(!pie||!legend||!HOLDINGS.length) return;
     const colours=palette();
     const rows=HOLDINGS.map(h=>{
       const shares=+h.shares||0, buy=+h.avgBuy||0, last=(typeof h.last==='number'&&h.last>0)?h.last:buy;
@@ -99,17 +99,6 @@
       </div>`;
     }).join('');
 
-    cards.innerHTML=rows.filter(r=>r.type!=='cs').map(r=>{
-      const pct=(r._value/totalValue*100).toFixed(1);
-      const gain=r._src?`<span class="hold-card-gain ${r._gain>=0?'up':'down'}">${fmtPct(r._gain)}</span>`:`<span class="hold-card-gain muted">…</span>`;
-      return `<div class="hold-card">
-        <div class="hold-card-hdr" data-tip="${esc(tip(r))}">
-          <div class="hold-card-t"><span class="hold-card-tick">${esc(r.ticker)}</span><span class="hold-card-name">${esc(r.name)}</span><span class="hold-card-tag">${(HOLD_TYPES[r.type]||{}).label||''}</span></div>
-          <div class="hold-card-r">${gain}<span class="hold-card-pct">${pct}%</span></div>
-        </div>
-        ${r.thesis?`<div class="hold-card-thesis">${esc(r.thesis)}</div>`:''}
-      </div>`;
-    }).join('');
   }
 
   /* ---------- prices ---------- */

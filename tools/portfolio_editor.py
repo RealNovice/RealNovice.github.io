@@ -143,7 +143,7 @@ class Editor(tk.Tk):
         right.columnconfigure(1, weight=1)
         self.f = {}
         rows = [('ticker', 'Ticker'), ('name', 'Name'), ('type', 'Type'), ('shares', 'Shares / units'), ('avgBuy', 'Average buy price'),
-                ('ccy', 'Currency of that price'), ('hl', 'Hyperliquid symbols'), ('yahoo', 'Yahoo symbols'), ('thesis', 'Thesis')]
+                ('ccy', 'Currency of that price'), ('hl', 'Hyperliquid symbols'), ('yahoo', 'Yahoo symbols')]
         for i, (key, label) in enumerate(rows):
             ttk.Label(right, text=label).grid(row=i, column=0, sticky='nw', pady=3, padx=(0, 8))
             if key == 'type':
@@ -162,7 +162,6 @@ class Editor(tk.Tk):
                 w.bind('<KeyRelease>', lambda e: self.apply_form())
             else:
                 w.bind('<<ComboboxSelected>>', lambda e: self.apply_form())
-        self.f['thesis'].bind('<KeyRelease>', lambda e: self.apply_form())
         hint = ('Hyperliquid / Yahoo symbols: comma-separated, first match wins.\n'
                 'Leave Yahoo empty for things that only trade on Hyperliquid (HYPE).\n'
                 'European ETFs: use the EUR listing, e.g. VWRL.AS, CSPX.AS, EMIM.AS.\n'
@@ -247,7 +246,6 @@ class Editor(tk.Tk):
             self.f['ccy'].set(h.get('ccy', 'EUR'))
             self._set(self.f['hl'], ', '.join(h.get('hl') or []))
             self._set(self.f['yahoo'], ', '.join(h.get('yahoo') or []))
-            self._set(self.f['thesis'], h.get('thesis', ''))
         finally:
             self._loading_form = False
 
@@ -287,7 +285,6 @@ class Editor(tk.Tk):
         h['ccy'] = self.f['ccy'].get() or 'EUR'
         h['hl'] = [s.strip() for s in self._get(self.f['hl']).split(',') if s.strip()]
         h['yahoo'] = [s.strip() for s in self._get(self.f['yahoo']).split(',') if s.strip()]
-        h['thesis'] = self._get(self.f['thesis'])
         self.dirty = True
         self.refresh_table(keep=i)
         self.set_status('unpublished changes')
@@ -301,7 +298,7 @@ class Editor(tk.Tk):
 
     # ---- row ops
     def add_row(self):
-        self.holdings.append({'ticker': 'NEW', 'name': '', 'type': 'eq', 'shares': 0, 'avgBuy': 0, 'ccy': 'EUR', 'hl': [], 'yahoo': [], 'thesis': ''})
+        self.holdings.append({'ticker': 'NEW', 'name': '', 'type': 'eq', 'shares': 0, 'avgBuy': 0, 'ccy': 'EUR', 'hl': [], 'yahoo': []})
         self.dirty = True
         self.refresh_table(keep=len(self.holdings) - 1)
         self.show_selected()
@@ -352,7 +349,8 @@ class Editor(tk.Tk):
             messagebox.showwarning('Offline', 'GitHub is not reachable — cannot publish.'); return
         self.publish_btn.state(['disabled'])
         self.set_status('publishing…')
-        data = {'updated': datetime.date.today().isoformat(), 'holdings': self.holdings}
+        data = {'updated': datetime.date.today().isoformat(),
+                'holdings': [{k: v for k, v in h.items() if k != 'thesis'} for h in self.holdings]}
         def work():
             try:
                 new_sha = push_remote(data, self.sha, f'Holdings update ({datetime.datetime.now():%Y-%m-%d %H:%M}) via Portfolio Editor')
