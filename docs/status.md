@@ -36,3 +36,10 @@ history); the Impressum decision before Step 8.
   working directory.
 - `docs/` is served publicly by Pages like everything else on `main`. It
   contains nothing that was not already public.
+
+## 2026-10-14
+
+Owner-authorised exception to rule 1: added one Dilettante card on `main`
+linking to the property calculator at https://immobilienrechner.lima-spielhofen.com
+(repo `RealNovice/immobilienrechner`). Legacy inventory and text updated. Roadmap
+position unchanged.

@@ -31,13 +31,13 @@ GitHub (`gh repo list`): `RealNovice.github.io` is the only matching repo. It is
 
 ## 3. Pages and sections
 
-One page, `index.html` (586 lines). Five views switched by JavaScript, URL hash kept in sync (`#finance`, `#passion`, `#languages`, `#vita`).
+One page, `index.html` (591 lines). Five views switched by JavaScript, URL hash kept in sync (`#finance`, `#passion`, `#languages`, `#vita`).
 
 | View | Element | Content |
 |---|---|---|
 | Home | `#hubHome` | Round photo, name, motto "Per Aspera Ad Astra", one line, four buttons. Three drifting colour fields behind it; photo hovers. |
 | Finance | `#sec-finance` | Two tabs. **Current Holdings** (default): donut by market value, legend with gain per row, one thesis card per position. **Stressboard**: see §5. |
-| Professional Dilettante | `#sec-passion` | Seven cards: Sheet Cheater app, this site, CFA Level 1, motorbike licence A, DGfM mushroom exam, hunting licence, vegetable garden. |
+| Professional Dilettante | `#sec-passion` | Eight cards: Sheet Cheater app, property calculator (links to immobilienrechner.lima-spielhofen.com), this site, CFA Level 1, motorbike licence A, DGfM mushroom exam, hunting licence, vegetable garden. |
 | Languages | `#sec-languages` | Six cards: Portuguese, German (native), English C2 with certificate lightbox, Japanese B2, French, Spanish. |
 | Vita | `#sec-vita` | One italic paragraph, then five dated entries in three groups (markets, professional, education). |
 
