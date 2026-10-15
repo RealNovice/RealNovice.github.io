@@ -1,3 +1,5 @@
+> Dated 2026-10-05; superseded where CLAUDE.md differs.
+
 # lima-spielhofen.com — Roadmap
 
 Written 2026-10-05 from the owner's answers. `docs/legacy-inventory.md` is the

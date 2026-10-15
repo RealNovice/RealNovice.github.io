@@ -1,3 +1,5 @@
+> Dated 2026-10-05; superseded where CLAUDE.md differs.
+
 # Status — 2026-10-05
 
 **Where:** the rebuild brief is complete through Step 5: inventory, CLAUDE.md,
