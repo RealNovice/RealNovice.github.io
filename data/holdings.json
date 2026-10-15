@@ -1,23 +1,22 @@
 {
-  "updated": "2026-09-06",
+  "updated": "2026-10-15",
   "holdings": [
     {
       "ticker": "HYPE",
       "name": "Hyperliquid",
       "type": "cr",
-      "shares": 2000,
       "avgBuy": 2.0,
       "ccy": "USD",
       "hl": [
         "HYPE"
       ],
-      "yahoo": []
+      "yahoo": [],
+      "weight": 0.091068
     },
     {
       "ticker": "CRCL",
       "name": "Circle Internet Group",
       "type": "eq",
-      "shares": 91.3,
       "avgBuy": 109.51,
       "ccy": "EUR",
       "hl": [
@@ -27,13 +26,13 @@
       ],
       "yahoo": [
         "CRCL"
-      ]
+      ],
+      "weight": 0.255764
     },
     {
       "ticker": "PLTR",
       "name": "Palantir",
       "type": "eq",
-      "shares": 33.77,
       "avgBuy": 22.31,
       "ccy": "EUR",
       "hl": [
@@ -43,13 +42,13 @@
       ],
       "yahoo": [
         "PLTR"
-      ]
+      ],
+      "weight": 0.019273
     },
     {
       "ticker": "HIMS",
       "name": "Hims & Hers Health",
       "type": "eq",
-      "shares": 92.52,
       "avgBuy": 27.03,
       "ccy": "EUR",
       "hl": [
@@ -59,13 +58,13 @@
       ],
       "yahoo": [
         "HIMS"
-      ]
+      ],
+      "weight": 0.063973
     },
     {
       "ticker": "ORCL",
       "name": "Oracle",
       "type": "eq",
-      "shares": 16.972,
       "avgBuy": 147.36,
       "ccy": "EUR",
       "hl": [
@@ -75,37 +74,37 @@
       ],
       "yahoo": [
         "ORCL"
-      ]
+      ],
+      "weight": 0.063978
     },
     {
       "ticker": "VWRL",
       "name": "Vanguard FTSE All-World Dist.",
       "type": "fd",
-      "shares": 56.75,
       "avgBuy": 123.0,
       "ccy": "EUR",
       "hl": [],
       "yahoo": [
         "VWRL.AS"
-      ]
+      ],
+      "weight": 0.178561
     },
     {
       "ticker": "CSPX",
       "name": "iShares Core S&P 500 UCITS",
       "type": "fd",
-      "shares": 6.44,
       "avgBuy": 527.81,
       "ccy": "EUR",
       "hl": [],
       "yahoo": [
         "CSPX.AS"
-      ]
+      ],
+      "weight": 0.086952
     },
     {
       "ticker": "EIMI",
       "name": "iShares Core MSCI EM IMI",
       "type": "fd",
-      "shares": 68,
       "avgBuy": 31.44,
       "ccy": "EUR",
       "hl": [],
@@ -113,13 +112,13 @@
         "EMIM.AS",
         "IS3N.DE",
         "EIMI.L"
-      ]
+      ],
+      "weight": 0.05469
     },
     {
       "ticker": "XAU",
       "name": "Gold",
       "type": "cm",
-      "shares": 1,
       "avgBuy": 3800,
       "ccy": "EUR",
       "hl": [
@@ -131,13 +130,13 @@
       ],
       "yahoo": [
         "GC=F"
-      ]
+      ],
+      "weight": 0.097207
     },
     {
       "ticker": "XAG",
       "name": "Silver",
       "type": "cm",
-      "shares": 7,
       "avgBuy": 66,
       "ccy": "EUR",
       "hl": [
@@ -148,17 +147,18 @@
       ],
       "yahoo": [
         "SI=F"
-      ]
+      ],
+      "weight": 0.011818
     },
     {
       "ticker": "CASH",
       "name": "Cash",
       "type": "cs",
-      "shares": 2999,
       "avgBuy": 1.0,
       "ccy": "EUR",
       "hl": [],
-      "yahoo": []
+      "yahoo": [],
+      "weight": 0.076717
     }
   ]
 }

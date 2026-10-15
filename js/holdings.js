@@ -53,9 +53,12 @@
     const pie=$('holdPie'),legend=$('holdLegend');
     if(!pie||!legend||!HOLDINGS.length) return;
     const colours=palette();
+    // The public file carries no share counts, only each position's share of the
+    // book at cost (`weight`). Live value = weight × last/entry, so the wheel still
+    // moves with prices while the book's size stays unknown.
     const rows=HOLDINGS.map(h=>{
-      const shares=+h.shares||0, buy=+h.avgBuy||0, last=(typeof h.last==='number'&&h.last>0)?h.last:buy;
-      const value=shares*toEur(last,h.ccy), cost=shares*toEur(buy,h.ccy);
+      const w=+h.weight||0, buy=+h.avgBuy||0, last=(typeof h.last==='number'&&h.last>0)?h.last:buy;
+      const value=buy>0?w*(last/buy):w, cost=w;
       const gain=buy>0?((last-buy)/buy)*100:0;
       return {...h,_value:value,_cost:cost,_gain:gain,_last:last};
     });
