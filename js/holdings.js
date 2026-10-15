@@ -86,7 +86,7 @@
     const tip=r=>{
       if(r.type==='cs') return 'Cash position';
       const src=r._src||'no live price yet — showing entry';
-      return `Last: ${fmtNum(r._last,r._last<10?4:2)} ${r.ccy||'EUR'}\nSource: ${src}\nEntry: ${fmtNum(+r.avgBuy)} ${r.ccy||'EUR'}\nShares: ${r.shares}`;
+      return `Last: ${fmtNum(r._last,r._last<10?4:2)} ${r.ccy||'EUR'}\nSource: ${src}`;
     };
     legend.innerHTML=rows.map(r=>{
       const pct=(r._value/totalValue*100).toFixed(1);
