@@ -4,9 +4,13 @@ Portfolio Editor — desktop tool for lima-spielhofen.com.
 
 Edits data/holdings.json in the GitHub repository through the GitHub CLI
 (`gh`, already logged in on this machine). Publishing a change commits the
-file to `main`; GitHub Pages redeploys within a minute or two and the
-Holdings view on the site picks it up on its next load. Saving also kicks
-the market-data workflow so a newly added ticker gets a price quickly.
+file to `main`; the site redeploys within a minute or two and the Holdings
+view picks it up on its next load. Saving also kicks the market-data
+workflow so a newly added ticker gets a price quickly.
+
+Share counts never leave this PC. They live in PRIVATE_FILE (outside the
+repository); the published file carries each position's weight instead:
+its cost in EUR as a share of the whole book's cost.
 
 Build as a Windows executable with tools/build_exe.bat (PyInstaller).
 """
@@ -23,6 +27,9 @@ CCYS = ['EUR', 'USD', 'GBP']
 
 HERE = os.path.dirname(os.path.abspath(sys.argv[0]))
 LOCAL_FALLBACKS = [os.path.join(HERE, 'data', 'holdings.json'), os.path.join(HERE, '..', 'data', 'holdings.json')]
+PRIVATE_DIR = os.path.join(os.environ.get('APPDATA') or os.path.expanduser('~'), 'PortfolioEditor')
+PRIVATE_FILE = os.path.join(PRIVATE_DIR, 'positions.private.json')
+FX_FALLBACK = {'EUR': 1.0, 'USD': 0.89, 'GBP': 1.17}  # EUR per unit, used only when the rate service is down
 
 
 # ────────────────────────── GitHub via gh ──────────────────────────
@@ -79,6 +86,46 @@ def load_local():
             with open(p, encoding='utf-8') as f:
                 return json.load(f), p
     return None, None
+
+
+# ─────────────────────── private share counts ───────────────────────
+def load_private():
+    """{ticker: shares} from this PC, or {} when there is no file yet."""
+    try:
+        with open(PRIVATE_FILE, encoding='utf-8') as f:
+            return {h['ticker']: h.get('shares', 0) for h in json.load(f).get('holdings', [])}
+    except Exception:
+        return {}
+
+
+def save_private(holdings):
+    os.makedirs(PRIVATE_DIR, exist_ok=True)
+    tmp = PRIVATE_FILE + '.tmp'
+    with open(tmp, 'w', encoding='utf-8') as f:
+        json.dump({'updated': datetime.date.today().isoformat(), 'holdings': holdings}, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, PRIVATE_FILE)
+
+
+def eur_rates():
+    """EUR per unit of each currency, from the ECB reference rates (frankfurter.dev)."""
+    import urllib.request
+    try:
+        req = urllib.request.Request('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD,GBP', headers={'User-Agent': 'PortfolioEditor'})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            rates = json.load(r)['rates']
+        return {'EUR': 1.0, **{c: 1 / v for c, v in rates.items()}}, True
+    except Exception:
+        return dict(FX_FALLBACK), False
+
+
+def public_holdings(holdings, fx):
+    """The published rows: no share counts, a `weight` per position (cost in EUR / total cost)."""
+    costs = [float(h.get('shares', 0) or 0) * float(h.get('avgBuy', 0) or 0) * fx.get(h.get('ccy', 'EUR'), 1.0) for h in holdings]
+    total = sum(costs)
+    if total <= 0:
+        raise ValueError('The portfolio has no cost basis: enter shares and average prices first.')
+    return [{**{k: v for k, v in h.items() if k not in ('shares', 'thesis', 'weight')}, 'weight': round(c / total, 6)}
+            for h, c in zip(holdings, costs)]
 
 
 # ────────────────────────────── UI ─────────────────────────────────
@@ -196,7 +243,17 @@ class Editor(tk.Tk):
             self.set_status('could not load holdings', err=True)
             messagebox.showerror('Load failed', err or 'No holdings found.')
         else:
+            private = load_private()
             self.holdings = [dict(h) for h in data.get('holdings', [])]
+            missing = []
+            for h in self.holdings:
+                if h.get('ticker') in private:
+                    h['shares'] = private[h['ticker']]
+                elif 'shares' not in h:
+                    missing.append(h.get('ticker', '?'))
+                h.pop('weight', None)
+            if missing:
+                messagebox.showinfo('Share counts', 'Share counts are kept only on this PC. Enter them once for: ' + ', '.join(missing))
             self.set_status(f"{len(self.holdings)} holdings · {'GitHub' if remote else 'LOCAL copy — publishing disabled'}", err=not remote)
             if not remote and err:
                 self.foot.configure(text='GitHub unreachable: ' + err.splitlines()[0][:160])
@@ -335,7 +392,7 @@ class Editor(tk.Tk):
             if t in seen:
                 return f'Ticker {t} appears twice.'
             seen.add(t)
-            if float(h.get('shares', 0)) < 0 or float(h.get('avgBuy', 0)) < 0:
+            if float(h.get('shares', 0) or 0) < 0 or float(h.get('avgBuy', 0) or 0) < 0:
                 return f'{t}: shares and price must be positive.'
             if h.get('type') != 'cs' and not h.get('hl') and not h.get('yahoo'):
                 return f'{t}: give at least one Hyperliquid or Yahoo symbol so it can be priced.'
@@ -349,24 +406,28 @@ class Editor(tk.Tk):
             messagebox.showwarning('Offline', 'GitHub is not reachable — cannot publish.'); return
         self.publish_btn.state(['disabled'])
         self.set_status('publishing…')
-        data = {'updated': datetime.date.today().isoformat(),
-                'holdings': [{k: v for k, v in h.items() if k != 'thesis'} for h in self.holdings]}
+        snapshot_rows = [dict(h) for h in self.holdings]
         def work():
             try:
+                save_private(snapshot_rows)
+                fx, live_fx = eur_rates()
+                rows = public_holdings(snapshot_rows, fx)
+                data = {'updated': datetime.date.today().isoformat(), 'holdings': rows}
                 new_sha = push_remote(data, self.sha, f'Holdings update ({datetime.datetime.now():%Y-%m-%d %H:%M}) via Portfolio Editor')
                 feed = trigger_feed()
-                self.after(0, lambda: self._published(new_sha, feed))
+                self.after(0, lambda: self._published(new_sha, feed, rows, live_fx))
             except Exception as e:
                 self.after(0, lambda: self._publish_failed(str(e)))
         threading.Thread(target=work, daemon=True).start()
 
-    def _published(self, sha, feed):
+    def _published(self, sha, feed, rows, live_fx=True):
         self.sha = sha; self.dirty = False
         self.set_status('committed ✓ — waiting for the site to redeploy…')
         self.foot.configure(text='Committed to GitHub. GitHub Pages is rebuilding (usually 1–2 minutes). '
                                  'Do not press Publish again — every extra publish restarts the rebuild. '
-                                 + ('Price feed refresh started.' if feed else ''))
-        snapshot = json.dumps({'holdings': self.holdings}, sort_keys=True)
+                                 + ('Price feed refresh started.' if feed else '')
+                                 + ('' if live_fx else ' Exchange rates were unreachable; weights used fixed rates.'))
+        snapshot = json.dumps({'holdings': rows}, sort_keys=True)
         threading.Thread(target=self._watch_deploy, args=(snapshot,), daemon=True).start()
 
     def _watch_deploy(self, snapshot):
